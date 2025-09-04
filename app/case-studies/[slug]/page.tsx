@@ -32,7 +32,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
     const toc = buildTOC(mdx);
 
     return (
-        <ArticleShell title={hit?.title ?? slug} subtitle={hit?.description} toc={toc}>
+        <ArticleShell title={hit?.title ?? slug} subtitle="" toc={toc}>
             <RenderMDX source={mdx} />
         </ArticleShell>
     );

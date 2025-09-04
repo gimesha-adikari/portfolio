@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "@/components/Header";
+import Header from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
@@ -47,10 +47,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         >
             Skip to content
         </a>
+
+        {/* Header should be a direct child of <body> */}
         <Header />
+
+        {/* Let the document scroll; avoid wrapping the entire app in a scrollable container */}
         <main id="content" className="flex-1 section">
             <div className="container-xl">{children}</div>
         </main>
+
         <Footer />
         </body>
         </html>

@@ -1,63 +1,121 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* ---------- Theme tokens ---------- */
 :root {
-    --bg: #f7f7fb;         /* soft quartz */
-    --fg: #0a0f1a;         /* ink */
-    --muted: #465366;      /* readable secondary */
-    --surface: #ffffff;    /* cards/nav */
+    --bg: #f6f8ff;
+    --fg: #0f1222;
+    --muted: #4b5568;
+    --surface: #ffffff;
     --elev: 0 10px 35px -10px rgb(12 18 28 / 0.10), 0 2px 8px -2px rgb(12 18 28 / 0.06);
-    --border: #e7e9f0;     /* hairline */
-    --accent: #3b82f6;     /* blue-500 */
-    --accent-2: #8b5cf6;   /* violet-500 */
+    --border: #e8ecf6;
+    --accent: #5b8cff;
+    --accent-2: #8c6cff;
     --radius: 18px;
+    --spot-1: color-mix(in oklab, var(--accent) 20%, transparent);
+    --spot-2: color-mix(in oklab, var(--accent-2) 20%, transparent);
 }
 
 :root[data-theme="dark"] {
-    --bg: #0f172a;         /* slate-900 */
-    --fg: #e6e8ee;         /* text */
-    --muted: #cbd5e1;      /* readable */
-    --surface: #111827;    /* card/nav */
+    --bg: #0f172a;
+    --fg: #e6e8ee;
+    --muted: #cbd5e1;
+    --surface: #111827;
     --elev: 0 16px 40px -12px rgb(0 0 0 / 0.50), 0 3px 10px -2px rgb(0 0 0 / 0.35);
-    --border: #1f2937;     /* hairline */
-    --accent: #7aa2ff;     /* soft blue */
-    --accent-2: #b794f4;   /* soft violet */
+    --border: #1f2937;
+    --accent: #7aa2ff;
+    --accent-2: #b794f4;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) { color-scheme: dark; }
-}
-@media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) { color-scheme: light; }
-}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; } }
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"])  { color-scheme: light; } }
 
+/* ---------- Base ---------- */
 html, body { background: var(--bg); color: var(--fg); }
-a { text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 
-.container-xl { width: 100%; max-width: 1240px; margin-inline: auto; padding-inline: 24px; }
+/* Let the document be the scroller; avoid wrapping the whole app in a scrollable div */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+@supports (overflow: clip) {
+    html, body { overflow-x: clip; }
+}
+
+/* Helper for internally scrollable mobile drawer panel */
+.mobile-panel {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Page-wide spotlight for light theme (very subtle) */
+body::before{
+    content:"";
+    position: fixed;
+    inset: -20% -10% auto -10%;
+    height: min(50vh, 520px);
+    pointer-events: none;
+    z-index: -1;
+    background:
+            radial-gradient(36% 40% at 20% 25%, var(--spot-1), transparent 65%),
+            radial-gradient(36% 40% at 80% 18%, var(--spot-2), transparent 65%);
+    filter: blur(48px);
+    opacity: .55;
+}
+
+/* Layout helpers */
+.container-xl {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: 24px;
+    overflow-x: hidden;
+}
 .section { padding-block: clamp(32px, 6vw, 72px); }
 
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--elev); }
+/* Cards / hairlines */
+.card {
+    background:
+            linear-gradient(180deg, color-mix(in oklab, var(--surface) 96%, var(--accent) 4%), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--elev);
+}
 .hairline { border: 1px solid var(--border); border-radius: calc(var(--radius) - 6px); }
 
+/* Frosted top nav helper */
+.nav-blur {
+    backdrop-filter: saturate(140%) blur(10px);
+    background: color-mix(in oklab, var(--surface) 85%, transparent);
+    border-bottom: 1px solid var(--border);
+}
+
+/* Buttons */
 .btn{
     display:inline-flex; align-items:center; justify-content:center;
     min-height: 44px; padding: 0 18px; border-radius: 14px;
     font-weight: 600; transition: transform .15s ease, opacity .2s ease, background .2s ease, box-shadow .2s ease;
 }
 .btn-primary{
-    color: #fff; background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    box-shadow: 0 10px 18px -10px color-mix(in oklab, var(--accent) 55%, transparent);
+    color: #fff;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    box-shadow: 0 12px 24px -12px color-mix(in oklab, var(--accent) 55%, transparent);
 }
 .btn-primary:hover{ transform: translateY(-1px); opacity: .98; }
-.btn-ghost{ background: var(--surface); border: 1px solid var(--border); color: var(--fg); }
+.btn-ghost{
+    background: color-mix(in oklab, var(--surface) 92%, var(--accent) 8%);
+    border: 1px solid var(--border);
+    color: var(--fg);
+}
 .btn-ghost:hover{ transform: translateY(-1px); }
 
+/* Focus ring */
 .focus-ring:focus-visible, a:focus-visible, button:focus-visible, [role="button"]:focus-visible{
     outline: 2px solid color-mix(in oklab, var(--accent) 60%, transparent);
     outline-offset: 3px;
 }
 
+/* ---------- Prose / MDX ---------- */
 .prose { max-width: 70ch; color: var(--fg); }
 .prose h1,.prose h2,.prose h3{ color: var(--fg); letter-spacing: -0.02em; }
 .prose a{ color: var(--accent); }
@@ -80,12 +138,27 @@ a { text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 }
 .prose :where(p, li, strong, em, code){ color: var(--fg); }
 .prose li::marker{ color: var(--muted); }
+.prose img, .prose video, .prose audio { max-width: 100%; height: auto; }
+.prose table { width: 100%; border-collapse: collapse; }
 
-.hero-glow{ position: relative; isolation: isolate; }
+/* ---------- Hero glow ---------- */
+.hero-glow{
+    position: relative;
+    isolation: isolate;
+    overflow-x: hidden;
+}
 .hero-glow::before{
-    content:""; position:absolute; inset:-10% -10% auto -10%; height: 52%;
+    content:"";
+    position:absolute; inset:-10% -10% auto -10%; height: 52%;
     background:
             radial-gradient(40% 40% at 25% 30%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 60%),
             radial-gradient(40% 40% at 75% 20%, color-mix(in oklab, var(--accent-2) 18%, transparent), transparent 60%);
     filter: blur(40px); z-index:-1; opacity:.8;
+}
+
+/* ---------- Small-screen niceties ---------- */
+@media (max-width: 480px){
+    .section { padding-block: 28px; }
+    .btn { min-height: 42px; padding: 0 16px; }
+    .card { border-radius: 16px; }
 }

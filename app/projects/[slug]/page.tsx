@@ -6,7 +6,6 @@ import {
     fetchRepoByName,
     fetchRepoLanguages,
     getRepoCardExtras,
-    type Repo,
 } from "@/lib/github";
 
 export const dynamicParams = true;
@@ -42,7 +41,7 @@ export async function generateMetadata(
 export default async function ProjectPage({ params }: { params: Promise<Params> }) {
     const { slug } = await params;
 
-    let repo: Repo | null = null;
+    let repo: any;
     try {
         repo = await fetchRepoByName(slug);
     } catch {
@@ -53,69 +52,59 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
     const langs = await fetchRepoLanguages(slug).catch(() => []);
     const totalPct = Math.round(langs.reduce((a, b) => a + b.pct, 0));
 
-    // SAME cover as RepoCard
     let cover: string | null = null;
     try {
         const extras = await getRepoCardExtras(repo);
-        cover = extras?.cover ?? null;
+        cover = extras.cover ?? null;
     } catch {}
-    const owner =
-        (process.env.GITHUB_USERNAME as string) ||
-        (repo as any)?.owner?.login ||
-        "github";
-    const ogCover = `https://opengraph.githubassets.com/1/${encodeURIComponent(owner)}/${encodeURIComponent(
-        repo.name
-    )}`;
-    const displayCover = cover || ogCover;
+    if (!cover) {
+        const owner = (process.env.GITHUB_USERNAME as string) || repo?.owner?.login || "github";
+        cover = `https://opengraph.githubassets.com/1/${encodeURIComponent(owner)}/${encodeURIComponent(
+            repo.name
+        )}`;
+    }
 
     return (
         <article className="space-y-10">
-            {/* HEADER with right-side image */}
-            <header className="hero-glow relative overflow-hidden">
-                {/* Pad the right side so text never sits under the image on md+ */}
-                <div className="md:pr-[500px]">
-                    <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
-            <span className="bg-gradient-to-r from-[var(--fg)] via-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">
-              {repo.name}
-            </span>
-                    </h1>
-                    <p className="mt-2 text-[var(--muted)]">
-                        {repo.private ? "Private" : "Public"} • {repo.license || "No license"} • Updated {fmt(repo.updatedAt)}
-                    </p>
-                    <div className="mt-4 flex gap-3">
-                        <a className="btn btn-ghost focus-ring" href={repo.htmlUrl} target="_blank" rel="noopener noreferrer">
-                            GitHub
-                        </a>
-                        {repo.homepage && (
-                            <a className="btn btn-primary focus-ring" href={repo.homepage} target="_blank" rel="noopener noreferrer">
-                                Live
+            <header className="hero-glow">
+                <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
+                    <div className="flex-1 min-w-0">
+                        <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
+              <span className="bg-gradient-to-r from-[var(--fg)] via-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">
+                {repo.name}
+              </span>
+                        </h1>
+                        <p className="mt-2 text-[var(--muted)]">
+                            {repo.private ? "Private" : "Public"} • {repo.license || "No license"} • Updated {fmt(repo.updatedAt)}
+                        </p>
+                        <div className="mt-4 flex flex-wrap gap-3">
+                            <a className="btn btn-ghost focus-ring" href={repo.htmlUrl} target="_blank" rel="noopener noreferrer">
+                                GitHub
                             </a>
-                        )}
+                            {repo.homepage && (
+                                <a className="btn btn-primary focus-ring" href={repo.homepage} target="_blank" rel="noopener noreferrer">
+                                    Live
+                                </a>
+                            )}
+                        </div>
                     </div>
-                </div>
 
-                {/* Right-side image (shown on md+). Change `hidden md:block` -> `block` to show on mobile too */}
-                <div className="pointer-events-none hidden md:block absolute inset-y-4 right-0 w-[460px]">
-                    <div className="relative h-full rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--surface)] shadow-sm">
-                        {displayCover ? (
+                    <div className="md:w-[360px] lg:w-[420px] md:shrink-0">
+                        <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-[var(--surface)]">
                             <Image
-                                src={displayCover}
+                                src={cover}
                                 alt={`${repo.name} cover`}
                                 fill
                                 className="object-cover"
-                                sizes="(min-width: 1536px) 460px, (min-width: 1280px) 420px, (min-width: 1024px) 380px, 100vw"
+                                sizes="(min-width: 1024px) 420px, (min-width: 768px) 360px, 100vw"
                                 priority={false}
                                 unoptimized
                             />
-                        ) : (
-                            <div className="absolute inset-0 grid place-items-center text-[var(--muted)]">No image</div>
-                        )}
-                        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[color:var(--surface)]/80 to-transparent" />
+                        </div>
                     </div>
                 </div>
             </header>
 
-            {/* Languages chart */}
             <section className="card p-5">
                 <h2 className="text-lg font-semibold">Languages</h2>
                 <div className="mt-4 space-y-2">
@@ -143,7 +132,6 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
                 </div>
             </section>
 
-            {/* Meta */}
             <section className="grid sm:grid-cols-2 gap-5">
                 <div className="card p-5">
                     <h3 className="font-semibold">Repository</h3>

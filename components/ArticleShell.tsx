@@ -1,7 +1,7 @@
-import type { ReactNode } from "react";
-import type { TOCItem } from "@/lib/toc";
-import TOC from "@/components/TOC";
+import { ReactNode } from "react";
 import ReadingProgress from "@/components/ReadingProgress";
+import TOC from "@/components/TOC";
+import type { TOCItem } from "@/lib/toc";
 
 export default function ArticleShell({
                                          title,

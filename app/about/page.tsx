@@ -23,11 +23,7 @@ export default async function AboutPage() {
     const toc = buildTOC(mdx);
 
     return (
-        <ArticleShell
-            title="About"
-            subtitle="Who I am, how I work, and selected projects & tools."
-            toc={toc}
-        >
+        <ArticleShell title="About" subtitle="" toc={toc}>
             <RenderMDX source={mdx} />
         </ArticleShell>
     );

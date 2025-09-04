@@ -1,6 +1,6 @@
 import { fetchAllRepos } from "@/lib/github";
 import { RepoCard } from "@/components/RepoCard";
-import { orderReposWithPinned, isPinned } from "@/lib/pins";
+import { orderReposWithPinned } from "@/lib/pins";
 import type { Repo } from "@/lib/github";
 
 export const metadata = { title: "Projects" };
@@ -11,9 +11,8 @@ export default async function ProjectsPage() {
 
     return (
         <div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 md:mb-8">
-                All Projects
-            </h1>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">All Projects</h1>
+            <div className="mt-6" />
 
             {list.length > 0 ? (
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 items-stretch">

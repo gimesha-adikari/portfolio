@@ -4,7 +4,6 @@ const API = "https://api.github.com";
 const OWNER = process.env.CONTENT_OWNER!;
 const REPO = process.env.CONTENT_REPO!;
 const BRANCH = process.env.CONTENT_BRANCH || "main";
-
 const TOKEN = process.env.CONTENT_TOKEN || process.env.GITHUB_TOKEN || "";
 
 const REVALIDATE = Number(process.env.CONTENT_REVALIDATE ?? 300);
@@ -33,23 +32,7 @@ async function fetchWithTimeout(
     const ac = new AbortController();
     const t = setTimeout(() => ac.abort(), ms);
 
-    const opts: {
-        next?: NextFetchRequestConfig | undefined;
-        body?: BodyInit | null;
-        cache?: RequestCache;
-        credentials?: RequestCredentials;
-        headers?: HeadersInit;
-        integrity?: string;
-        keepalive?: boolean;
-        method?: string;
-        mode?: RequestMode;
-        priority?: RequestPriority;
-        redirect?: RequestRedirect;
-        referrer?: string;
-        referrerPolicy?: ReferrerPolicy;
-        signal: AbortSignal;
-        window?: null
-    } = {
+    const opts: any = {
         ...rest,
         signal: ac.signal,
     };
