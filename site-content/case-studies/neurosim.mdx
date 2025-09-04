@@ -1,0 +1,36 @@
+# NeuroSim — Brain Network Simulator
+
+_Python · Flask · HTML5 Canvas · JS Front-end_
+
+**TL;DR** — Built a browser-based neural simulator. Implemented a refractory period to prevent runaway firing and tuned rendering for smooth 60fps on mid-range devices.
+
+## Context & Role
+CS50 final project to demonstrate neuron dynamics with a clear visual model and interactive controls.
+
+## Problem
+- Naive recursion caused infinite firing loops and browser lock-ups.
+- Unbounded rendering produced frame drops on modest hardware.
+
+## Approach & Architecture
+- Introduced **refractory cooldown** to each neuron after firing.
+- Separated simulation tick from render loop (better use of rAF).
+- Added export/import and simple APIs for persistence.
+
+## Stack
+Flask · HTML/JS · Canvas 2D · Lightweight async API calls
+
+## Challenges & Trade-offs
+- Balancing visual fidelity vs performance on lower-spec devices.
+- Keeping the code approachable for learners while avoiding pitfalls.
+
+## Results
+- Smooth rendering on mid-range laptops; stable neuron firing behavior.
+- Clearer demonstrations for lecture/demos; easier to reason about activity.
+
+## Links
+- [Projects](/projects)
+- GitHub: <https://github.com/gimesha-adikari/neurosim>
+
+## What’s next
+- Preset networks (small-world/random) and parameter sliders.
+- Export/import of neuron graphs; richer reports.

@@ -1,0 +1,41 @@
+# Multi-Platform Platform (Fintech)
+
+_Spring Boot · React · Android · FastAPI (AI KYC) · ONNX/OCR_
+
+**TL;DR** — Designed and implemented a modular platform spanning backend, web, mobile, and an AI KYC microservice. Improved KYC false-reject rate and stabilized flows under real-world constraints.
+
+## Context & Role
+Solo/lead developer across multiple layers. Objectives: secure account flows, robust KYC, and a wallet experience that can operate independently of heavier banking flows.
+
+## Problem
+- Fragmented onboarding with brittle KYC caused drop-offs and manual reviews.
+- Inconsistent data boundaries across services and clients slowed iteration.
+- Accuracy/latency trade-offs in OCR, face match, and liveness checks.
+
+## Approach & Architecture
+- **Domain-oriented Spring Boot** modules (auth, accounts, analytics, kyc, wallet).
+- **AI KYC microservice** (FastAPI): pluggable providers; threshold tuning and retries.
+- **Android Wallet**: card reload, QR pay, bill-pay; Retrofit interfaces & DTOs.
+- **React Web** dashboard with a11y-first forms/tables.
+- **Observability & CI**: safe defaults, lint/type checks, reproducible envs.
+
+## Stack
+Spring Boot · Hibernate · MySQL · Kotlin/Android · TypeScript/React · FastAPI · ONNX (ArcFace, SCRFD, liveness) · OCR
+
+## Challenges & Trade-offs
+- Face-match sensitivity vs UX: tuned thresholds; re-tryable capture & guidance.
+- OCR noise: preprocessing + field-level confidence gating.
+- Network reliability: graceful fallbacks & cached responses on mobile.
+
+## Results
+- Reduced KYC false rejects vs baseline after threshold tuning and OCR cleanup.
+- Fewer manual reviews; faster re-submission loops.
+- Standalone wallet flows widened the onboarding funnel.
+
+## Links
+- [Projects](/projects)
+- GitHub: <https://github.com/gimesha-adikari/BankingSystem>
+
+## What’s next
+- Deeper analytics for KYC decision explainability.
+- Payment gateway webhooks with idempotency + retries.

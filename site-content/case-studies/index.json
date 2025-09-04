@@ -1,0 +1,17 @@
+[
+  {
+    "slug": "banking-system",
+    "title": "Multi-Platform Platform (Fintech)",
+    "description": "Spring Boot core, React admin, Android wallet, FastAPI verification—modular domains and resilient KYC."
+  },
+  {
+    "slug": "bank-app",
+    "title": "BankApp — Android Wallet & Payments",
+    "description": "Compose wallet: cards, reload, QR payments, bill-pay. Clean Retrofit layer and resilient UX."
+  },
+  {
+    "slug": "neurosim",
+    "title": "NeuroSim — Brain Network Simulator",
+    "description": "Canvas-based neural simulator with thresholds, cooldowns, and smooth playback."
+  }
+]

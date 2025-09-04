@@ -1,0 +1,37 @@
+# BankApp — Android Wallet & Payments
+
+_Kotlin · Jetpack Compose · Retrofit · Coroutines · Material 3_
+
+**TL;DR** — Built a modern wallet feature with card reloads, QR payments, and bill-pay. A clean Retrofit API layer and resilient UI reduced visible errors and clarified flows.
+
+## Context & Role
+Android module focused on wallet flows, designed to operate even when core banking features are not available.
+
+## Problem
+- Payment flows were overly coupled to banking onboarding.
+- Intermittent network caused confusing failures and abandons.
+
+## Approach & Architecture
+- Feature-based packages with screens, viewmodels, and DI.
+- Retrofit interfaces: clean DTOs, interceptors, consistent error envelopes.
+- Compose UI: unified components (cards, inputs, buttons) and a11y labels.
+- Robust retries and offline affordances where possible.
+
+## Stack
+Kotlin · Jetpack Compose · Retrofit/OkHttp · Hilt/DI · Material 3 · Kotlin Coroutines
+
+## Challenges & Trade-offs
+- Gateway sandbox limitations: emulated webhooks and idempotent retries in dev.
+- UI complexity: extracted shared components to keep code tidy and reusable.
+
+## Results
+- Reduced user-visible errors in payment flows through defensive UI and API handling.
+- Faster iteration thanks to a clean, testable Retrofit layer.
+
+## Links
+- [Projects](/projects)
+- Backend Repo: <https://github.com/gimesha-adikari/BankingSystem>
+
+## What’s next
+- Native deep-linking for payment intents; richer receipt exports.
+- Gateway production integration (secure storage & 3DS flows).
