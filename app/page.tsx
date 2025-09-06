@@ -21,7 +21,7 @@ export default async function HomePage() {
                     </h1>
                     <div className="flex items-center justify-center gap-3">
                         <Link href="/projects" className="btn btn-primary focus-ring">All Projects</Link>
-                        <Link href="/cv" className="btn btn-ghost focus-ring">View CV</Link>
+                        <Link href="/cv.pdf" className="btn btn-ghost focus-ring">View CV</Link>
                     </div>
                 </div>
             </section>
