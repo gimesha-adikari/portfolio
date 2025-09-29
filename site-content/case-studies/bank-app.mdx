@@ -1,37 +1,83 @@
-# BankApp — Android Wallet & Payments
+## BankApp (Android) — Wallet Flows
 
-_Kotlin · Jetpack Compose · Retrofit · Coroutines · Material 3_
+<p className="text-[var(--muted)]">
+  <em>Kotlin · Jetpack Compose · Retrofit · Coroutines · Material 3</em>
+</p>
 
-**TL;DR** — Built a modern wallet feature with card reloads, QR payments, and bill-pay. A clean Retrofit API layer and resilient UI reduced visible errors and clarified flows.
+> **TL;DR** — Built wallet features (card reloads, QR payments, bill-pay). A clean Retrofit API layer and resilient UI reduced visible errors and clarified flows.
 
-## Context & Role
-Android module focused on wallet flows, designed to operate even when core banking features are not available.
+---
 
-## Problem
+### Context & Role
+Android module focused on wallet flows, designed to operate even when core banking features are unavailable.
+
+### Problem
 - Payment flows were overly coupled to banking onboarding.
 - Intermittent network caused confusing failures and abandons.
 
-## Approach & Architecture
-- Feature-based packages with screens, viewmodels, and DI.
-- Retrofit interfaces: clean DTOs, interceptors, consistent error envelopes.
-- Compose UI: unified components (cards, inputs, buttons) and a11y labels.
-- Robust retries and offline affordances where possible.
+### Approach & Architecture
+- Feature-based packages (screens, view models, DI)  
+- Retrofit interfaces with clean DTOs, interceptors, consistent error envelopes  
+- Compose UI with unified components (cards, inputs, buttons) and a11y labels  
+- Robust retries and offline affordances where possible
 
-## Stack
-Kotlin · Jetpack Compose · Retrofit/OkHttp · Hilt/DI · Material 3 · Kotlin Coroutines
+---
 
-## Challenges & Trade-offs
-- Gateway sandbox limitations: emulated webhooks and idempotent retries in dev.
-- UI complexity: extracted shared components to keep code tidy and reusable.
+### Tech Stack
+<ul className="mt-2 flex flex-wrap gap-2">
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--brand-kotlin] size-4" aria-hidden="true"></span> Kotlin
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--square-rounded-letter-c] size-4" aria-hidden="true"></span> Jetpack Compose
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--cloud-data-connection] size-4" aria-hidden="true"></span> Retrofit / OkHttp
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--bolt] size-4" aria-hidden="true"></span> Coroutines
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--layout-grid] size-4" aria-hidden="true"></span> Material 3
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--components] size-4" aria-hidden="true"></span> Hilt / DI
+  </li>
+</ul>
 
-## Results
-- Reduced user-visible errors in payment flows through defensive UI and API handling.
-- Faster iteration thanks to a clean, testable Retrofit layer.
+---
 
-## Links
-- [Projects](/projects)
-- Backend Repo: <https://github.com/gimesha-adikari/BankingSystem>
+### Challenges & Trade-offs
+- Gateway sandbox limitations → emulated webhooks + idempotent retries in dev  
+- UI complexity → extracted shared components to keep code tidy and reusable
 
-## What’s next
-- Native deep-linking for payment intents; richer receipt exports.
-- Gateway production integration (secure storage & 3DS flows).
+### Results
+- Fewer user-visible errors in payment flows via defensive UI and API handling  
+- Faster iteration thanks to a clean, testable Retrofit layer
+
+---
+
+### Links
+<div className="grid gap-3 sm:grid-cols-2">
+  <a href="/projects" className="card flex items-center justify-between px-4 py-3 rounded-[var(--radius)] hover:shadow-md transition-shadow">
+    <span className="inline-flex items-center gap-2">
+      <span className="icon-[tabler--folder] size-5 text-[var(--muted)]"></span>
+      <span className="font-medium">Projects</span>
+    </span>
+    <span className="icon-[tabler--chevron-right] size-5 text-[var(--muted)]"></span>
+  </a>
+
+  <a href="https://github.com/gimesha-adikari/BankingSystem" target="_blank" rel="noopener noreferrer" className="card flex items-center justify-between px-4 py-3 rounded-[var(--radius)] hover:shadow-md transition-shadow">
+    <span className="inline-flex items-center gap-2">
+      <span className="icon-[tabler--brand-github] size-5 text-[var(--muted)]"></span>
+      <span className="font-medium">Backend Repo</span>
+    </span>
+    <span className="icon-[tabler--arrow-up-right] size-5 text-[var(--muted)]"></span>
+  </a>
+</div>
+
+---
+
+### What’s next
+- Native deep-linking for payment intents; richer receipt exports  
+- Gateway production integration (secure storage & 3DS flows)

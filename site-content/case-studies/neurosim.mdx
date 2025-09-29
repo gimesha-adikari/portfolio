@@ -1,36 +1,78 @@
-# NeuroSim — Brain Network Simulator
+## NeuroSim — Browser Neural Simulator
 
-_Python · Flask · HTML5 Canvas · JS Front-end_
+<p className="text-[var(--muted)]">
+  <em>Python · Flask · HTML5 Canvas · JS Front-end</em>
+</p>
 
-**TL;DR** — Built a browser-based neural simulator. Implemented a refractory period to prevent runaway firing and tuned rendering for smooth 60fps on mid-range devices.
+> **TL;DR** — Built a browser-based neural simulator. Implemented a refractory period to prevent runaway firing and tuned rendering for smooth 60fps on mid-range devices.
 
-## Context & Role
+---
+
+### Context & Role
 CS50 final project to demonstrate neuron dynamics with a clear visual model and interactive controls.
 
-## Problem
-- Naive recursion caused infinite firing loops and browser lock-ups.
-- Unbounded rendering produced frame drops on modest hardware.
+### Problem
+- Naive recursion caused infinite firing loops and browser lock-ups  
+- Unbounded rendering produced frame drops on modest hardware
 
-## Approach & Architecture
-- Introduced **refractory cooldown** to each neuron after firing.
-- Separated simulation tick from render loop (better use of rAF).
-- Added export/import and simple APIs for persistence.
+---
 
-## Stack
-Flask · HTML/JS · Canvas 2D · Lightweight async API calls
+### Approach & Architecture
+- Introduced <strong>refractory cooldown</strong> per neuron after firing  
+- Separated simulation tick from render loop (requestAnimationFrame)  
+- Added export/import and simple APIs for persistence
 
-## Challenges & Trade-offs
-- Balancing visual fidelity vs performance on lower-spec devices.
-- Keeping the code approachable for learners while avoiding pitfalls.
+---
 
-## Results
-- Smooth rendering on mid-range laptops; stable neuron firing behavior.
-- Clearer demonstrations for lecture/demos; easier to reason about activity.
+### Tech Stack
+<ul className="mt-2 flex flex-wrap gap-2">
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--brand-python] size-4"></span> Python · Flask
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--layout] size-4"></span> HTML / JS (ES modules)
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--atom-2] size-4"></span> Canvas 2D
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--arrows-shuffle] size-4"></span> Lightweight async APIs
+  </li>
+</ul>
 
-## Links
-- [Projects](/projects)
-- GitHub: <https://github.com/gimesha-adikari/neurosim>
+---
 
-## What’s next
-- Preset networks (small-world/random) and parameter sliders.
-- Export/import of neuron graphs; richer reports.
+### Challenges & Trade-offs
+- Balancing visual fidelity vs performance on lower-spec devices  
+- Keeping the code approachable for learners while avoiding pitfalls
+
+### Results
+- Smooth rendering on mid-range laptops; stable neuron firing behavior  
+- Clearer demonstrations for lecture/demos; easier to reason about activity
+
+---
+
+### Links
+<div className="grid gap-3 sm:grid-cols-2">
+  <a href="/projects" className="card flex items-center justify-between px-4 py-3 rounded-[var(--radius)] hover:shadow-md transition-shadow">
+    <span className="inline-flex items-center gap-2">
+      <span className="icon-[tabler--folder] size-5 text-[var(--muted)]"></span>
+      <span className="font-medium">Projects</span>
+    </span>
+    <span className="icon-[tabler--chevron-right] size-5 text-[var(--muted)]"></span>
+  </a>
+
+  <a href="https://github.com/gimesha-adikari/neurosim" target="_blank" rel="noopener noreferrer" className="card flex items-center justify-between px-4 py-3 rounded-[var(--radius)] hover:shadow-md transition-shadow">
+    <span className="inline-flex items-center gap-2">
+      <span className="icon-[tabler--brand-github] size-5 text-[var(--muted)]"></span>
+      <span className="font-medium">GitHub (NeuroSim)</span>
+    </span>
+    <span className="icon-[tabler--arrow-up-right] size-5 text-[var(--muted)]"></span>
+  </a>
+</div>
+
+---
+
+### What’s next
+- Preset networks (small-world/random) and parameter sliders  
+- Export/import of neuron graphs; richer reports

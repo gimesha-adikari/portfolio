@@ -1,22 +1,45 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
+@import "flyonui/variants.css";
 
-/* ---------- Theme tokens ---------- */
+@plugin "@tailwindcss/typography";
+@plugin "flyonui"{
+    themes: shadcn --default, spotify --prefersdark;
+}
+@plugin "@iconify/tailwind4";
+@source "./node_modules/flyonui/flyonui.js";
+
 :root {
-    --bg: #f6f8ff;
-    --fg: #0f1222;
-    --muted: #4b5568;
-    --surface: #ffffff;
+    --bg: #dbe2ee;
+    --fg: #0b1220;
+    --muted: #2f3c50;
+    --surface: #e9eef6;
     --elev: 0 10px 35px -10px rgb(12 18 28 / 0.10), 0 2px 8px -2px rgb(12 18 28 / 0.06);
-    --border: #e8ecf6;
+    --border: #b8c3d7;
     --accent: #5b8cff;
     --accent-2: #8c6cff;
+    --header-h: 56px;
     --radius: 18px;
-    --spot-1: color-mix(in oklab, var(--accent) 20%, transparent);
-    --spot-2: color-mix(in oklab, var(--accent-2) 20%, transparent);
+    --spot-1: color-mix(in oklab, var(--accent) 8%, transparent);
+    --spot-2: color-mix(in oklab, var(--accent-2) 8%, transparent);
+    --ring: color-mix(in oklab, var(--accent) 70%, transparent);
+    --hover: color-mix(in oklab, var(--surface) 88%, var(--accent) 12%);
+    --active: color-mix(in oklab, var(--surface) 84%, var(--accent) 16%);
+    --mx: -100px;
+    --my: -100px;
+    --mop: 0;
+    --grad-text-strong: linear-gradient(90deg,
+    color-mix(in oklab, var(--fg) 96%, transparent) 0%,
+    color-mix(in oklab, var(--accent) 92%, transparent) 48%,
+    color-mix(in oklab, var(--accent-2) 96%, transparent) 100%
+    );
+    --grad-text-soft: linear-gradient(90deg,
+    color-mix(in oklab, var(--fg) 88%, transparent) 0%,
+    color-mix(in oklab, var(--accent) 70%, transparent) 55%,
+    color-mix(in oklab, var(--accent-2) 80%, transparent) 100%
+    );
 }
-
 :root[data-theme="dark"] {
+    --hover: color-mix(in oklab, var(--surface) 88%, var(--accent) 12%);
     --bg: #0f172a;
     --fg: #e6e8ee;
     --muted: #cbd5e1;
@@ -25,30 +48,35 @@
     --border: #1f2937;
     --accent: #7aa2ff;
     --accent-2: #b794f4;
+    --grad-text-strong: linear-gradient(90deg,
+    #e6e8ee 0%,
+    color-mix(in oklab, var(--accent) 96%, transparent) 52%,
+    color-mix(in oklab, var(--accent-2) 98%, transparent) 100%
+    );
+    --grad-text-soft: linear-gradient(90deg,
+    color-mix(in oklab, #e6e8ee 88%, transparent) 0%,
+    color-mix(in oklab, var(--accent) 86%, transparent) 52%,
+    color-mix(in oklab, var(--accent-2) 90%, transparent) 100%
+    );
 }
-
+:root[data-accent="ocean"] { --accent:#06b6d4; --accent-2:#22c55e; }
+:root[data-accent="violet"] { --accent:#5b8cff; --accent-2:#8c6cff; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; } }
 @media (prefers-color-scheme: light){ :root:not([data-theme="dark"])  { color-scheme: light; } }
 
-/* ---------- Base ---------- */
 html, body { background: var(--bg); color: var(--fg); }
-
-/* Let the document be the scroller; avoid wrapping the whole app in a scrollable div */
 html, body {
     max-width: 100%;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 @supports (overflow: clip) {
     html, body { overflow-x: clip; }
 }
-
-/* Helper for internally scrollable mobile drawer panel */
 .mobile-panel {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
-
-/* Page-wide spotlight for light theme (very subtle) */
 body::before{
     content:"";
     position: fixed;
@@ -59,11 +87,46 @@ body::before{
     background:
             radial-gradient(36% 40% at 20% 25%, var(--spot-1), transparent 65%),
             radial-gradient(36% 40% at 80% 18%, var(--spot-2), transparent 65%);
-    filter: blur(48px);
-    opacity: .55;
+    filter: blur(40px);
+    opacity: .22;
+}
+body::after{
+    content:"";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+            radial-gradient(280px 200px at var(--mx) var(--my),
+            color-mix(in oklab, var(--accent) 18%, transparent) 0%,
+            transparent 60%);
+    opacity: calc(var(--mop) * .22);
+    transition: opacity .25s ease;
+    mix-blend-mode: normal;
+}
+:root[data-theme="dark"] body::after{
+    background:
+            radial-gradient(360px 260px at var(--mx) var(--my),
+            color-mix(in oklab, var(--accent) 28%, transparent) 0%,
+            transparent 62%);
+    opacity: var(--mop);
 }
 
-/* Layout helpers */
+.grad-sheen {
+    background-image: var(--grad-text-strong);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    position: relative; display: inline-block;
+    text-shadow: 0 .45px 0 rgba(0,0,0,.04);
+}
+.grad-sheen::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+    transform: translateX(-120%); filter: blur(6px);
+    transition: transform .9s cubic-bezier(.2,.7,.2,1);
+}
+.grad-sheen:hover::after{ transform: translateX(120%); }
+.text-gradient{ background-image: var(--grad-text-soft); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
 .container-xl {
     width: 100%;
     max-width: 1240px;
@@ -73,29 +136,35 @@ body::before{
 }
 .section { padding-block: clamp(32px, 6vw, 72px); }
 
-/* Cards / hairlines */
 .card {
     background:
             linear-gradient(180deg, color-mix(in oklab, var(--surface) 96%, var(--accent) 4%), var(--surface));
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    box-shadow: var(--elev);
+    box-shadow: 0 10px 30px -14px rgb(12 18 28 / 0.12), 0 2px 8px -2px rgb(12 18 28 / 0.07);
+    transition: transform .18s ease, box-shadow .25s ease, outline-color .2s;
+    color: var(--fg);
 }
+.card:hover { transform: translateY(-2px); }
+.card:active { transform: translateY(0); }
+.card { border-radius: calc(var(--radius) + 2px); }
+
 .hairline { border: 1px solid var(--border); border-radius: calc(var(--radius) - 6px); }
 
-/* Frosted top nav helper */
 .nav-blur {
     backdrop-filter: saturate(140%) blur(10px);
-    background: color-mix(in oklab, var(--surface) 85%, transparent);
+    background: color-mix(in oklab, var(--surface) 88%, transparent);
     border-bottom: 1px solid var(--border);
 }
 
-/* Buttons */
 .btn{
     display:inline-flex; align-items:center; justify-content:center;
     min-height: 44px; padding: 0 18px; border-radius: 14px;
     font-weight: 600; transition: transform .15s ease, opacity .2s ease, background .2s ease, box-shadow .2s ease;
 }
+.btn:hover { background: var(--hover); }
+.btn:active { background: var(--active); transform: translateY(0); }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
 .btn-primary{
     color: #fff;
     background: linear-gradient(90deg, var(--accent), var(--accent-2));
@@ -103,19 +172,18 @@ body::before{
 }
 .btn-primary:hover{ transform: translateY(-1px); opacity: .98; }
 .btn-ghost{
-    background: color-mix(in oklab, var(--surface) 92%, var(--accent) 8%);
+    background: color-mix(in oklab, var(--surface) 90%, var(--accent) 10%);
     border: 1px solid var(--border);
     color: var(--fg);
 }
 .btn-ghost:hover{ transform: translateY(-1px); }
 
-/* Focus ring */
+.focus-ring, .btn, a[href]{ outline-offset: 3px; }
 .focus-ring:focus-visible, a:focus-visible, button:focus-visible, [role="button"]:focus-visible{
     outline: 2px solid color-mix(in oklab, var(--accent) 60%, transparent);
     outline-offset: 3px;
 }
 
-/* ---------- Prose / MDX ---------- */
 .prose { max-width: 70ch; color: var(--fg); }
 .prose h1,.prose h2,.prose h3{ color: var(--fg); letter-spacing: -0.02em; }
 .prose a{ color: var(--accent); }
@@ -123,7 +191,7 @@ body::before{
     --tw-prose-body: var(--fg);
     --tw-prose-headings: var(--fg);
     --tw-prose-bold: var(--fg);
-    --tw-prose-links: var(--accent);
+    --tw-prose-links: color-mix(in oklab, var(--accent) 80%, var(--fg) 20%);
     --tw-prose-counters: var(--muted);
     --tw-prose-bullets: var(--muted);
     --tw-prose-hr: var(--border);
@@ -132,16 +200,16 @@ body::before{
     --tw-prose-captions: var(--muted);
     --tw-prose-code: var(--fg);
     --tw-prose-pre-code: var(--fg);
-    --tw-prose-pre-bg: color-mix(in oklab, var(--surface) 96%, transparent);
+    --tw-prose-pre-bg: color-mix(in oklab, var(--surface) 94%, transparent);
     --tw-prose-th-borders: var(--border);
     --tw-prose-td-borders: var(--border);
 }
 .prose :where(p, li, strong, em, code){ color: var(--fg); }
+.prose :where(h2,h3,h4,h5){ scroll-margin-top: calc(var(--header-h,56px) + 20px); }
 .prose li::marker{ color: var(--muted); }
 .prose img, .prose video, .prose audio { max-width: 100%; height: auto; }
 .prose table { width: 100%; border-collapse: collapse; }
 
-/* ---------- Hero glow ---------- */
 .hero-glow{
     position: relative;
     isolation: isolate;
@@ -151,14 +219,113 @@ body::before{
     content:"";
     position:absolute; inset:-10% -10% auto -10%; height: 52%;
     background:
-            radial-gradient(40% 40% at 25% 30%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 60%),
-            radial-gradient(40% 40% at 75% 20%, color-mix(in oklab, var(--accent-2) 18%, transparent), transparent 60%);
-    filter: blur(40px); z-index:-1; opacity:.8;
+            radial-gradient(40% 40% at 25% 30%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 60%),
+            radial-gradient(40% 40% at 75% 20%, color-mix(in oklab, var(--accent-2) 14%, transparent), transparent 60%);
+    filter: blur(40px);
+    z-index:-1;
+    opacity:.22;
 }
 
-/* ---------- Small-screen niceties ---------- */
 @media (max-width: 480px){
     .section { padding-block: 28px; }
     .btn { min-height: 42px; padding: 0 16px; }
     .card { border-radius: 16px; }
+}
+
+.gn-sidebar {
+    background: var(--surface);
+    color: var(--fg);
+    border-color: var(--border);
+}
+.gn-sidebar .drawer-header {
+    border-bottom: 1px solid var(--border);
+}
+.gn-sidebar .menu a {
+    color: var(--fg);
+}
+.gn-sidebar .menu a .iconify,
+.gn-sidebar .menu a [class^="icon-"],
+.gn-sidebar .menu a [class*=" icon-"] {
+    color: var(--muted);
+}
+.gn-sidebar .menu a:hover {
+    background: color-mix(in oklab, var(--surface) 90%, var(--accent) 10%);
+}
+.gn-sidebar .menu a[aria-current="page"] {
+    background: color-mix(in oklab, var(--accent) 16%, transparent);
+    color: var(--fg);
+    outline: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+}
+.gn-sidebar .dropdown-menu {
+    background: var(--surface);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    box-shadow: var(--elev);
+}
+.gn-sidebar.overlay-minified .dropdown-menu {
+    box-shadow: var(--elev);
+}
+.gn-sidebar .btn.btn-text,
+.gn-sidebar .btn.btn-circle.btn-text {
+    color: var(--fg);
+}
+.gn-sidebar .btn.btn-text:hover,
+.gn-sidebar .btn.btn-circle.btn-text:hover {
+    background: color-mix(in oklab, var(--surface) 88%, var(--accent) 12%);
+}
+.btn.btn-text.max-sm\:btn-square {
+    color: var(--fg);
+}
+@media (min-width:640px){ body { --sidebar-w: 264px; } }
+
+.gn-select {
+    background: var(--surface);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+    min-width: 190px;
+    height: 40px;
+    line-height: 1.2;
+    outline: 0;
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    box-shadow: var(--elev);
+    color-scheme: light;
+}
+:root[data-theme="dark"] .gn-select { color-scheme: dark; }
+.gn-select-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+.gn-select-wrapper::after {
+    content: "";
+    position: absolute;
+    right: .6rem; top: 50%; transform: translateY(-50%);
+    width: 0.6rem; height: 0.6rem;
+    border-right: 2px solid var(--muted);
+    border-bottom: 2px solid var(--muted);
+    rotate: 45deg;
+    pointer-events: none;
+}
+.gn-select:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--accent) 60%, transparent);
+    outline-offset: 2px;
+}
+.gn-input {
+    background: var(--surface);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.5rem 0.75rem;
+    height: 40px;
+}
+.gn-input::placeholder { color: var(--muted); }
+select.gn-select option {
+    background: var(--surface);
+    color: var(--fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
 }

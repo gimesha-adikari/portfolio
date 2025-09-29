@@ -1,41 +1,83 @@
-# Multi-Platform Platform (Fintech)
+## Multi-Platform Platform (Fintech)
 
-_Spring Boot · React · Android · FastAPI (AI KYC) · ONNX/OCR_
+<p className="text-[var(--muted)]">
+  <em>Spring Boot · React · Android · FastAPI (AI KYC) · ONNX/OCR</em>
+</p>
 
-**TL;DR** — Designed and implemented a modular platform spanning backend, web, mobile, and an AI KYC microservice. Improved KYC false-reject rate and stabilized flows under real-world constraints.
+> **TL;DR** — Designed and implemented a modular platform across backend, web, mobile, and an AI KYC microservice. Reduced KYC false-rejects and stabilized flows under real-world constraints.
 
-## Context & Role
+---
+
+### Context & Role
 Solo/lead developer across multiple layers. Objectives: secure account flows, robust KYC, and a wallet experience that can operate independently of heavier banking flows.
 
-## Problem
-- Fragmented onboarding with brittle KYC caused drop-offs and manual reviews.
-- Inconsistent data boundaries across services and clients slowed iteration.
-- Accuracy/latency trade-offs in OCR, face match, and liveness checks.
+### Problem
+- Fragmented onboarding with brittle KYC caused drop-offs and manual reviews  
+- Inconsistent data boundaries across services and clients slowed iteration  
+- Accuracy/latency trade-offs in OCR, face match, and liveness checks
 
-## Approach & Architecture
-- **Domain-oriented Spring Boot** modules (auth, accounts, analytics, kyc, wallet).
-- **AI KYC microservice** (FastAPI): pluggable providers; threshold tuning and retries.
-- **Android Wallet**: card reload, QR pay, bill-pay; Retrofit interfaces & DTOs.
-- **React Web** dashboard with a11y-first forms/tables.
-- **Observability & CI**: safe defaults, lint/type checks, reproducible envs.
+---
 
-## Stack
-Spring Boot · Hibernate · MySQL · Kotlin/Android · TypeScript/React · FastAPI · ONNX (ArcFace, SCRFD, liveness) · OCR
+### Architecture & Approach
+- <strong>Domain-oriented Spring Boot</strong> modules: auth, accounts, analytics, kyc, wallet  
+- <strong>AI KYC microservice (FastAPI)</strong>: pluggable providers; threshold tuning + retries  
+- <strong>Android Wallet</strong>: card reload, QR pay, bill-pay; Retrofit interfaces & DTOs  
+- <strong>React Web</strong> dashboard with a11y-first forms/tables  
+- <strong>Observability & CI</strong>: safe defaults, lint/type checks, reproducible envs
 
-## Challenges & Trade-offs
-- Face-match sensitivity vs UX: tuned thresholds; re-tryable capture & guidance.
-- OCR noise: preprocessing + field-level confidence gating.
-- Network reliability: graceful fallbacks & cached responses on mobile.
+---
 
-## Results
-- Reduced KYC false rejects vs baseline after threshold tuning and OCR cleanup.
-- Fewer manual reviews; faster re-submission loops.
-- Standalone wallet flows widened the onboarding funnel.
+### Tech Stack
+<ul className="mt-2 flex flex-wrap gap-2">
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--brand-java] size-4"></span> Spring Boot · Hibernate · MySQL
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--brand-react] size-4"></span> TypeScript · React
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--device-mobile] size-4"></span> Kotlin · Android · Retrofit/OkHttp
+  </li>
+  <li className="hairline px-3 py-1 rounded-md text-sm inline-flex items-center gap-2">
+    <span className="icon-[tabler--brain] size-4"></span> FastAPI · ONNX (ArcFace, SCRFD, liveness) · OCR
+  </li>
+</ul>
 
-## Links
-- [Projects](/projects)
-- GitHub: <https://github.com/gimesha-adikari/BankingSystem>
+---
 
-## What’s next
-- Deeper analytics for KYC decision explainability.
-- Payment gateway webhooks with idempotency + retries.
+### Challenges & Trade-offs
+- Face-match sensitivity vs UX → tuned thresholds; re-tryable capture & guidance  
+- OCR noise → preprocessing + field-level confidence gating  
+- Network reliability → graceful fallbacks & cached responses on mobile
+
+### Results
+- Fewer KYC false-rejects after threshold tuning and OCR cleanup  
+- Reduced manual reviews; faster re-submission loops  
+- Standalone wallet flows widened the onboarding funnel
+
+---
+
+### Links
+<div className="grid gap-3 sm:grid-cols-2">
+  <a href="/projects" className="card flex items-center justify-between px-4 py-3 rounded-[var(--radius)] hover:shadow-md transition-shadow">
+    <span className="inline-flex items-center gap-2">
+      <span className="icon-[tabler--folder] size-5 text-[var(--muted)]"></span>
+      <span className="font-medium">Projects</span>
+    </span>
+    <span className="icon-[tabler--chevron-right] size-5 text-[var(--muted)]"></span>
+  </a>
+
+  <a href="https://github.com/gimesha-adikari/BankingSystem" target="_blank" rel="noopener noreferrer" className="card flex items-center justify-between px-4 py-3 rounded-[var(--radius)] hover:shadow-md transition-shadow">
+    <span className="inline-flex items-center gap-2">
+      <span className="icon-[tabler--brand-github] size-5 text-[var(--muted)]"></span>
+      <span className="font-medium">GitHub (Backend)</span>
+    </span>
+    <span className="icon-[tabler--arrow-up-right] size-5 text-[var(--muted)]"></span>
+  </a>
+</div>
+
+---
+
+### What’s next
+- Deeper analytics for KYC decision explainability  
+- Payment gateway webhooks with idempotency + retries

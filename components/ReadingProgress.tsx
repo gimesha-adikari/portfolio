@@ -1,23 +1,28 @@
 "use client";
-
-import * as React from "react";
+import { useEffect, useState } from "react";
 
 export default function ReadingProgress() {
-    const [pct, setPct] = React.useState(0);
-    React.useEffect(() => {
+    const [p, setP] = useState(0);
+    useEffect(() => {
         const onScroll = () => {
-            const el = document.documentElement;
-            const total = el.scrollHeight - el.clientHeight;
-            const p = total > 0 ? (el.scrollTop / total) * 100 : 0;
-            setPct(Math.max(0, Math.min(100, p)));
+            const h = document.documentElement;
+            const max = h.scrollHeight - h.clientHeight;
+            setP(Math.max(0, Math.min(1, (h.scrollTop || 0) / (max || 1))));
         };
         onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
     return (
-        <div className="fixed inset-x-0 top-0 z-40 h-0.5 bg-transparent">
-            <div className="h-full bg-[var(--accent)] transition-[width] duration-150" style={{ width: `${pct}%` }} />
+        <div aria-hidden className="fixed top-0 left-0 right-0 h-1 z-50">
+            <div
+                className="h-full"
+                style={{
+                    width: `${p * 100}%`,
+                    background: "linear-gradient(90deg, var(--accent), var(--accent-2))",
+                    transition: "width .1s linear",
+                }}
+            />
         </div>
     );
 }

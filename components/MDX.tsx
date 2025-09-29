@@ -14,22 +14,12 @@ export function slugify(s: string) {
         .replace(/^-|-$/g, "");
 }
 
-/**
- * Normalizes angle-bracket autolinks (<https://…>, <mailto:…>)
- * into standard markdown links so MDX renders consistent anchors.
- */
 function normalizeMDX(s: string) {
     return s
         .replace(/<\s*(https?:\/\/[^>\s]+)\s*>/gi, (_m, url) => `[${url}](${url})`)
         .replace(/<\s*(mailto:[^>\s]+)\s*>/gi, (_m, url) => `[${url}](${url})`);
 }
 
-/**
- * Safe <a> mapper:
- * - Avoids nested <a> hydration errors by detecting a single <a> child and
- *   cloning it instead of rendering an extra wrapper.
- * - Adds external target/rel for http(s) links.
- */
 function Anchor(props: any) {
     const { href = "", children, className, ...rest } = props;
     const kids = React.Children.toArray(children);
@@ -61,10 +51,6 @@ function Anchor(props: any) {
     );
 }
 
-/**
- * Headings with anchored ids and hoverable “#” link.
- * Sizes are fluid for readability on mobile.
- */
 function Heading(tag: "h2" | "h3" | "h4") {
     return function H({ children, className, ...rest }: any) {
         const text = React.Children.toArray(children).join(" ");
@@ -97,12 +83,10 @@ function Heading(tag: "h2" | "h3" | "h4") {
     };
 }
 
-/** Responsive image wrapper (keeps markdown <img> usable). */
 function Img(props: any) {
     const { className, ...rest } = props;
     return (
         <span className="block my-4 rounded-xl overflow-hidden border border-[var(--border)]">
-      {/* Use native <img> for MDXRemote */}
             <img {...rest} className={cx("w-full h-auto", className)} />
     </span>
     );

@@ -1,21 +1,5 @@
 const API = "https://api.github.com";
 
-/** ========= Tuning via env =========
- * GITHUB_USERNAME                (required)
- * GITHUB_TOKEN                   (optional, avoids rate limits / enables private)
- * GITHUB_INCLUDE_PRIVATE=true    (default true)
- * GITHUB_INCLUDE_FORKS=false     (default false)
- * GITHUB_INCLUDE_ARCHIVED=false  (default false)
- * GITHUB_OWNER_ONLY=true         (default true)
- *
- * Timeouts & pagination:
- * GITHUB_TIMEOUT_MS=2500
- * GITHUB_README_TIMEOUT_MS=1500
- * GITHUB_MAX_PAGES=5
- *
- * Extras:
- * GITHUB_ENABLE_README_EXTRAS=false   (default false => no README fetch)
- */
 const TIMEOUT_MS = Number(process.env.GITHUB_TIMEOUT_MS || 2500);
 const README_TIMEOUT_MS = Number(process.env.GITHUB_README_TIMEOUT_MS || 1500);
 const MAX_PAGES = Math.max(1, Number(process.env.GITHUB_MAX_PAGES || 5));
@@ -42,7 +26,6 @@ function publicHeaders() {
     };
 }
 
-/** Abortable fetch with timeout (doesn't cancel remote, but aborts locally) */
 async function fetchWithTimeout(
     url: string,
     init: RequestInit & { revalidate?: number } = {},
@@ -52,8 +35,7 @@ async function fetchWithTimeout(
     const ac = new AbortController();
     const t = setTimeout(() => ac.abort(), ms);
     try {
-        const res = await fetch(url, { ...rest, signal: ac.signal, next: { revalidate } });
-        return res;
+        return await fetch(url, {...rest, signal: ac.signal, next: {revalidate}});
     } finally {
         clearTimeout(t);
     }
@@ -62,7 +44,7 @@ async function fetchWithTimeout(
 async function gh<T>(path: string, init?: RequestInit & { revalidate?: number }) {
     const res = await fetchWithTimeout(`${API}${path}`, { headers: ghHeaders(), ...init });
     if (!res.ok) throw new Error(`GitHub ${res.status}: ${path}`);
-    return res.json() as Promise<T>;
+    return await res.json() as Promise<T>;
 }
 
 async function ghPublic<T>(path: string, revalidate = 900) {
@@ -71,7 +53,7 @@ async function ghPublic<T>(path: string, revalidate = 900) {
         revalidate,
     });
     if (!res.ok) throw new Error(`GitHub public ${res.status}: ${path}`);
-    return res.json() as Promise<T>;
+    return await res.json() as Promise<T>;
 }
 
 
@@ -144,7 +126,7 @@ export async function fetchAllRepos(): Promise<Repo[]> {
     } catch {
     }
 
-    let publicRepos: Repo[] = [];
+    let publicRepos: Repo[];
     try {
         const publicList = await ghPublic<any[]>(
             `/users/${encodeURIComponent(username)}/repos?per_page=100&sort=pushed&direction=desc`
@@ -203,7 +185,7 @@ export async function fetchRepoLanguages(name: string) {
 
 
 export async function fetchRepoReadmeRaw(name: string): Promise<string | null> {
-    if (!ENABLE_README_EXTRAS) return null; // disabled by default to avoid timeouts
+    if (!ENABLE_README_EXTRAS) return null;
     const owner = process.env.GITHUB_USERNAME!;
     const res = await fetchWithTimeout(
         `${API}/repos/${owner}/${encodeURIComponent(name)}/readme`,
@@ -224,12 +206,15 @@ function absolutizeReadmeUrl(url: string, owner: string, repo: string, branch: s
     return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${clean}`;
 }
 
-export function extractReadmeMeta(md: string | null, owner: string, repo: string, branch: string) {
+export function extractReadmeMeta(md: {
+    name: string;
+    bytes: number;
+    pct: number
+}[] | any[] | null extends ((value: infer V, ...args: infer _) => any) ? Awaited<V> : never | string | null, owner: string, repo: string, branch: string) {
     let cover: string | null = null;
     const bullets: string[] = [];
 
     if (md) {
-        // Pick the first non-badge image
         const imgRe = /!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
         let m: RegExpExecArray | null;
         while ((m = imgRe.exec(md))) {
@@ -240,7 +225,6 @@ export function extractReadmeMeta(md: string | null, owner: string, repo: string
             break;
         }
 
-        // First 80 lines: collect up to 2 short bullets
         const lines = md.split(/\r?\n/);
         for (let i = 0; i < Math.min(lines.length, 80); i++) {
             const mm = lines[i].match(/^\s*[-*]\s+(.+?)\s*$/);
@@ -251,7 +235,6 @@ export function extractReadmeMeta(md: string | null, owner: string, repo: string
     return { cover, bullets };
 }
 
-/* ---------- Card extras ---------- */
 
 export async function getRepoCardExtras(repo: Repo) {
     const [langs, readme] = await Promise.allSettled([

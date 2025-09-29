@@ -2,29 +2,50 @@
 
 For opportunities or questions, email me or connect on socials.
 
-<div className="mt-6 space-y-4">
+<ul className="mt-6 grid gap-3 sm:gap-4">
+  {/* Email */}
+  <li>
     <a
-        href="mailto:gimeshanirmal23@gmail.com"
-        className="card block px-4 py-3 hover:shadow-md transition-shadow"
+      href="mailto:gimeshanirmal23@gmail.com"
+      className="card group flex items-center justify-between px-4 py-3 rounded-[var(--radius)] hover:shadow-md transition-shadow"
     >
-        gimeshanirmal23@gmail.com
+      <span className="flex items-center gap-3">
+        <span className="icon-[tabler--mail] size-5 text-[var(--muted)]" aria-hidden="true"></span>
+        <span className="font-medium">gimeshanirmal23@gmail.com</span>
+      </span>
+      <span className="icon-[tabler--chevron-right] size-5 text-[var(--muted)] group-hover:translate-x-0.5 transition-transform" aria-hidden="true"></span>
     </a>
+  </li>
 
+  {/* GitHub */}
+  <li>
     <a
-        href="https://github.com/gimesha-adikari"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="card block px-4 py-3 hover:shadow-md transition-shadow"
+      href="https://github.com/gimesha-adikari"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="card group flex items-center justify-between px-4 py-3 rounded-[var(--radius)] hover:shadow-md transition-shadow"
     >
-        GitHub
+      <span className="flex items-center gap-3">
+        <span className="icon-[tabler--brand-github] size-5 text-[var(--muted)]" aria-hidden="true"></span>
+        <span className="font-medium">GitHub</span>
+      </span>
+      <span className="icon-[tabler--arrow-up-right] size-5 text-[var(--muted)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true"></span>
     </a>
+  </li>
 
+  {/* LinkedIn */}
+  <li>
     <a
-        href="https://linkedin.com/in/gimesha-nirmal-490245343"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="card block px-4 py-3 hover:shadow-md transition-shadow"
+      href="https://linkedin.com/in/gimesha-nirmal-490245343"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="card group flex items-center justify-between px-4 py-3 rounded-[var(--radius)] hover:shadow-md transition-shadow"
     >
-        LinkedIn
+      <span className="flex items-center gap-3">
+        <span className="icon-[tabler--brand-linkedin] size-5 text-[var(--muted)]" aria-hidden="true"></span>
+        <span className="font-medium">LinkedIn</span>
+      </span>
+      <span className="icon-[tabler--arrow-up-right] size-5 text-[var(--muted)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true"></span>
     </a>
-</div>
+  </li>
+</ul>
