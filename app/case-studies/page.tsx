@@ -18,7 +18,7 @@ const cases: Case[] = [
         blurb:
             "Modular Spring Boot + FastAPI (AI KYC) with React admin and Android wallet. Focus on clean domains and resilient KYC.",
         read: "3–4 min",
-        icon: "icon-[tabler--brand-java]",
+        icon: "icon-[devicon--java]",
         tags: ["Impact", "Architecture", "Trade-offs"],
     },
     {
