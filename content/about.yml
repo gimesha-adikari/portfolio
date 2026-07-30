@@ -128,3 +128,8 @@ certifications:
     issuer: "Coursera"
     year: "2026"
     credential_link: "https://www.coursera.org/account/accomplishments/specialization/M699R7O1070Z"
+
+  - title: "CS50x"
+    issuer: "HarvardX"
+    year: "2025"
+    credential_link: "https://certificates.cs50.io/44bcf6a3-a9b2-43ed-bf6b-b3888d260893.pdf?size=letter"

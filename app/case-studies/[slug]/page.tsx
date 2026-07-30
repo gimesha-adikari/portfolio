@@ -1,4 +1,3 @@
-// file: app/case-studies/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllCaseStudies, getCaseStudyBySlug } from "@/lib/case-studies";
@@ -9,11 +8,9 @@ export const revalidate = 3600;
 export default async function CasePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
 
-    // Fetch the single YAML file
     const data = getCaseStudyBySlug(slug);
     if (!data) notFound();
 
-    // Get all cases to calculate Prev/Next pagination
     const list = getAllCaseStudies();
     const idx = list.findIndex((x) => x.slug === slug);
     const prev = idx > 0 ? list[idx - 1] : null;

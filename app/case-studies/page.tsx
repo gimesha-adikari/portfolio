@@ -24,17 +24,14 @@ export default function CaseStudiesIndex() {
                             href={`/case-studies/${c.slug}`}
                             className="group relative flex flex-col justify-between w-full p-6 sm:p-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] hover:shadow-xl hover:shadow-[var(--accent)]/5 transition-all duration-500 focus:outline-none overflow-hidden"
                         >
-                            {/* Subtle gradient overlay on hover to add depth */}
                             <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                             <div className="relative z-10 flex flex-col grow">
                                 <div className="flex items-start justify-between mb-8">
-                                    {/* Icon Box */}
                                     <div className="size-12 rounded-2xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center group-hover:scale-110 group-hover:-rotate-3 group-hover:border-[var(--accent)]/50 transition-all duration-500 shadow-sm">
                                         <span className={`${c.main_icon} size-6 text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors`} />
                                     </div>
 
-                                    {/* Read Time Pill */}
                                     <span className="text-xs font-semibold tracking-wider text-[var(--muted)] uppercase flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--background)] shadow-sm">
                                         <span className="icon-[tabler--clock] size-3.5"></span> {c.read_time}
                                     </span>
@@ -49,7 +46,6 @@ export default function CaseStudiesIndex() {
                                 </p>
                             </div>
 
-                            {/* Tags Section - Separated by a subtle line */}
                             <div className="relative z-10 mt-auto pt-6 border-t border-[var(--border)]/60 flex flex-wrap gap-2">
                                 {c.tags?.map((t) => (
                                     <span key={t} className="px-3 py-1 text-xs font-medium rounded-lg bg-[var(--background)] text-[var(--muted)] border border-[var(--border)]/50">
