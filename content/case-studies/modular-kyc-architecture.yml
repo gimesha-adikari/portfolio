@@ -1,0 +1,60 @@
+order: 2
+
+title: "Architecting a Modular KYC Microservice Platform"
+blurb: "Modular Spring Boot + FastAPI (AI KYC) with React admin and Android wallet. Focus on clean domains and resilient KYC."
+read_time: "3–4 min"
+main_icon: "icon-[devicon--java]"
+tags:
+  - "Impact"
+  - "Architecture"
+  - "Trade-offs"
+subtitle: "Spring Boot · React · Android · FastAPI (AI KYC) · ONNX/OCR"
+tldr: "Designed and implemented a modular platform spanning backend, web, mobile, and an AI KYC microservice. Improved KYC false-reject rate and stabilized flows under real-world constraints."
+
+context: "Solo/lead developer across multiple layers. Objectives: secure account flows, robust KYC, and a wallet experience that can operate independently of heavier banking flows."
+
+problem:
+  - "Fragmented onboarding with brittle KYC caused drop-offs and manual reviews"
+  - "Inconsistent data boundaries across services and clients slowed iteration"
+  - "Accuracy/latency trade-offs in OCR, face match, and liveness checks"
+
+architecture:
+  - "Domain-oriented Spring Boot modules (auth, accounts, analytics, kyc, wallet)"
+  - "AI KYC microservice (FastAPI): pluggable providers; threshold tuning & retries"
+  - "Android Wallet: card reload, QR pay, bill-pay; Retrofit interfaces & DTOs"
+  - "React Web dashboard with a11y-first forms/tables"
+  - "Observability & CI: safe defaults, lint/type checks, reproducible envs"
+
+stack:
+  - name: "Spring Boot · Hibernate · MySQL"
+    icon: "icon-[tabler--brand-java]"
+  - name: "TypeScript · React"
+    icon: "icon-[tabler--brand-react]"
+  - name: "Kotlin / Android · Retrofit/OkHttp"
+    icon: "icon-[tabler--device-mobile]"
+  - name: "FastAPI · ONNX (ArcFace, SCRFD, liveness) · OCR"
+    icon: "icon-[tabler--brain]"
+
+challenges:
+  - "Face-match sensitivity vs UX → tuned thresholds; re-tryable capture & guidance"
+  - "OCR noise → preprocessing + field-level confidence gating"
+  - "Network reliability → graceful fallbacks & cached responses on mobile"
+
+results:
+  - "Reduced KYC false rejects vs baseline after threshold tuning and OCR cleanup"
+  - "Fewer manual reviews; faster re-submission loops"
+  - "Standalone wallet flows widened the onboarding funnel"
+
+links:
+  - label: "Projects"
+    url: "/projects"
+    icon: "icon-[tabler--folder]"
+    is_external: false
+  - label: "GitHub (Backend)"
+    url: "https://github.com/gimesha-adikari/BankingSystem"
+    icon: "icon-[tabler--brand-github]"
+    is_external: true
+
+next_steps:
+  - "Deeper analytics for KYC decision explainability"
+  - "Payment gateway webhooks with idempotency + retries"

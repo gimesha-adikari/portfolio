@@ -1,0 +1,52 @@
+order: 5
+title: "OCR and Scanned Document Processing"
+blurb: "OCR experiments and image-processing choices aimed to turn scanned PDFs into searchable, usable documents."
+read_time: "3–4 min"
+main_icon: "icon-[tabler--scan]"
+tags:
+  - "OCR"
+  - "Computer Vision"
+  - "Accuracy"
+subtitle: "Python · FastAPI · OCR · Computer Vision · Document Processing"
+tldr: "Explored how to extract readable text from scanned or image-based documents while balancing accuracy, speed, and resource usage."
+context: "This case study covers the OCR and image-processing side of PDFNest and the research needed to make scanned documents more useful."
+problem:
+  - "Scanned PDFs are not searchable by default."
+  - "Low-quality images can reduce OCR accuracy."
+  - "Document processing had to balance speed, quality, and resource usage."
+architecture:
+  - "Image preprocessing before OCR"
+  - "OCR pipeline designed for scanned and mixed-content documents"
+  - "FastAPI-based service layer for document extraction workflows"
+  - "Post-processing to make extracted text more usable"
+stack:
+  - name: "Python"
+    icon: "icon-[tabler--brand-python]"
+  - name: "FastAPI"
+    icon: "icon-[tabler--api]"
+  - name: "OCR"
+    icon: "icon-[tabler--scan]"
+  - name: "OpenCV"
+    icon: "icon-[tabler--camera]"
+  - name: "Computer Vision"
+    icon: "icon-[tabler--eye]"
+  - name: "Document Processing"
+    icon: "icon-[tabler--file-text]"
+challenges:
+  - "Handling poor scan quality and mixed image/text content"
+  - "Keeping inference and preprocessing efficient enough for real workloads"
+results:
+  - "A path toward searchable scanned documents"
+  - "A more practical OCR workflow for document-heavy use cases"
+links:
+  - label: "Projects"
+    url: "/projects"
+    icon: "icon-[tabler--folder]"
+    is_external: false
+  - label: "PDFNest"
+    url: "/projects/pdfnest"
+    icon: "icon-[tabler--file-text]"
+    is_external: false
+next_steps:
+  - "Improve preprocessing for difficult scans"
+  - "Explore stronger OCR models and better confidence handling"

@@ -1,0 +1,52 @@
+order: 3
+title: "Building a High-Performance PDF Processing Pipeline"
+blurb: "Go services handled validation, transformation, cleanup, and file lifecycle management for heavy PDF workloads."
+read_time: "3–4 min"
+main_icon: "icon-[tabler--speedboat]"
+tags:
+  - "Performance"
+  - "Backend"
+  - "Cleanup"
+subtitle: "Go · File Lifecycle · Validation · Temporary Storage"
+tldr: "Built the backend side of document processing around safe file handling, efficient transformations, and predictable cleanup so large jobs could run reliably."
+context: "This case study focuses on the backend processing layer that powers PDFNest and how it was designed to handle heavy document workloads."
+problem:
+  - "Large PDFs could consume too much memory if processed naively."
+  - "Temporary files and partial outputs had to be cleaned up safely."
+  - "Processing steps needed to stay isolated so one failure would not break the whole request."
+architecture:
+  - "Go services with clear validation and processing boundaries"
+  - "Temporary storage for intermediate files and generated outputs"
+  - "Orchestrated transformation steps with explicit cleanup"
+  - "Error handling designed for safe failure and consistent responses"
+stack:
+  - name: "Go"
+    icon: "icon-[tabler--brand-golang]"
+  - name: "PDF CPU / Processing"
+    icon: "icon-[tabler--file-cog]"
+  - name: "Validation"
+    icon: "icon-[tabler--shield-check]"
+  - name: "Temporary Files"
+    icon: "icon-[tabler--folder-open]"
+  - name: "Streaming"
+    icon: "icon-[tabler--arrows-split-2]"
+  - name: "Cleanup"
+    icon: "icon-[tabler--trash]"
+challenges:
+  - "Avoiding memory pressure during large document transformations"
+  - "Preventing stale temporary files and partial outputs from accumulating"
+results:
+  - "A more reliable backend for long-running document operations"
+  - "Cleaner file lifecycle management across the processing pipeline"
+links:
+  - label: "Projects"
+    url: "/projects"
+    icon: "icon-[tabler--folder]"
+    is_external: false
+  - label: "Backend Repo"
+    url: ""
+    icon: "icon-[tabler--brand-github]"
+    is_external: false
+next_steps:
+  - "Introduce stronger job tracking for long-running operations"
+  - "Explore more parallel processing where it makes sense"

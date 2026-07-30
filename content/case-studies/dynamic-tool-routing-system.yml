@@ -1,0 +1,52 @@
+order: 4
+title: "Designing a Flexible Tool System"
+blurb: "A dynamic tool architecture let the product support many document tools without duplicating pages or logic."
+read_time: "2–3 min"
+main_icon: "icon-[tabler--settings-2]"
+tags:
+  - "Platform"
+  - "Reuse"
+  - "SEO"
+subtitle: "Next.js · Dynamic Routes · Tool Config · Shared Layouts"
+tldr: "Built the product so new tools could be added through shared layouts and configuration instead of writing a full page from scratch every time."
+context: "Focuses on how the tool system was structured, including tool-specific pages, shared workspaces, SEO metadata, and reusable UI."
+problem:
+  - "Every new tool would have required its own page structure and metadata if built manually."
+  - "Shared upload, workspace, and download behavior needed to stay consistent across tools."
+  - "Tool pages still needed enough flexibility for special cases."
+architecture:
+  - "Dynamic route-based tool layouts"
+  - "Reusable upload, workspace, and download components"
+  - "Tool configuration loaded through shared data structures"
+  - "Metadata and FAQ generation driven from the same tool definitions"
+stack:
+  - name: "Next.js"
+    icon: "icon-[tabler--brand-nextjs]"
+  - name: "TypeScript"
+    icon: "icon-[tabler--brand-typescript]"
+  - name: "Dynamic Routing"
+    icon: "icon-[tabler--route]"
+  - name: "Metadata"
+    icon: "icon-[tabler--world]"
+  - name: "Reusable UI"
+    icon: "icon-[tabler--components]"
+  - name: "SEO"
+    icon: "icon-[tabler--search]"
+challenges:
+  - "Keeping shared components generic without making them bloated"
+  - "Supporting special tool behaviors without breaking the common flow"
+results:
+  - "New tools could be added with far less duplication"
+  - "A cleaner and more maintainable platform structure"
+links:
+  - label: "Projects"
+    url: "/projects"
+    icon: "icon-[tabler--folder]"
+    is_external: false
+  - label: "Tools"
+    url: "/tools"
+    icon: "icon-[tabler--tool]"
+    is_external: false
+next_steps:
+  - "Make tool configuration even more data-driven"
+  - "Expand shared UI patterns for new categories of tools"

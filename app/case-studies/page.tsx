@@ -1,137 +1,66 @@
 import Link from "next/link";
+import { getAllCaseStudies } from "@/lib/case-studies";
 
-export const metadata = {title: "Case Studies"};
-
-type Case = {
-    slug: string;
-    title: string;
-    blurb: string;
-    read: string;
-    icon: string;
-    tags: string[];
-};
-
-const cases: Case[] = [
-    {
-        slug: "banking-system",
-        title: "Bank System — Multi-Platform Banking",
-        blurb:
-            "Modular Spring Boot + FastAPI (AI KYC) with React admin and Android wallet. Focus on clean domains and resilient KYC.",
-        read: "3–4 min",
-        icon: "icon-[devicon--java]",
-        tags: ["Impact", "Architecture", "Trade-offs"],
-    },
-    {
-        slug: "bank-app",
-        title: "BankApp — Android Wallet & Payments",
-        blurb:
-            "Compose UI, Retrofit/OkHttp, robust retries and clear flows for reloads, QR pay, and bill-pay on real networks.",
-        read: "2–3 min",
-        icon: "icon-[tabler--device-mobile]",
-        tags: ["UX", "Resilience", "Testing"],
-    },
-    {
-        slug: "neurosim",
-        title: "NeuroSim — Brain Network Simulator",
-        blurb:
-            "Canvas-based neuron visualizer with refractory logic and decoupled sim/render for smooth, stable demos.",
-        read: "2–3 min",
-        icon: "icon-[tabler--brain]",
-        tags: ["Visualization", "Performance", "Teaching"],
-    },
-];
+export const metadata = { title: "Case Studies" };
 
 export default function CaseStudiesIndex() {
+    const cases = getAllCaseStudies();
+
     return (
-        <section aria-labelledby="cs-title">
-            <h1 id="cs-title" className="text-3xl md:text-4xl font-bold tracking-tight">
-                Case Studies
-            </h1>
-            <p className="mt-2 text-[var(--muted)] max-w-2xl">
-                Short, outcome-focused write-ups of flagship projects—each highlights the problem, approach, and
-                results.
-            </p>
+        <div className="max-w-6xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+            <header className="mb-16 md:mb-20 max-w-3xl">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[var(--fg)] mb-6">
+                    Case Studies
+                </h1>
+                <p className="text-lg md:text-xl text-[var(--muted)] leading-relaxed">
+                    Short, outcome-focused write-ups of flagship projects. Exploring the problem space, architectural decisions, and results.
+                </p>
+            </header>
 
-            <ul
-                className="mt-8 grid gap-6 sm:grid-cols-2"
-                role="list"
-                aria-label="Case studies list"
-            >
-                {cases.map((c, idx) => {
-                    const gradFrom = idx % 2 === 0 ? "from-[var(--spot-1)]" : "from-[var(--accent)]/18";
-                    const gradTo = idx % 2 === 0 ? "to-[var(--spot-2)]" : "to-[var(--accent-2)]/18";
+            <ul className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {cases.map((c) => (
+                    <li key={c.slug} className="flex">
+                        <Link
+                            href={`/case-studies/${c.slug}`}
+                            className="group relative flex flex-col justify-between w-full p-6 sm:p-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] hover:shadow-xl hover:shadow-[var(--accent)]/5 transition-all duration-500 focus:outline-none overflow-hidden"
+                        >
+                            {/* Subtle gradient overlay on hover to add depth */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                    return (
-                        <li key={c.slug} className="h-full">
-                            <Link
-                                href={`/case-studies/${c.slug}`}
-                                className="group block focus:outline-none"
-                                aria-labelledby={`cs-${c.slug}-title`}
-                                aria-describedby={`cs-${c.slug}-desc`}
-                                prefetch={false}
-                            >
-                                <article
-                                    className="relative rounded-2xl p-[1px] transition-transform duration-300 group-hover:-translate-y-0.5 h-full">
-                                    <div
-                                        className={[
-                                            "absolute inset-0 rounded-2xl bg-gradient-to-br opacity-70 group-hover:opacity-100",
-                                            gradFrom,
-                                            gradTo,
-                                        ].join(" ")}
-                                        aria-hidden
-                                    />
-                                    <div className="relative card rounded-2xl h-full overflow-hidden">
-                                        <div className="p-5 md:p-6 flex items-start gap-4">
-                                            <div
-                                                className="shrink-0 grid place-items-center rounded-xl size-11 bg-[color-mix(in_oklab,var(--accent)20%,transparent)] border border-[var(--border)] transition-transform duration-300 group-hover:rotate-[2deg] group-hover:scale-[1.04]"
-                                                aria-hidden
-                                            >
-                                                <span className={`${c.icon} size-5 text-[var(--accent)]`}/>
-                                            </div>
-
-                                            <div className="min-w-0 flex-1">
-                                                <h2
-                                                    id={`cs-${c.slug}-title`}
-                                                    className="text-lg font-semibold tracking-tight line-clamp-1"
-                                                >
-                          <span
-                              className="bg-[linear-gradient(90deg,var(--fg),var(--accent))] [background-clip:text] text-transparent group-hover:underline">
-                            {c.title}
-                          </span>
-                                                </h2>
-
-                                                <p
-                                                    id={`cs-${c.slug}-desc`}
-                                                    className="mt-1 text-sm text-[var(--muted)] line-clamp-2"
-                                                >
-                                                    {c.blurb}
-                                                </p>
-
-                                                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-                                                    {c.tags.map((t) => (
-                                                        <span
-                                                            key={t}
-                                                            className="hairline rounded-full px-2.5 py-1 transition-colors hover:bg-[color-mix(in_oklab,var(--surface)_92%,var(--accent)_8%)]"
-                                                        >
-                              {t}
-                            </span>
-                                                    ))}
-                                                    <span className="text-[var(--muted)] ms-auto">⏱ {c.read}</span>
-                                                </div>
-                                            </div>
-
-                                            <span
-                                                className="icon-[tabler--chevron-right] size-5 text-[var(--muted)] transition-transform duration-200 group-hover:translate-x-0.5"
-                                                aria-hidden
-                                            />
-                                        </div>
+                            <div className="relative z-10 flex flex-col grow">
+                                <div className="flex items-start justify-between mb-8">
+                                    {/* Icon Box */}
+                                    <div className="size-12 rounded-2xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center group-hover:scale-110 group-hover:-rotate-3 group-hover:border-[var(--accent)]/50 transition-all duration-500 shadow-sm">
+                                        <span className={`${c.main_icon} size-6 text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors`} />
                                     </div>
-                                </article>
-                            </Link>
-                        </li>
-                    );
-                })}
+
+                                    {/* Read Time Pill */}
+                                    <span className="text-xs font-semibold tracking-wider text-[var(--muted)] uppercase flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--background)] shadow-sm">
+                                        <span className="icon-[tabler--clock] size-3.5"></span> {c.read_time}
+                                    </span>
+                                </div>
+
+                                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--fg)] mb-4 group-hover:text-[var(--accent)] transition-colors leading-snug">
+                                    {c.title}
+                                </h2>
+
+                                <p className="text-sm sm:text-base text-[var(--muted)] leading-relaxed mb-8 line-clamp-3">
+                                    {c.blurb}
+                                </p>
+                            </div>
+
+                            {/* Tags Section - Separated by a subtle line */}
+                            <div className="relative z-10 mt-auto pt-6 border-t border-[var(--border)]/60 flex flex-wrap gap-2">
+                                {c.tags?.map((t) => (
+                                    <span key={t} className="px-3 py-1 text-xs font-medium rounded-lg bg-[var(--background)] text-[var(--muted)] border border-[var(--border)]/50">
+                                        {t}
+                                    </span>
+                                ))}
+                            </div>
+                        </Link>
+                    </li>
+                ))}
             </ul>
-        </section>
+        </div>
     );
 }

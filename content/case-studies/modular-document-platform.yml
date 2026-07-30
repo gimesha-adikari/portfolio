@@ -1,0 +1,52 @@
+order: 1
+title: "Designing a Modular Document Platform"
+blurb: "A shared Next.js and Go architecture turned many PDF actions into one consistent product experience."
+read_time: "3–4 min"
+main_icon: "icon-[tabler--layers-intersect]"
+tags:
+  - "Architecture"
+  - "Scalability"
+  - "UX"
+subtitle: "Next.js · Go · PostgreSQL · JWT/OAuth · PDF Pipeline"
+tldr: "Built a modular document platform where uploads, workspaces, metadata, and downloads all follow one clear flow. Shared layouts and reusable components kept the product scalable as new tools were added."
+context: "Focuses on the overall system design behind PDFNest and how the app was structured to support many document tools without turning the codebase into duplicated one-off pages."
+problem:
+  - "Each PDF tool had different inputs, outputs, and validation rules."
+  - "Building separate pages for every tool would have created a fragile, hard-to-maintain codebase."
+  - "Users needed a consistent experience across many document operations."
+architecture:
+  - "Shared tool layout with common upload, workspace, and download patterns"
+  - "Tool-specific workspaces built on reusable UI and state primitives"
+  - "Backend services designed around a flexible processing pipeline"
+  - "Dynamic metadata and route-driven configuration for tool pages"
+stack:
+  - name: "Next.js"
+    icon: "icon-[tabler--brand-nextjs]"
+  - name: "Go"
+    icon: "icon-[tabler--brand-golang]"
+  - name: "PostgreSQL"
+    icon: "icon-[tabler--database]"
+  - name: "JWT / OAuth"
+    icon: "icon-[tabler--shield-lock]"
+  - name: "TypeScript"
+    icon: "icon-[tabler--brand-typescript]"
+  - name: "PDF Pipeline"
+    icon: "icon-[tabler--file-text]"
+challenges:
+  - "Keeping many tools consistent without repeating the same page logic"
+  - "Preserving flexibility for special tools like URL input and multi-file workflows"
+results:
+  - "A single product shell that made many tools feel like one platform"
+  - "Less duplication and easier maintenance as the toolset expanded"
+links:
+  - label: "Projects"
+    url: "/projects"
+    icon: "icon-[tabler--folder]"
+    is_external: false
+  - label: "Live App"
+    url: ""
+    icon: "icon-[tabler--external-link]"
+    is_external: false
+next_steps:
+  - "Further refine shared patterns for new document tools"
+  - "Improve route-level metadata and content generation"

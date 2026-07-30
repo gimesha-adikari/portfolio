@@ -1,0 +1,55 @@
+order: 4
+
+title: "Optimizing Browser Rendering for Neural Simulations"
+blurb: "Canvas-based neuron visualizer with refractory logic and decoupled sim/render for smooth, stable demos."
+read_time: "2–3 min"
+main_icon: "icon-[tabler--brain]"
+tags:
+  - "Visualization"
+  - "Performance"
+  - "Teaching"
+subtitle: "Python · Flask · HTML5 Canvas · JS Front-end"
+tldr: "Built a browser-based neural simulator. Implemented a refractory period to prevent runaway firing and tuned rendering for smooth 60fps on mid-range devices."
+
+context: "CS50 final project to demonstrate neuron dynamics with a clear visual model and interactive controls."
+
+problem:
+  - "Naive recursion caused infinite firing loops and browser lock-ups"
+  - "Unbounded rendering produced frame drops on modest hardware"
+
+architecture:
+  - "Introduced refractory cooldown per neuron after firing"
+  - "Separated simulation tick from render loop (requestAnimationFrame)"
+  - "Added export/import and simple APIs for persistence"
+
+stack:
+  - name: "Python · Flask"
+    icon: "icon-[tabler--brand-python]"
+  - name: "HTML / JS (ES modules)"
+    icon: "icon-[tabler--layout]"
+  - name: "Canvas 2D"
+    icon: "icon-[tabler--atom-2]"
+  - name: "Lightweight async APIs"
+    icon: "icon-[tabler--arrows-shuffle]"
+
+challenges:
+  - "Balancing visual fidelity vs performance on lower-spec devices"
+  - "Keeping the code approachable for learners while avoiding pitfalls"
+
+results:
+  - "Smooth rendering on mid-range laptops; stable neuron firing behavior"
+  - "Clearer demonstrations for lecture/demos; easier to reason about activity"
+
+links:
+  - label: "Projects"
+    url: "/projects"
+    icon: "icon-[tabler--folder]"
+    is_external: false
+  - label: "GitHub (NeuroSim)"
+    url: "https://github.com/gimesha-adikari/neurosim"
+    icon: "icon-[tabler--brand-github]"
+    is_external: true
+
+next_steps:
+  - "Preset networks (small-world/random) and parameter sliders"
+  - "Export/import of neuron graphs; richer reports"

@@ -1,0 +1,53 @@
+order: 2
+title: "Handling Real-World PDF Edge Cases"
+blurb: "Upload failures, crop issues, and tricky file states were handled with guarded flows and safer validation."
+read_time: "3–4 min"
+main_icon: "icon-[tabler--alert-triangle]"
+tags:
+  - "Edge Cases"
+  - "Reliability"
+  - "State"
+subtitle: "Next.js · Go · PDF Processing · OCR · Workspace Flow"
+tldr: "Focused on the hard parts of document software: files that break assumptions, operations that fail in subtle ways, and workspace states that need to stay recoverable."
+context: "Covers the engineering problems behind PDFNest, especially the parts that needed extra care to keep document operations predictable and safe."
+problem:
+  - "Large files and multi-step workflows made it easy for users to lose progress."
+  - "Different tools needed different file states, which complicated shared routing and workspace logic."
+  - "Crop, OCR, and conversion flows could fail depending on the input document structure."
+architecture:
+  - "Shared upload → workspace → download flow"
+  - "Tool-specific workspace components that isolate logic"
+  - "State sharing between pages to preserve file context"
+  - "Backend validation and guarded processing to fail safely"
+stack:
+  - name: "Next.js"
+    icon: "icon-[tabler--brand-nextjs]"
+  - name: "Go"
+    icon: "icon-[tabler--brand-golang]"
+  - name: "TypeScript"
+    icon: "icon-[tabler--brand-typescript]"
+  - name: "PDF Processing"
+    icon: "icon-[tabler--file-settings]"
+  - name: "OCR"
+    icon: "icon-[tabler--scan]"
+  - name: "Workspace State"
+    icon: "icon-[tabler--stack-3]"
+challenges:
+  - "Upload state had to survive navigation across multiple screens"
+  - "Crop logic needed careful bounds handling to avoid incorrect output"
+  - "Different document structures produced inconsistent results in conversion and OCR"
+results:
+  - "More predictable workflows with clearer recovery paths"
+  - "Better resilience for messy or unusual input files"
+links:
+  - label: "Projects"
+    url: "/projects"
+    icon: "icon-[tabler--folder]"
+    is_external: false
+  - label: "PDFNest"
+    url: "/projects/pdfnest"
+    icon: "icon-[tabler--file-text]"
+    is_external: false
+next_steps:
+  - "Add stronger job recovery for long-running tasks"
+  - "Improve crop previews and page-level feedback"

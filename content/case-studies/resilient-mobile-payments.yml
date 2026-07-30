@@ -1,0 +1,60 @@
+order: 3
+
+title: "Building Resilient Mobile Payment Flows"
+blurb: "Compose UI, Retrofit/OkHttp, robust retries and clear flows for reloads, QR pay, and bill-pay on real networks."
+read_time: "2–3 min"
+main_icon: "icon-[tabler--device-mobile]"
+tags:
+  - "UX"
+  - "Resilience"
+  - "Testing"
+subtitle: "Kotlin · Jetpack Compose · Retrofit · Coroutines · Material 3"
+tldr: "Built wallet features (card reloads, QR payments, bill-pay). A clean Retrofit API layer and resilient UI reduced visible errors and clarified flows."
+
+context: "Android module focused on wallet flows, designed to operate even when core banking features are unavailable."
+
+problem:
+  - "Payment flows were overly coupled to banking onboarding."
+  - "Intermittent network caused confusing failures and abandons."
+
+architecture:
+  - "Feature-based packages (screens, view models, DI)"
+  - "Retrofit interfaces with clean DTOs, interceptors, consistent error envelopes"
+  - "Compose UI with unified components (cards, inputs, buttons) and a11y labels"
+  - "Robust retries and offline affordances where possible"
+
+stack:
+  - name: "Kotlin"
+    icon: "icon-[tabler--brand-kotlin]"
+  - name: "Jetpack Compose"
+    icon: "icon-[tabler--square-rounded-letter-c]"
+  - name: "Retrofit / OkHttp"
+    icon: "icon-[tabler--cloud-data-connection]"
+  - name: "Coroutines"
+    icon: "icon-[tabler--bolt]"
+  - name: "Material 3"
+    icon: "icon-[tabler--layout-grid]"
+  - name: "Hilt / DI"
+    icon: "icon-[tabler--components]"
+
+challenges:
+  - "Gateway sandbox limitations → emulated webhooks + idempotent retries in dev"
+  - "UI complexity → extracted shared components to keep code tidy and reusable"
+
+results:
+  - "Fewer user-visible errors in payment flows via defensive UI and API handling"
+  - "Faster iteration thanks to a clean, testable Retrofit layer"
+
+links:
+  - label: "Projects"
+    url: "/projects"
+    icon: "icon-[tabler--folder]"
+    is_external: false
+  - label: "Backend Repo"
+    url: "https://github.com/gimesha-adikari/BankingSystem"
+    icon: "icon-[tabler--brand-github]"
+    is_external: true
+
+next_steps:
+  - "Native deep-linking for payment intents; richer receipt exports"
+  - "Gateway production integration (secure storage & 3DS flows)"
