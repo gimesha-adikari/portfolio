@@ -120,10 +120,11 @@ export default async function HomePage() {
                                     {profile.company}
                                 </span>
                             )}
-                            {profile.blog && (
-                                <a href={profile.blog.startsWith('http') ? profile.blog : `https://${profile.blog}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 bg-[var(--surface)] px-3 py-1.5 rounded-md border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors">
-                                    <span className="icon-[tabler--link] size-4" aria-hidden />
-                                    Website
+                            {/* Changed from Website to GitHub Profile */}
+                            {profile.html_url && (
+                                <a href={profile.html_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 bg-[var(--surface)] px-3 py-1.5 rounded-md border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors">
+                                    <span className="icon-[tabler--brand-github] size-4" aria-hidden />
+                                    GitHub Profile
                                 </a>
                             )}
                         </div>
