@@ -53,7 +53,7 @@ export function Footer() {
                                 <span className="icon-[tabler--brand-linkedin] size-5" />
                             </a>
                             <a
-                                href="mailto:contact@gimesha.dev"
+                                href="mailto:gimeshanirmal23@gmail.com"
                                 className="text-[var(--muted)] hover:text-[var(--accent)] hover:-translate-y-0.5 transition-all"
                                 aria-label="Email Me"
                             >
