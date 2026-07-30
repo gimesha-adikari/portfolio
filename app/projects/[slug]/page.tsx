@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import matter from "gray-matter";
 import {
@@ -8,6 +9,7 @@ import {
     fetchRepoLanguages,
     type Repo,
 } from "@/lib/github";
+import Reveal from "@/components/Reveal";
 
 export const dynamicParams = true;
 export const revalidate = 3600;
@@ -59,7 +61,7 @@ const STORY_PATH = ".portfolio/story.md";
 const README_PATH = "README.md";
 
 function pickRepoOwner(repo: Repo) {
-    return (process.env.GITHUB_USERNAME as string) || (repo as any)?.owner?.login || "github";
+    return (process.env.GITHUB_USERNAME as string) || repo.owner?.login || "github";
 }
 
 function formatDate(v?: string | null) {
@@ -72,7 +74,7 @@ function escapeRegExp(value: string) {
     return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function splitParagraphs(text?: string) {
+function splitParagraphs(text?: string | null) {
     if (!text) return [];
     return text
         .split(/\n\s*\n/g)
@@ -80,8 +82,25 @@ function splitParagraphs(text?: string) {
         .filter(Boolean);
 }
 
-function firstParagraph(text?: string) {
-    return splitParagraphs(text)[0] ?? "";
+
+function cleanMarkdownText(text?: string | null) {
+    if (!text) return "";
+    return text
+        .replace(/!\[[^\]]*\]\([^)]+\)/g, "") // Strip ![alt](url)
+        .replace(/<img[^>]*>/gi, "")          // Strip <img ...>
+        .replace(/^#+\s+/gm, "")               // Strip headers
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Convert [text](url) -> text
+        .trim();
+}
+
+function firstParagraph(text?: string | null) {
+    if (!text) return "";
+    const paragraphs = splitParagraphs(text);
+    for (const p of paragraphs) {
+        const cleaned = cleanMarkdownText(p);
+        if (cleaned.length > 0) return cleaned;
+    }
+    return "";
 }
 
 function extractSection(markdown: string, heading: string) {
@@ -183,7 +202,7 @@ function resolveRepoAssetUrl(repo: Repo, input: string, sourcePath = STORY_PATH)
     const relativePath = value.startsWith("/") ? cleaned : baseDir ? `${baseDir}/${cleaned}` : cleaned;
 
     const owner = pickRepoOwner(repo);
-    const branch = (repo as any).defaultBranch || process.env.CONTENT_BRANCH || "main";
+    const branch = repo.defaultBranch || process.env.CONTENT_BRANCH || "main";
     const encodedPath = relativePath
         .split("/")
         .map((part) => encodeURIComponent(part))
@@ -203,24 +222,28 @@ function normalizeScreenshots(repo: Repo, shots: StoryImage[], sourcePath = STOR
 
 async function fetchRepoFileText(repo: Repo, filePath: string) {
     const owner = pickRepoOwner(repo);
-    const branch = (repo as any).defaultBranch || process.env.CONTENT_BRANCH || "main";
+    const branch = repo.defaultBranch || process.env.CONTENT_BRANCH || "main";
     const token = process.env.CONTENT_TOKEN || process.env.GITHUB_TOKEN || "";
 
     const url = `https://api.github.com/repos/${owner}/${repo.name}/contents/${encodeURIComponent(filePath)}?ref=${encodeURIComponent(branch)}`;
 
-    const res = await fetch(url, {
-        headers: {
-            Accept: "application/vnd.github.raw+json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            "User-Agent": "portfolio-story-loader",
-        },
-        next: { revalidate },
-    });
+    try {
+        const res = await fetch(url, {
+            headers: {
+                Accept: "application/vnd.github.raw+json",
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                "User-Agent": "portfolio-story-loader",
+            },
+            next: { revalidate },
+        });
 
-    if (res.status === 404) return null;
-    if (!res.ok) throw new Error(`Unable to fetch ${filePath} for ${repo.name}`);
+        if (res.status === 404) return null;
+        if (!res.ok) return null;
 
-    return await res.text();
+        return await res.text();
+    } catch {
+        return null;
+    }
 }
 
 async function loadStory(repo: Repo): Promise<StoryData | null> {
@@ -302,8 +325,8 @@ async function loadStory(repo: Repo): Promise<StoryData | null> {
     const summary =
         fm.summary ||
         firstParagraph(overview) ||
-        firstParagraph(readmeMarkdown ?? "") ||
         repo.description ||
+        firstParagraph(readmeMarkdown ?? "") ||
         `Details and links for ${repo.name}`;
 
     return {
@@ -390,8 +413,8 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
     const stack =
         architecture.length > 0
             ? architecture.map((item) => item.value).filter(Boolean).slice(0, 6)
-            : Array.isArray((repo as any).topics)
-                ? ((repo as any).topics as string[]).slice(0, 6)
+            : Array.isArray(repo.topics)
+                ? repo.topics.slice(0, 6)
                 : [];
 
     const cover =
@@ -401,10 +424,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
             pickRepoOwner(repo)
         )}/${encodeURIComponent(repo.name)}`;
 
-    const safeLicense =
-        typeof (repo as any).license === "string"
-            ? ((repo as any).license as string)
-            : (repo as any)?.license?.spdx_id || (repo as any)?.license?.key || "No license";
+    const safeLicense = repo.license || "No license";
 
     const jsonLd = {
         "@context": "https://schema.org",
@@ -418,263 +438,301 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
         license: safeLicense,
     };
 
-    const overviewBlocks = splitParagraphs(story?.overview);
+    const displayOverview = story?.overview || repo.description || null;
+    const overviewBlocks = splitParagraphs(displayOverview);
     const problemBlocks = splitParagraphs(story?.problem);
     const solutionBlocks = splitParagraphs(story?.solution);
 
     return (
-        <article className="space-y-10">
-            <header className="hero-glow">
-                <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
-                    <div className="flex-1 min-w-0">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 hairline rounded-full text-xs text-[var(--muted)]">
-                            <span className="icon-[tabler--brand-github] size-4" aria-hidden />
-                            {repo.private ? "Private" : "Public"} • {safeLicense}
-                        </div>
+        <article className="space-y-12 pb-20 container-xl max-w-5xl mx-auto pt-6">
 
-                        <h1 className="mt-3 text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
-                            <span className="bg-gradient-to-r from-[var(--fg)] via-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">
+            <Reveal>
+                <Link
+                    href="/projects"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-colors group mb-6"
+                >
+                    <span className="icon-[tabler--arrow-left] size-4 group-hover:-translate-x-1 transition-transform" aria-hidden />
+                    Back to projects
+                </Link>
+            </Reveal>
+
+            <Reveal delay={0.05}>
+                <header className="hero-glow">
+                    <div className="flex flex-col md:flex-row md:items-start gap-8 md:gap-12">
+                        <div className="flex-1 min-w-0">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 border border-[var(--border)] bg-[var(--surface)] rounded-full text-xs font-medium text-[var(--fg)] shadow-sm">
+                                <span className="icon-[tabler--brand-github] size-4 text-[var(--accent)]" aria-hidden />
+                                {repo.private ? "Private" : "Public"} • {safeLicense}
+                            </div>
+
+                            <h1 className="mt-5 text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight text-[var(--fg)]">
                                 {story?.title ?? repo.name}
-                            </span>
-                        </h1>
+                            </h1>
 
-                        <p className="mt-2 text-[var(--muted)] max-w-2xl">
-                            {story?.summary ?? repo.description ?? "A project page with live repository data and a repo-owned story file."}
-                        </p>
+                            <p className="mt-4 text-lg text-[var(--muted)] max-w-2xl leading-relaxed">
+                                {story?.summary ?? repo.description ?? "A project page with live repository data and a repo-owned story file."}
+                            </p>
 
-                        <div className="mt-4 flex flex-wrap gap-2 text-sm text-[var(--muted)]">
-                            <span className="hairline rounded-lg px-2 py-1 inline-flex items-center gap-1">
-                                <span className="icon-[tabler--clock] size-4" aria-hidden />
-                                Updated {formatDate(repo.updatedAt)}
-                            </span>
-                            <span className="hairline rounded-lg px-2 py-1 inline-flex items-center gap-1">
-                                <span className="icon-[tabler--git-fork] size-4" aria-hidden />
-                                {nf.format(repo.forks ?? 0)}
-                            </span>
-                            <span className="hairline rounded-lg px-2 py-1 inline-flex items-center gap-1">
-                                <span className="icon-[tabler--star] size-4" aria-hidden />
-                                {nf.format(repo.stars ?? 0)}
-                            </span>
-                            <span className="hairline rounded-lg px-2 py-1 inline-flex items-center gap-1">
-                                <span className="icon-[tabler--git-branch] size-4" aria-hidden />
-                                {repo.defaultBranch}
-                            </span>
-                        </div>
+                            <div className="mt-6 flex flex-wrap gap-2 text-sm text-[var(--muted)]">
+                                <span className="border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_60%,transparent)] rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 shadow-sm">
+                                    <span className="icon-[tabler--clock] size-4" aria-hidden />
+                                    Updated {formatDate(repo.updatedAt)}
+                                </span>
+                                <span className="border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_60%,transparent)] rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 shadow-sm">
+                                    <span className="icon-[tabler--git-fork] size-4" aria-hidden />
+                                    {nf.format(repo.forks ?? 0)}
+                                </span>
+                                <span className="border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_60%,transparent)] rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 shadow-sm">
+                                    <span className="icon-[tabler--star] size-4" aria-hidden />
+                                    {nf.format(repo.stars ?? 0)}
+                                </span>
+                                <span className="border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_60%,transparent)] rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 shadow-sm">
+                                    <span className="icon-[tabler--git-branch] size-4" aria-hidden />
+                                    {repo.defaultBranch}
+                                </span>
+                            </div>
 
-                        <div className="mt-4 flex flex-wrap gap-3">
-                            <a
-                                className="btn btn-ghost focus-ring inline-flex items-center gap-2"
-                                href={story?.githubUrl ?? repo.htmlUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <span className="icon-[tabler--brand-github] size-5" aria-hidden />
-                                GitHub
-                            </a>
-
-                            {(story?.liveUrl || repo.homepage) && (
+                            <div className="mt-8 flex flex-wrap gap-3">
+                                {(story?.liveUrl || repo.homepage) && (
+                                    <a
+                                        className="rounded-lg bg-[var(--accent)] text-[var(--bg)] px-6 py-3 text-sm font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm"
+                                        href={story?.liveUrl ?? repo.homepage!}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <span className="icon-[tabler--external-link] size-5" aria-hidden />
+                                        Visit Live Site
+                                    </a>
+                                )}
                                 <a
-                                    className="btn btn-primary focus-ring inline-flex items-center gap-2"
-                                    href={story?.liveUrl ?? repo.homepage!}
+                                    className="rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--fg)] px-6 py-3 text-sm font-semibold hover:border-[var(--accent)] transition-colors flex items-center gap-2 shadow-sm"
+                                    href={story?.githubUrl ?? repo.htmlUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <span className="icon-[tabler--external-link] size-5" aria-hidden />
-                                    Live
+                                    <span className="icon-[tabler--brand-github] size-5" aria-hidden />
+                                    View Source
                                 </a>
+                            </div>
+
+                            {(story?.role || story?.duration || story?.team || story?.category) && (
+                                <div className="mt-8 grid gap-4 grid-cols-2 sm:grid-cols-4 border-t border-[var(--border)] pt-8">
+                                    {story?.role && (
+                                        <div>
+                                            <div className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)]">Role</div>
+                                            <div className="mt-1.5 font-medium text-sm text-[var(--fg)]">{story.role}</div>
+                                        </div>
+                                    )}
+                                    {story?.duration && (
+                                        <div>
+                                            <div className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)]">Duration</div>
+                                            <div className="mt-1.5 font-medium text-sm text-[var(--fg)]">{story.duration}</div>
+                                        </div>
+                                    )}
+                                    {story?.team && (
+                                        <div>
+                                            <div className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)]">Team</div>
+                                            <div className="mt-1.5 font-medium text-sm text-[var(--fg)]">{story.team}</div>
+                                        </div>
+                                    )}
+                                    {story?.category && (
+                                        <div>
+                                            <div className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)]">Category</div>
+                                            <div className="mt-1.5 font-medium text-sm text-[var(--fg)]">{story.category}</div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {stack.length > 0 && (
+                                <div className="mt-6 flex flex-wrap gap-2">
+                                    {stack.map((item) => (
+                                        <span key={item} className="border border-[var(--border)] bg-[var(--bg)] rounded-md px-2.5 py-1 text-xs font-medium text-[var(--muted)]">
+                                            {item}
+                                        </span>
+                                    ))}
+                                </div>
                             )}
                         </div>
 
-                        {(story?.role || story?.duration || story?.team || story?.category) && (
-                            <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                                {story?.role && (
-                                    <div className="card p-4">
-                                        <div className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">Role</div>
-                                        <div className="mt-1 font-medium">{story.role}</div>
-                                    </div>
-                                )}
-                                {story?.duration && (
-                                    <div className="card p-4">
-                                        <div className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">Duration</div>
-                                        <div className="mt-1 font-medium">{story.duration}</div>
-                                    </div>
-                                )}
-                                {story?.team && (
-                                    <div className="card p-4">
-                                        <div className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">Team</div>
-                                        <div className="mt-1 font-medium">{story.team}</div>
-                                    </div>
-                                )}
-                                {story?.category && (
-                                    <div className="card p-4">
-                                        <div className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">Category</div>
-                                        <div className="mt-1 font-medium">{story.category}</div>
-                                    </div>
-                                )}
+                        <div className="md:w-[360px] lg:w-[480px] md:shrink-0">
+                            <div className="relative aspect-[16/10] rounded-[14px] overflow-hidden border border-[var(--border)] bg-[color-mix(in_oklab,var(--bg)_70%,var(--surface))] shadow-lg group">
+                                <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none" />
+                                <Image
+                                    src={cover}
+                                    alt={`${story?.title ?? repo.name} cover`}
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    sizes="(min-width: 1024px) 480px, (min-width: 768px) 360px, 100vw"
+                                    priority={true}
+                                    unoptimized
+                                />
                             </div>
-                        )}
-
-                        {stack.length > 0 && (
-                            <div className="mt-4 flex flex-wrap gap-2">
-                                {stack.map((item) => (
-                                    <span key={item} className="hairline rounded-full px-3 py-1 text-xs text-[var(--muted)]">
-                                        {item}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="md:w-[360px] lg:w-[420px] md:shrink-0">
-                        <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-[var(--surface)] card">
-                            <Image
-                                src={cover}
-                                alt={`${story?.title ?? repo.name} cover`}
-                                fill
-                                className="object-cover"
-                                sizes="(min-width: 1024px) 420px, (min-width: 768px) 360px, 100vw"
-                                priority={false}
-                                unoptimized
-                            />
                         </div>
                     </div>
-                </div>
-            </header>
+                </header>
+            </Reveal>
 
-            {story?.overview && (
-                <section className="card p-5">
-                    <h2 className="text-lg font-semibold">Overview</h2>
-                    <div className="mt-3 space-y-3 text-[var(--muted)] leading-7">
-                        {overviewBlocks.map((p, i) => (
-                            <p key={i}>{p}</p>
-                        ))}
-                    </div>
-                </section>
+            {overviewBlocks.length > 0 && (
+                <Reveal delay={0.1}>
+                    <section className="card p-6 md:p-8 border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_60%,transparent)] backdrop-blur-sm relative overflow-hidden">
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--accent)] rounded-l-2xl" />
+                        <h2 className="text-xl font-bold text-[var(--fg)] flex items-center gap-2">
+                            <span className="icon-[tabler--info-circle] text-[var(--accent)] size-5" aria-hidden />
+                            Overview
+                        </h2>
+                        <div className="mt-4 space-y-4 text-[var(--muted)] leading-relaxed md:text-lg">
+                            {overviewBlocks.map((p, i) => (
+                                <p key={i}>{p}</p>
+                            ))}
+                        </div>
+                    </section>
+                </Reveal>
             )}
 
             {(story?.problem || story?.solution) && (
-                <section className="grid sm:grid-cols-2 gap-5">
-                    {story?.problem && (
-                        <div className="card p-5">
-                            <h3 className="font-semibold">Problem</h3>
-                            <div className="mt-3 space-y-3 text-[var(--muted)] leading-7">
-                                {problemBlocks.map((p, i) => (
-                                    <p key={i}>{p}</p>
-                                ))}
+                <Reveal delay={0.15}>
+                    <section className="grid md:grid-cols-2 gap-6">
+                        {story?.problem && (
+                            <div className="card p-6 border border-[var(--border)] bg-[var(--surface)]">
+                                <h3 className="text-lg font-bold text-[var(--fg)] flex items-center gap-2">
+                                    <span className="icon-[tabler--target] text-[var(--accent-2)] size-5" aria-hidden />
+                                    The Challenge
+                                </h3>
+                                <div className="mt-4 space-y-3 text-[var(--muted)] leading-relaxed">
+                                    {problemBlocks.map((p, i) => (
+                                        <p key={i}>{p}</p>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    {story?.solution && (
-                        <div className="card p-5">
-                            <h3 className="font-semibold">Solution</h3>
-                            <div className="mt-3 space-y-3 text-[var(--muted)] leading-7">
-                                {solutionBlocks.map((p, i) => (
-                                    <p key={i}>{p}</p>
-                                ))}
+                        )}
+                        {story?.solution && (
+                            <div className="card p-6 border border-[var(--border)] bg-[var(--surface)]">
+                                <h3 className="text-lg font-bold text-[var(--fg)] flex items-center gap-2">
+                                    <span className="icon-[tabler--bulb] text-[var(--success)] size-5" aria-hidden />
+                                    The Solution
+                                </h3>
+                                <div className="mt-4 space-y-3 text-[var(--muted)] leading-relaxed">
+                                    {solutionBlocks.map((p, i) => (
+                                        <p key={i}>{p}</p>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </section>
+                        )}
+                    </section>
+                </Reveal>
             )}
 
             {story?.features?.length ? (
-                <section className="card p-5">
-                    <h3 className="font-semibold">Features</h3>
-                    <ul className="mt-3 space-y-2 text-sm">
-                        {story.features.map((feature) => (
-                            <li key={feature} className="flex items-start gap-2">
-                                <span className="icon-[tabler--circle-check] size-4 mt-0.5 text-[var(--accent)]" aria-hidden />
-                                <span>{feature}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </section>
+                <Reveal delay={0.2}>
+                    <section className="card p-6 md:p-8 border border-[var(--border)] bg-[var(--surface)]">
+                        <h3 className="text-lg font-bold text-[var(--fg)] mb-6">Key Features</h3>
+                        <ul className="grid sm:grid-cols-2 gap-4 text-sm md:text-base text-[var(--muted)]">
+                            {story.features.map((feature) => (
+                                <li key={feature} className="flex items-start gap-3 bg-[var(--bg)] p-3 rounded-lg border border-[var(--border)]">
+                                    <div className="mt-0.5 rounded-full bg-[color-mix(in_oklab,var(--success)_20%,transparent)] p-1 shrink-0">
+                                        <span className="icon-[tabler--check] size-3.5 text-[var(--success)]" aria-hidden />
+                                    </div>
+                                    <span className="leading-snug">{feature}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                </Reveal>
             ) : null}
 
             {(story?.challenges?.length || story?.lessons?.length) ? (
-                <section className="grid sm:grid-cols-2 gap-5">
-                    {story?.challenges?.length ? (
-                        <div className="card p-5">
-                            <h3 className="font-semibold">Challenges</h3>
-                            <ul className="mt-3 space-y-2 text-sm">
-                                {story.challenges.map((item) => (
-                                    <li key={item} className="flex items-start gap-2">
-                                        <span className="icon-[tabler--alert-circle] size-4 mt-0.5 text-[var(--accent-2)]" aria-hidden />
-                                        <span>{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ) : null}
+                <Reveal delay={0.25}>
+                    <section className="grid md:grid-cols-2 gap-6">
+                        {story?.challenges?.length ? (
+                            <div className="card p-6 border border-[var(--border)] bg-[var(--surface)]">
+                                <h3 className="text-lg font-bold text-[var(--fg)] mb-5">Hurdles Overcome</h3>
+                                <ul className="space-y-3 text-sm text-[var(--muted)]">
+                                    {story.challenges.map((item) => (
+                                        <li key={item} className="flex items-start gap-3">
+                                            <span className="icon-[tabler--alert-triangle] size-5 mt-0.5 text-[var(--accent-2)] shrink-0" aria-hidden />
+                                            <span className="leading-relaxed">{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ) : null}
 
-                    {story?.lessons?.length ? (
-                        <div className="card p-5">
-                            <h3 className="font-semibold">What I learned</h3>
-                            <ul className="mt-3 space-y-2 text-sm">
-                                {story.lessons.map((item) => (
-                                    <li key={item} className="flex items-start gap-2">
-                                        <span className="icon-[tabler--bulb] size-4 mt-0.5 text-[var(--accent)]" aria-hidden />
-                                        <span>{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ) : null}
-                </section>
+                        {story?.lessons?.length ? (
+                            <div className="card p-6 border border-[var(--border)] bg-[var(--surface)]">
+                                <h3 className="text-lg font-bold text-[var(--fg)] mb-5">What I Learned</h3>
+                                <ul className="space-y-3 text-sm text-[var(--muted)]">
+                                    {story.lessons.map((item) => (
+                                        <li key={item} className="flex items-start gap-3">
+                                            <span className="icon-[tabler--school] size-5 mt-0.5 text-[var(--accent)] shrink-0" aria-hidden />
+                                            <span className="leading-relaxed">{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ) : null}
+                    </section>
+                </Reveal>
             ) : null}
 
             {screenshots.length > 0 ? (
-                <section className="card p-5">
-                    <h3 className="font-semibold">Screenshots</h3>
-                    <div className="mt-4 grid gap-4 md:grid-cols-2">
-                        {screenshots.map((shot) => (
-                            <figure key={shot.src} className="space-y-2">
-                                <div className="relative aspect-[16/10] rounded-xl overflow-hidden hairline bg-[var(--surface)]">
-                                    <Image
-                                        src={shot.src}
-                                        alt={shot.alt}
-                                        fill
-                                        className="object-cover"
-                                        sizes="(min-width: 768px) 50vw, 100vw"
-                                        unoptimized
-                                    />
-                                </div>
-                                {shot.caption ? (
-                                    <figcaption className="text-xs text-[var(--muted)]">{shot.caption}</figcaption>
-                                ) : null}
-                            </figure>
-                        ))}
-                    </div>
-                </section>
+                <Reveal delay={0.3}>
+                    <section className="space-y-6">
+                        <h3 className="text-xl font-bold text-[var(--fg)]">Gallery</h3>
+                        <div className="grid gap-6 md:grid-cols-2">
+                            {screenshots.map((shot) => (
+                                <figure key={shot.src} className="group flex flex-col gap-3">
+                                    <div className="relative aspect-[16/10] rounded-[14px] overflow-hidden border border-[var(--border)] bg-[color-mix(in_oklab,var(--bg)_70%,var(--surface))] shadow-sm">
+                                        <Image
+                                            src={shot.src}
+                                            alt={shot.alt}
+                                            fill
+                                            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                                            sizes="(min-width: 768px) 50vw, 100vw"
+                                            unoptimized
+                                        />
+                                    </div>
+                                    {shot.caption ? (
+                                        <figcaption className="text-sm text-[var(--muted)] text-center px-4">
+                                            {shot.caption}
+                                        </figcaption>
+                                    ) : null}
+                                </figure>
+                            ))}
+                        </div>
+                    </section>
+                </Reveal>
             ) : null}
 
             {(architecture.length > 0 || langs.length > 0) && (
-                <section className="grid sm:grid-cols-2 gap-5">
-                    {architecture.length > 0 ? (
-                        <div className="card p-5">
-                            <h3 className="font-semibold">{story?.architecture?.title ?? "Architecture snapshot"}</h3>
-                            <dl className="mt-3 space-y-3 text-sm">
-                                {architecture.map((item) => (
-                                    <div key={item.label} className="grid grid-cols-[120px_1fr] gap-3">
-                                        <dt className="text-[var(--muted)]">{item.label}</dt>
-                                        <dd className="font-medium">{item.value}</dd>
-                                    </div>
-                                ))}
-                            </dl>
-                        </div>
-                    ) : null}
+                <Reveal delay={0.35}>
+                    <section className="grid md:grid-cols-2 gap-6">
+                        {architecture.length > 0 ? (
+                            <div className="card p-6 border border-[var(--border)] bg-[var(--surface)]">
+                                <h3 className="text-lg font-bold text-[var(--fg)] mb-5">
+                                    {story?.architecture?.title ?? "Architecture"}
+                                </h3>
+                                <dl className="space-y-4 text-sm">
+                                    {architecture.map((item) => (
+                                        <div key={item.label} className="grid grid-cols-[120px_1fr] sm:grid-cols-[140px_1fr] gap-4 border-b border-[var(--border)] pb-3 last:border-0 last:pb-0">
+                                            <dt className="text-[var(--muted)] font-medium">{item.label}</dt>
+                                            <dd className="text-[var(--fg)]">{item.value}</dd>
+                                        </div>
+                                    ))}
+                                </dl>
+                            </div>
+                        ) : null}
 
-                    <div className="card p-5">
-                        <h3 className="font-semibold">Languages</h3>
+                        <div className="card p-6 border border-[var(--border)] bg-[var(--surface)] flex flex-col">
+                            <h3 className="text-lg font-bold text-[var(--fg)] mb-5">Languages</h3>
 
-                        {langs.length > 0 ? (
-                            <div className="mt-4">
-                                <div
-                                    className="h-2 rounded-full overflow-hidden hairline bg-[var(--surface)]"
-                                    role="img"
-                                    aria-label="Language distribution"
-                                >
-                                    <div className="flex h-full w-full">
+                            {langs.length > 0 ? (
+                                <div className="mt-auto">
+                                    <div
+                                        className="h-2.5 rounded-full overflow-hidden border border-[var(--border)] bg-[var(--bg)] flex"
+                                        role="img"
+                                        aria-label="Language distribution"
+                                    >
                                         {langs.slice(0, 6).map((l, i) => (
                                             <span
                                                 key={l.name}
@@ -686,52 +744,72 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
                                             />
                                         ))}
                                     </div>
-                                </div>
 
-                                <div className="mt-3 flex flex-wrap gap-3 text-xs text-[var(--muted)]">
-                                    {langs.slice(0, 6).map((l, i) => (
-                                        <span key={l.name} className="inline-flex items-center gap-1.5">
-                                            <span
-                                                className="inline-block size-2 rounded-[3px]"
-                                                style={{ background: PALETTE[i % PALETTE.length] }}
-                                                aria-hidden
-                                            />
-                                            {l.name} {Math.round(l.pct)}%
-                                        </span>
-                                    ))}
-                                </div>
+                                    <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-2 text-sm text-[var(--fg)] font-medium">
+                                        {langs.slice(0, 6).map((l, i) => (
+                                            <span key={l.name} className="flex items-center gap-2">
+                                                <span
+                                                    className="size-3 rounded-[4px] shrink-0"
+                                                    style={{ background: PALETTE[i % PALETTE.length] }}
+                                                    aria-hidden
+                                                />
+                                                <span className="truncate">{l.name}</span>
+                                                <span className="text-[var(--muted)] ml-auto font-mono text-xs">{Math.round(l.pct)}%</span>
+                                            </span>
+                                        ))}
+                                    </div>
 
-                                {totalPct !== 100 ? (
-                                    <p className="mt-2 text-[var(--muted)] text-xs">Percentages are approximate.</p>
-                                ) : null}
-                            </div>
-                        ) : (
-                            <p className="mt-2 text-[var(--muted)]">No languages detected.</p>
-                        )}
-                    </div>
-                </section>
+                                    {totalPct !== 100 ? (
+                                        <p className="mt-5 text-[var(--muted)] text-xs border-t border-[var(--border)] pt-4">
+                                            Percentages are approximate.
+                                        </p>
+                                    ) : null}
+                                </div>
+                            ) : (
+                                <p className="text-[var(--muted)] text-sm">No languages detected via GitHub API.</p>
+                            )}
+                        </div>
+                    </section>
+                </Reveal>
             )}
 
-            <section className="grid sm:grid-cols-2 gap-5">
-                <div className="card p-5">
-                    <h3 className="font-semibold">Repository</h3>
-                    <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
-                        <dt className="text-[var(--muted)]">Created</dt>
-                        <dd>{formatDate(repo.createdAt)}</dd>
-                        <dt className="text-[var(--muted)]">Default branch</dt>
-                        <dd>{repo.defaultBranch}</dd>
-                        <dt className="text-[var(--muted)]">Stars</dt>
-                        <dd>★ {nf.format(repo.stars ?? 0)}</dd>
-                        <dt className="text-[var(--muted)]">Forks</dt>
-                        <dd>{nf.format(repo.forks ?? 0)}</dd>
-                    </dl>
-                </div>
+            {/* Always-rendered Repository Info & Description */}
+            <Reveal delay={0.4}>
+                <section className="grid sm:grid-cols-2 gap-6">
+                    <div className="card p-6 border border-[var(--border)] bg-[var(--surface)]">
+                        <h3 className="text-lg font-bold text-[var(--fg)] mb-4 flex items-center gap-2">
+                            <span className="icon-[tabler--database] text-[var(--accent)] size-5" aria-hidden />
+                            Repository Info
+                        </h3>
+                        <dl className="grid grid-cols-[130px_1fr] gap-y-3 text-sm">
+                            <dt className="text-[var(--muted)]">Created</dt>
+                            <dd className="font-medium text-[var(--fg)]">{formatDate(repo.createdAt)}</dd>
 
-                <div className="card p-5">
-                    <h3 className="font-semibold">Description</h3>
-                    <p className="mt-3 text-[var(--muted)]">{repo.description || "—"}</p>
-                </div>
-            </section>
+                            <dt className="text-[var(--muted)]">Default branch</dt>
+                            <dd className="font-medium text-[var(--fg)] font-mono text-xs">{repo.defaultBranch}</dd>
+
+                            <dt className="text-[var(--muted)]">Stars</dt>
+                            <dd className="font-medium text-[var(--fg)]">★ {nf.format(repo.stars ?? 0)}</dd>
+
+                            <dt className="text-[var(--muted)]">Forks</dt>
+                            <dd className="font-medium text-[var(--fg)]">{nf.format(repo.forks ?? 0)}</dd>
+
+                            <dt className="text-[var(--muted)]">License</dt>
+                            <dd className="font-medium text-[var(--fg)]">{safeLicense}</dd>
+                        </dl>
+                    </div>
+
+                    <div className="card p-6 border border-[var(--border)] bg-[var(--surface)] flex flex-col">
+                        <h3 className="text-lg font-bold text-[var(--fg)] mb-4 flex items-center gap-2">
+                            <span className="icon-[tabler--file-text] text-[var(--accent)] size-5" aria-hidden />
+                            GitHub Description
+                        </h3>
+                        <p className="text-sm text-[var(--muted)] leading-relaxed my-auto">
+                            {repo.description || "No GitHub description provided for this repository."}
+                        </p>
+                    </div>
+                </section>
+            </Reveal>
 
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         </article>
