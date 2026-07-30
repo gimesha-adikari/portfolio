@@ -1,3 +1,4 @@
+// file: lib/github.ts
 const API = "https://api.github.com";
 
 const TIMEOUT_MS = Number(process.env.GITHUB_TIMEOUT_MS || 2500);
@@ -78,6 +79,21 @@ export type Repo = {
     defaultBranch: string;
     owner?: { login: string };
 };
+
+// --- NEW PROFILE TYPE ---
+export interface GitHubProfile {
+    login: string;
+    avatar_url: string;
+    name: string;
+    company: string | null;
+    blog: string;
+    location: string | null;
+    bio: string | null;
+    public_repos: number;
+    followers: number;
+    following: number;
+    created_at: string;
+}
 
 function mapRepo(r: any): Repo {
     return {
@@ -217,7 +233,7 @@ export function extractReadmeMeta(md: {
     if (md) {
         const imgRe = /!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
         let m: RegExpExecArray | null;
-        while ((m = imgRe.exec(md))) {
+        while ((m = imgRe.exec(md as string))) {
             const candidate = (m[1] || "").trim();
             if (!candidate) continue;
             if (/shields\.io|badgen\.net|badge|visitor|coverage|workflow/i.test(candidate)) continue;
@@ -225,7 +241,7 @@ export function extractReadmeMeta(md: {
             break;
         }
 
-        const lines = md.split(/\r?\n/);
+        const lines = (md as string).split(/\r?\n/);
         for (let i = 0; i < Math.min(lines.length, 80); i++) {
             const mm = lines[i].match(/^\s*[-*]\s+(.+?)\s*$/);
             if (mm && mm[1] && mm[1].length < 140) bullets.push(mm[1]);
@@ -267,4 +283,24 @@ export async function getRepoCardExtras(repo: Repo) {
     const topLangs = langList.slice(0, 3).map((l) => ({ name: l.name, pct: l.pct }));
 
     return { cover, bullets, stack, topLangs };
+}
+
+// --- NEW DATA FETCHERS FOR HOME PAGE ---
+
+export async function fetchProfile(): Promise<GitHubProfile> {
+    const username = process.env.GITHUB_USERNAME!;
+    try {
+        return await gh<GitHubProfile>(`/users/${encodeURIComponent(username)}`, { revalidate: 3600 });
+    } catch {
+        return await ghPublic<GitHubProfile>(`/users/${encodeURIComponent(username)}`, 3600);
+    }
+}
+
+export async function fetchRecentActivity(): Promise<any[]> {
+    const username = process.env.GITHUB_USERNAME!;
+    try {
+        return await gh<any[]>(`/users/${encodeURIComponent(username)}/events/public?per_page=10`, { revalidate: 3600 });
+    } catch {
+        return await ghPublic<any[]>(`/users/${encodeURIComponent(username)}/events/public?per_page=10`, 3600);
+    }
 }

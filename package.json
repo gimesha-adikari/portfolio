@@ -28,6 +28,7 @@
     "nouislider": "^15.8.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-github-calendar": "^5.0.8",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",

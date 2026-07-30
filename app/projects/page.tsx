@@ -74,9 +74,10 @@ export default async function ProjectsPage({
 
             <div className="flex items-end justify-between gap-4 flex-wrap">
                 <div>
-                    <h1 id="projects-title" className="text-3xl md:text-4xl font-bold tracking-tight">All Projects</h1>
+                    <h1 id="projects-title" className="text-3xl md:text-4xl font-bold tracking-tight">Projects</h1>
                     <p className="mt-1 text-[var(--muted)]">
-                        {count} project{count === 1 ? "" : "s"}
+                        Selected work and experiments
+                        {count > 0 && <> • {count} project{count === 1 ? "" : "s"}</>}
                         {q && <> • search: <span className="font-medium">“{q}”</span></>}
                         {lang && <> • language: <span className="font-medium">{lang}</span></>}
                     </p>

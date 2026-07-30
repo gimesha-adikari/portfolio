@@ -1,7 +1,7 @@
 {
   "pinned": [
-    "multi-platform-banking-system",
-    "neurosim",
-    "webapp-ecommerce"
+    "pdfnest",
+    "pdfnest-backend",
+    "pdfnest-worker"
   ]
 }
