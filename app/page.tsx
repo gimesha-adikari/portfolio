@@ -25,8 +25,6 @@ export default async function HomePage() {
         (repo) => repo.homepage && repo.homepage.startsWith("http") && !featuredNames.includes(repo.name)
     );
 
-    const totalStars = repos.reduce((acc, repo) => acc + (repo.stars || 0), 0);
-
     const CODING_START_YEAR = 2021;
     const yearsCoding = new Date().getFullYear() - CODING_START_YEAR;
 
@@ -136,22 +134,6 @@ export default async function HomePage() {
                     ──────────────────────────────────── */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-                        {/* STATS ROW */}
-                        <div className="md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <StatCard title="Repositories">
-                                <AnimatedCounter value={profile.public_repos} className="text-2xl font-semibold" />
-                            </StatCard>
-                            <StatCard title="Total Stars">
-                                <AnimatedCounter value={totalStars} className="text-2xl font-semibold" />
-                            </StatCard>
-                            <StatCard title="Followers">
-                                <AnimatedCounter value={profile.followers} className="text-2xl font-semibold" />
-                            </StatCard>
-                            <StatCard title="Years Coding">
-                                <AnimatedCounter value={yearsCoding} className="text-2xl font-semibold" />
-                            </StatCard>
-                        </div>
-
                         {/* LIVE ACTIVITY TERMINAL */}
                         <div className="md:col-span-2 card p-6 border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_60%,transparent)] backdrop-blur-sm relative overflow-hidden group">
                             <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -206,6 +188,16 @@ export default async function HomePage() {
                                     </MotionSection>
                                 ))}
                             </div>
+                        </div>
+
+                        {/* STATS ROW (Balanced 2-Column layout) */}
+                        <div className="md:col-span-3 grid grid-cols-2 gap-4">
+                            <StatCard title="Public Repositories">
+                                <AnimatedCounter value={profile.public_repos} className="text-3xl font-bold tracking-tight text-[var(--fg)]" />
+                            </StatCard>
+                            <StatCard title="Years Coding">
+                                <AnimatedCounter value={yearsCoding} className="text-3xl font-bold tracking-tight text-[var(--fg)]" />
+                            </StatCard>
                         </div>
 
                         {/* CALENDAR */}
