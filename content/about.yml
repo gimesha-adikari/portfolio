@@ -1,0 +1,130 @@
+name: "Gimesha Nirmal"
+subtitle: "3 min read"
+role_description: "Full-stack Software Engineer building scalable backend systems, modern web applications, document processing platforms, Android apps, and AI-powered products."
+tldr: "I enjoy building complete software products—from backend architecture and APIs to polished user interfaces, document processing pipelines, and AI-powered features. My focus is writing maintainable, production-ready software that solves real problems."
+
+badges:
+  - label: "Backend"
+    icon: "icon-[tabler--server]"
+  - label: "Frontend"
+    icon: "icon-[tabler--layout]"
+  - label: "Android"
+    icon: "icon-[tabler--device-mobile]"
+  - label: "AI & Machine Learning"
+    icon: "icon-[tabler--brain]"
+
+overview:
+  text: >
+    I'm a full-stack software engineer passionate about building reliable,
+    production-ready applications. My experience spans Java and Go backend
+    development, modern React/Next.js frontends, and Android applications. I enjoy designing scalable architectures,
+    building secure APIs, developing high-performance document processing
+    pipelines, and creating software that is easy to extend, maintain,
+    and deploy.
+  focus_areas:
+    - "Scalable backend architecture with Go, Java & Spring Boot"
+    - "Modern React/Next.js applications with TypeScript"
+    - "Document processing, PDF editing, conversion, and automation"
+    - "Android development using Kotlin & Jetpack Compose"
+    - "AI-powered products with Python, FastAPI, OCR & Computer Vision"
+    - "Authentication, authorization and secure system design"
+
+working_style:
+  - title: "Architecture first"
+    desc: "Designing maintainable systems with clear separation of responsibilities."
+  - title: "Production mindset"
+    desc: "Building software that is reliable, testable, secure, and easy to maintain."
+  - title: "Continuous learning"
+    desc: "Always exploring better tools, frameworks, and engineering practices."
+  - title: "Performance focused"
+    desc: "Optimizing systems for speed, scalability, and efficient resource usage."
+
+stack:
+  - category: "Backend"
+    icon: "icon-[tabler--server]"
+    items: "Go, Java, Spring Boot, Hibernate/JPA, Jakarta EE, REST APIs, PostgreSQL, MySQL"
+    subtext: "JWT, OAuth, RBAC, service architecture, concurrent processing, database design"
+  - category: "Frontend"
+    icon: "icon-[tabler--layout]"
+    items: "React, Next.js, TypeScript, Tailwind CSS"
+    subtext: "Responsive interfaces, reusable components, SaaS dashboards, PDF workspaces, accessibility"
+  - category: "Mobile"
+    icon: "icon-[tabler--device-mobile]"
+    items: "Android (Kotlin), Jetpack Compose, Retrofit, Material Design"
+    subtext: "Native Android applications with modern architecture"
+  - category: "AI & Machine Learning"
+    icon: "icon-[tabler--brain]"
+    items: "Python, FastAPI, ONNX Runtime, OpenCV, OCR"
+    subtext: "Document OCR, image processing, computer vision, face verification, ML inference APIs"
+  - category: "Document Processing"
+    icon: "icon-[tabler--file-text]"
+    items: "PDF editing, conversion, compression, metadata, watermarking, signing"
+    subtext: "High-performance document workflows, page operations, and file automation"
+
+selected_work:
+  - title: "PDFNest"
+    description: >
+      Full-stack PDF SaaS built with Next.js and Go, featuring PDF editing,
+      conversion, compression, OCR, page manipulation, document security,
+      image conversion, metadata editing, watermarking, digital signing,
+      and AI-assisted document processing.
+    link: "/projects/pdfnest"
+    link_text: "View project"
+  - title: "Banking Platform"
+    description: >
+      Multi-platform banking system with Spring Boot backend,
+      Android application, web dashboard, authentication,
+      authorization, and AI-powered identity verification services.
+    link: "/projects/banking-platform"
+    link_text: "View project"
+  - title: "AI Verification Service"
+    description: >
+      FastAPI microservice implementing face matching,
+      liveness detection, OCR, and ONNX-based inference
+      for digital identity verification.
+    link: "/projects/ai-verification"
+    link_text: "View project"
+
+skills:
+  - category: "Backend"
+    icon: "icon-[tabler--server]"
+    desc: "Go, Java, Spring Boot, Jakarta EE, Hibernate/JPA, REST APIs, JWT Authentication, OAuth, RBAC"
+  - category: "Frontend"
+    icon: "icon-[tabler--layout]"
+    desc: "React, Next.js, TypeScript, Tailwind CSS, HTML5, CSS3"
+  - category: "Android"
+    icon: "icon-[tabler--device-mobile]"
+    desc: "Kotlin, Jetpack Compose, Retrofit, Material Design"
+  - category: "AI & Machine Learning"
+    icon: "icon-[tabler--brain]"
+    desc: "Python, FastAPI, ONNX Runtime, OpenCV, OCR, Computer Vision"
+  - category: "Document Processing"
+    icon: "icon-[tabler--file-text]"
+    desc: "PDF editing, PDF conversion, OCR, image processing, document rendering, metadata management, watermarking, digital signatures"
+  - category: "Database"
+    icon: "icon-[tabler--database]"
+    desc: "PostgreSQL, MySQL, SQLite, SQL, Database Design, Query Optimization"
+  - category: "DevOps & Tools"
+    icon: "icon-[tabler--terminal-2]"
+    desc: "Git, GitHub, Docker, Linux, Vercel, Render, Gradle, Maven, WSL2, Conda"
+
+availability: >
+  Open to Software Engineering opportunities focused on backend,
+  full-stack web development, Go, Java, AI-powered applications,
+  document processing platforms, and scalable cloud services.
+
+education:
+  degree: "Bachelor of Engineering (Software Engineering)"
+  institution: "IIC University of Technology, Cambodia"
+
+  additional:
+    - "Java Institute for Advanced Technology (JIAT)"
+    - "Central College, Kuliyapitiya"
+
+languages: "English · Sinhala"
+
+certifications:
+  - title: "Meta React"
+    issuer: "Coursera"
+    year: "2026"
+    credential_link: "https://www.coursera.org/account/accomplishments/specialization/M699R7O1070Z"
