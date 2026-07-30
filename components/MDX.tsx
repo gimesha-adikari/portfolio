@@ -1,3 +1,4 @@
+// file: components/MDX.tsx
 import * as React from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
@@ -88,7 +89,7 @@ function Img(props: any) {
     return (
         <span className="block my-4 rounded-xl overflow-hidden border border-[var(--border)]">
             <img {...rest} className={cx("w-full h-auto", className)} />
-    </span>
+        </span>
     );
 }
 
@@ -101,7 +102,7 @@ function Table(props: any) {
     );
 }
 
-const components = {
+const defaultComponents = {
     h2: Heading("h2"),
     h3: Heading("h3"),
     h4: Heading("h4"),
@@ -115,7 +116,7 @@ const components = {
     img: Img,
     table: Table,
 
-    hr:   (p: any) => <hr className="my-8 border-[var(--border)]" {...p} />,
+    hr:    (p: any) => <hr className="my-8 border-[var(--border)]" {...p} />,
     code: (p: any) => <code className="px-1 py-0.5 rounded bg-[var(--surface)]" {...p} />,
     pre:  (p: any) => <pre className="p-4 rounded bg-[var(--surface)] overflow-x-auto" {...p} />,
 
@@ -127,6 +128,17 @@ const components = {
     ),
 };
 
-export function RenderMDX({ source }: { source: string }) {
-    return <MDXRemote source={normalizeMDX(source)} components={components as any} />;
+export function RenderMDX({
+                              source,
+                              components = {}
+                          }: {
+    source: string;
+    components?: Record<string, React.ComponentType<any>>;
+}) {
+    const mergedComponents = {
+        ...defaultComponents,
+        ...components,
+    };
+
+    return <MDXRemote source={normalizeMDX(source)} components={mergedComponents as any} />;
 }

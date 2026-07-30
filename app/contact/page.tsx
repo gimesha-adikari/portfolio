@@ -1,13 +1,13 @@
+// file: app/contact/page.tsx
 import type { Metadata } from "next";
-import { getContactMDX } from "@/lib/content";
-import { RenderMDX } from "@/components/MDX";
 import ContactCards from "@/components/ContactCards";
+import Reveal from "@/components/Reveal";
 
 const siteUrl = process.env.SITE_URL ?? "http://localhost:3000";
 const NAME = "Gimesha Nirmal";
 const EMAIL = "gimeshanirmal23@gmail.com";
 const GITHUB = "https://github.com/gimesha-adikari";
-const LINKEDIN = "https://linkedin.com/in/gimesha-nirmal-490245343";
+const LINKEDIN = "https://linkedin.com/in/gimesha-nirmal";
 
 export const metadata: Metadata = {
     title: "Contact",
@@ -15,9 +15,7 @@ export const metadata: Metadata = {
     alternates: { canonical: "/contact" },
 };
 
-export default async function ContactPage() {
-    const mdx = await getContactMDX();
-
+export default function ContactPage() {
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "Person",
@@ -34,25 +32,38 @@ export default async function ContactPage() {
     };
 
     return (
-        <section aria-labelledby="contact-title" className="max-w-3xl">
-            <h1 id="contact-title" className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
-        <span className="bg-gradient-to-r from-[var(--fg)] via-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">
-          Contact
-        </span>
-            </h1>
+        <section aria-labelledby="contact-title" className="relative container-xl max-w-4xl mx-auto pt-10 md:pt-14 pb-20 hero-glow">
+            {/* Ambient Background Glow */}
+            <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-[-10vh] h-[40vh] bg-[radial-gradient(ellipse_at_top,color-mix(in_oklab,var(--accent),transparent_80%)_0%,transparent_70%)] opacity-40"
+            />
 
-            <p className="mt-3 text-[var(--muted)]">
-                For opportunities or questions, email me or connect on socials.
-            </p>
+            <Reveal>
+                <div className="max-w-2xl">
+                    <h1 id="contact-title" className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight text-[var(--fg)]">
+                        Let's build something <br className="hidden sm:block" />
+                        <span className="bg-gradient-to-r from-[var(--fg)] via-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent">
+                            incredible together.
+                        </span>
+                    </h1>
+                    <p className="mt-5 text-lg text-[var(--muted)] leading-relaxed">
+                        For opportunities, collaborations, or just a quick question, feel free to reach out via email or connect with me on social media.
+                    </p>
+                </div>
+            </Reveal>
 
-            <div className="mt-6">
-                <ContactCards
-                    email={EMAIL}
-                    githubUrl={GITHUB}
-                    linkedinUrl={LINKEDIN}
-                    vcardHref="/api/vcard"
-                />
-            </div>
+            {/* Hardcoded Contact Cards Component */}
+            <Reveal delay={0.2}>
+                <div className="mt-12">
+                    <ContactCards
+                        email={EMAIL}
+                        githubUrl={GITHUB}
+                        linkedinUrl={LINKEDIN}
+                        vcardHref="/api/vcard"
+                    />
+                </div>
+            </Reveal>
 
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         </section>
