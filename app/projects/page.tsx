@@ -1,3 +1,5 @@
+// file: app/projects/page.tsx
+import Link from "next/link";
 import { fetchAllRepos, type Repo } from "@/lib/github";
 import { RepoCard } from "@/components/RepoCard";
 import { orderReposWithPinned } from "@/lib/pins";
@@ -67,54 +69,86 @@ export default async function ProjectsPage({
     const count = list.length;
 
     return (
-        <section aria-labelledby="projects-title" className="relative">
-            <div className="hidden lg:block fixed left-4 top-[calc(var(--header-h,56px)+16px)] w-[280px] z-30">
-                <ProjectsFilters initialQ={q} initialLang={lang} initialSort={sort} langs={langs} counts={counts} layout="card" />
-            </div>
+        <section aria-labelledby="projects-title" className="relative hero-glow">
+            {/* Ambient Background Glow */}
+            <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-[-10vh] h-[40vh] bg-[radial-gradient(ellipse_at_top,color-mix(in_oklab,var(--accent),transparent_85%)_0%,transparent_70%)] opacity-50"
+            />
 
-            <div className="flex items-end justify-between gap-4 flex-wrap">
-                <div>
-                    <h1 id="projects-title" className="text-3xl md:text-4xl font-bold tracking-tight">Projects</h1>
-                    <p className="mt-1 text-[var(--muted)]">
-                        Selected work and experiments
-                        {count > 0 && <> • {count} project{count === 1 ? "" : "s"}</>}
-                        {q && <> • search: <span className="font-medium">“{q}”</span></>}
-                        {lang && <> • language: <span className="font-medium">{lang}</span></>}
-                    </p>
-                </div>
+            <div className="container-xl max-w-7xl mx-auto pt-10 md:pt-14 pb-20">
+                {/* Flex layout for Sticky Sidebar + Main Content */}
+                <div className="flex flex-col lg:flex-row gap-8 items-start">
 
-                <div className="w-full sm:max-w-xl lg:hidden">
-                    <ProjectsFilters initialQ={q} initialLang={lang} initialSort={sort} langs={langs} counts={counts} layout="bar" />
-                </div>
-            </div>
+                    {/* Desktop Sidebar: Sticky instead of Fixed ensures it respects the container max-width */}
+                    <aside className="hidden lg:block sticky top-[calc(var(--header-h,56px)+32px)] w-[280px] shrink-0 z-10">
+                        <ProjectsFilters initialQ={q} initialLang={lang} initialSort={sort} langs={langs} counts={counts} layout="card" />
+                    </aside>
 
-            <div className="mt-6" />
+                    {/* Main Content Area */}
+                    <div className="flex-1 w-full min-w-0 space-y-8">
 
-            {count > 0 ? (
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
-                    {list.map((repo) => {
-                        const key =
-                            (repo as any).id ??
-                            (repo as any).full_name ??
-                            (repo as any).fullName ??
-                            ((repo as any).owner ? `${(repo as any).owner}/${repo.name}` : undefined) ??
-                            repo.name;
-                        return (
-                            <Reveal key={key}>
-                                <RepoCard repo={repo} />
+                        {/* Header & Mobile Filters */}
+                        <div className="flex flex-col gap-4">
+                            <div>
+                                <h1 id="projects-title" className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--fg)]">
+                                    Projects
+                                </h1>
+                                <p className="mt-2 text-[var(--muted)] leading-relaxed flex flex-wrap items-center gap-x-2 gap-y-1">
+                                    <span>Selected work and experiments</span>
+                                    {count > 0 && <span className="opacity-50">•</span>}
+                                    {count > 0 && <span>{count} project{count === 1 ? "" : "s"}</span>}
+                                    {q && <span className="opacity-50">•</span>}
+                                    {q && <span>search: <span className="font-medium text-[var(--fg)]">“{q}”</span></span>}
+                                    {lang && <span className="opacity-50">•</span>}
+                                    {lang && <span>language: <span className="font-medium text-[var(--fg)]">{lang}</span></span>}
+                                </p>
+                            </div>
+
+                            {/* Mobile Filters (Hidden on Desktop) */}
+                            <div className="w-full sm:max-w-xl lg:hidden">
+                                <ProjectsFilters initialQ={q} initialLang={lang} initialSort={sort} langs={langs} counts={counts} layout="bar" />
+                            </div>
+                        </div>
+
+                        {/* Projects Grid */}
+                        {count > 0 ? (
+                            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 items-stretch">
+                                {list.map((repo, i) => {
+                                    // Clean TypeScript key extraction
+                                    const key = repo.fullName || repo.name;
+                                    return (
+                                        <Reveal key={key} delay={(i % 10) * 0.05}>
+                                            <RepoCard repo={repo} />
+                                        </Reveal>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            /* Premium Empty State */
+                            <Reveal>
+                                <div className="card flex flex-col items-center justify-center p-12 text-center border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_60%,transparent)] backdrop-blur-sm rounded-[14px]">
+                                    <div className="size-16 rounded-full bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center mb-4">
+                                        <span className="icon-[tabler--search-off] size-8 text-[var(--muted)]" aria-hidden />
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-2">No projects found</h3>
+                                    <p className="text-[var(--muted)] max-w-sm mb-6">
+                                        We couldn't find any projects matching your current filters. Try adjusting your search term or language.
+                                    </p>
+                                    <div className="flex flex-wrap justify-center gap-3">
+                                        <Link href="/projects" className="rounded-lg bg-[var(--accent)] text-[var(--bg)] px-5 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">
+                                            Clear all filters
+                                        </Link>
+                                        <Link href="/projects?sort=stars" className="rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--fg)] px-5 py-2.5 text-sm font-semibold hover:border-[var(--accent)] transition-colors">
+                                            Sort by stars
+                                        </Link>
+                                    </div>
+                                </div>
                             </Reveal>
-                        );
-                    })}
-                </div>
-            ) : (
-                <div className="card p-6 mt-4">
-                    <p className="text-[var(--muted)]">No projects match your filters. Try clearing the search or language.</p>
-                    <div className="mt-3 flex gap-2">
-                        <a href="/projects" className="btn btn-ghost text-sm">Clear filters</a>
-                        <a href="/projects?sort=stars" className="btn btn-text text-sm">Sort by stars</a>
+                        )}
                     </div>
                 </div>
-            )}
+            </div>
         </section>
     );
 }

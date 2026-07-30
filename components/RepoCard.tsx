@@ -1,4 +1,3 @@
-// file: components/RepoCard.tsx
 import Link from "next/link";
 import Image from "next/image";
 import { cache } from "react";
@@ -38,7 +37,6 @@ export async function RepoCard({ repo }: { repo: Repo }) {
         stack = extras.stack ?? [];
         topLangs = extras.topLangs ?? [];
     } catch {
-        // Silently fail extras fetch; component will render gracefully with fallbacks
     }
 
     const topics = Array.isArray(repo.topics) ? repo.topics : [];
@@ -54,7 +52,6 @@ export async function RepoCard({ repo }: { repo: Repo }) {
     const title = `Open details for ${repo.name}`;
     const initials = getInitials(repo.name);
 
-    // Sanitize repo name for a valid HTML ID (removes dots/special chars)
     const titleId = `${repo.name.replace(/[^a-zA-Z0-9-]/g, '-')}-title`;
 
     return (
@@ -215,7 +212,6 @@ export async function RepoCard({ repo }: { repo: Repo }) {
                             </div>
                         )}
 
-                        {/* `mt-auto` forces this footer to the bottom, aligning all cards perfectly */}
                         <div className="mt-auto pt-5 flex items-center justify-between text-xs text-[var(--muted)]">
                             <span className="inline-flex items-center gap-1.5 font-mono" aria-label={`${forks} forks`}>
                                 <span className="icon-[tabler--git-fork] size-4" aria-hidden />
