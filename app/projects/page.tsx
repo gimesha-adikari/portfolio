@@ -1,4 +1,3 @@
-// file: app/projects/page.tsx
 import Link from "next/link";
 import { fetchAllRepos, type Repo } from "@/lib/github";
 import { RepoCard } from "@/components/RepoCard";
@@ -70,25 +69,20 @@ export default async function ProjectsPage({
 
     return (
         <section aria-labelledby="projects-title" className="relative hero-glow">
-            {/* Ambient Background Glow */}
             <div
                 aria-hidden
                 className="pointer-events-none absolute inset-x-0 top-[-10vh] h-[40vh] bg-[radial-gradient(ellipse_at_top,color-mix(in_oklab,var(--accent),transparent_85%)_0%,transparent_70%)] opacity-50"
             />
 
             <div className="container-xl max-w-7xl mx-auto pt-10 md:pt-14 pb-20">
-                {/* Flex layout for Sticky Sidebar + Main Content */}
                 <div className="flex flex-col lg:flex-row gap-8 items-start">
 
-                    {/* Desktop Sidebar: Sticky instead of Fixed ensures it respects the container max-width */}
                     <aside className="hidden lg:block sticky top-[calc(var(--header-h,56px)+32px)] w-[280px] shrink-0 z-10">
                         <ProjectsFilters initialQ={q} initialLang={lang} initialSort={sort} langs={langs} counts={counts} layout="card" />
                     </aside>
 
-                    {/* Main Content Area */}
                     <div className="flex-1 w-full min-w-0 space-y-8">
 
-                        {/* Header & Mobile Filters */}
                         <div className="flex flex-col gap-4">
                             <div>
                                 <h1 id="projects-title" className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--fg)]">
@@ -105,7 +99,6 @@ export default async function ProjectsPage({
                                 </p>
                             </div>
 
-                            {/* Mobile Filters (Hidden on Desktop) */}
                             <div className="w-full sm:max-w-xl lg:hidden">
                                 <ProjectsFilters initialQ={q} initialLang={lang} initialSort={sort} langs={langs} counts={counts} layout="bar" />
                             </div>
@@ -125,7 +118,6 @@ export default async function ProjectsPage({
                                 })}
                             </div>
                         ) : (
-                            /* Premium Empty State */
                             <Reveal>
                                 <div className="card flex flex-col items-center justify-center p-12 text-center border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_60%,transparent)] backdrop-blur-sm rounded-[14px]">
                                     <div className="size-16 rounded-full bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center mb-4">
