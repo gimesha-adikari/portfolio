@@ -1,3 +1,4 @@
+// file: components/RepoCard.tsx
 import Link from "next/link";
 import Image from "next/image";
 import { cache } from "react";
@@ -36,20 +37,25 @@ export async function RepoCard({ repo }: { repo: Repo }) {
         bullets = extras.bullets ?? [];
         stack = extras.stack ?? [];
         topLangs = extras.topLangs ?? [];
-    } catch {}
+    } catch {
+        // Silently fail extras fetch; component will render gracefully with fallbacks
+    }
 
-    const topics = Array.isArray((repo as any).topics) ? ((repo as any).topics as string[]) : [];
+    const topics = Array.isArray(repo.topics) ? repo.topics : [];
     const techStack = Array.from(new Set((stack.length ? stack : topics).filter(Boolean))).slice(0, 4);
     const showLangBar = techStack.length === 0 && topLangs.length > 0;
 
-    const updated = fmtDate((repo as any).pushedAt || (repo as any).updatedAt);
+    const updated = fmtDate(repo.pushedAt || repo.updatedAt);
     const stars = nf.format(repo.stars ?? 0);
     const forks = nf.format(repo.forks ?? 0);
-    const language = (repo as any).language ?? topLangs[0]?.name ?? "Code";
+    const language = repo.language ?? topLangs[0]?.name ?? "Code";
 
     const href = `/projects/${repo.name}`;
     const title = `Open details for ${repo.name}`;
     const initials = getInitials(repo.name);
+
+    // Sanitize repo name for a valid HTML ID (removes dots/special chars)
+    const titleId = `${repo.name.replace(/[^a-zA-Z0-9-]/g, '-')}-title`;
 
     return (
         <Link
@@ -60,11 +66,12 @@ export async function RepoCard({ repo }: { repo: Repo }) {
             prefetch={false}
         >
             <div className="relative h-full rounded-[14px] p-[1px] transition-transform duration-300 group-hover:-translate-y-1">
+                {/* Glowing Outer Border */}
                 <div className="absolute inset-0 rounded-[14px] border border-transparent bg-gradient-to-br from-[var(--accent)] via-[color-mix(in_oklab,var(--accent)_45%,var(--success))] to-[var(--accent)] opacity-15 blur-[1px] transition-opacity duration-300 group-hover:opacity-35" />
 
                 <article
-                    className="relative card rounded-[14px] overflow-hidden h-full flex flex-col"
-                    aria-labelledby={`${repo.name}-title`}
+                    className="relative card rounded-[14px] overflow-hidden h-full flex flex-col bg-[var(--surface)]"
+                    aria-labelledby={titleId}
                 >
                     <div className="relative aspect-[16/10] bg-[color-mix(in_oklab,var(--bg)_70%,var(--surface))] overflow-hidden border-b border-[var(--border)]">
                         {cover ? (
@@ -77,40 +84,38 @@ export async function RepoCard({ repo }: { repo: Repo }) {
                                 priority={false}
                             />
                         ) : (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="flex flex-col items-center gap-3 text-center">
-                                    <div className="grid place-items-center size-16 rounded-2xl border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_88%,transparent)] text-[var(--fg)]">
-                                        <span className="text-xl font-bold tracking-tight">{initials || "P"}</span>
+                            /* Premium Technical Blueprint Fallback */
+                            <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_1px_1px,var(--border)_1px,transparent_0)] [background-size:16px_16px]">
+                                <div className="flex flex-col items-center gap-3 text-center bg-[var(--surface)]/80 p-4 rounded-xl backdrop-blur-sm border border-[var(--border)] shadow-sm">
+                                    <div className="grid place-items-center size-14 rounded-full border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_88%,transparent)] text-[var(--fg)]">
+                                        <span className="text-lg font-bold tracking-tight">{initials || "P"}</span>
                                     </div>
-                                    <div className="text-xs text-[var(--muted)]">Project preview unavailable</div>
                                 </div>
                             </div>
                         )}
 
-                        <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_88%,transparent)] px-2.5 py-1 text-xs text-[var(--muted)] backdrop-blur-md">
-                            <span className="icon-[tabler--sparkles] size-4" aria-hidden />
+                        {/* Badges */}
+                        <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-2.5 py-1 text-xs text-[var(--fg)] backdrop-blur-md shadow-sm">
+                            <span className="icon-[tabler--sparkles] size-3.5 text-[var(--accent)]" aria-hidden />
                             Featured
                         </div>
 
                         <div
-                            className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_88%,transparent)] px-2.5 py-1 text-xs text-[var(--fg)] backdrop-blur-md"
+                            className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-2.5 py-1 text-xs text-[var(--fg)] backdrop-blur-md shadow-sm"
                             aria-label={`${stars} stars`}
                         >
-                            <span className="icon-[tabler--star] size-4" aria-hidden />
+                            <span className="icon-[tabler--star] size-3.5 text-[var(--accent)]" aria-hidden />
                             {stars}
                         </div>
 
                         <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
                             <div className="max-w-[70%]">
-                                <div className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bg)] bg-[var(--fg)] px-2 py-0.5 rounded shadow-sm inline-block">
                                     {language}
-                                </div>
-                                <div className="mt-1 text-sm text-[var(--fg)]/90 line-clamp-1">
-                                    {repo.private ? "Private repository" : "Public repository"}
                                 </div>
                             </div>
                             {updated && (
-                                <div className="rounded-full border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_88%,transparent)] px-2.5 py-1 text-xs text-[var(--muted)] backdrop-blur-md whitespace-nowrap">
+                                <div className="rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-2.5 py-1 text-xs font-mono text-[var(--muted)] backdrop-blur-md whitespace-nowrap shadow-sm">
                                     {updated}
                                 </div>
                             )}
@@ -120,34 +125,29 @@ export async function RepoCard({ repo }: { repo: Repo }) {
                     <div className="p-5 md:p-6 flex-1 flex flex-col">
                         <div className="flex items-start justify-between gap-3">
                             <h3
-                                id={`${repo.name}-title`}
-                                className="text-base sm:text-lg md:text-xl font-semibold tracking-tight line-clamp-1 text-[var(--fg)]"
+                                id={titleId}
+                                className="text-base sm:text-lg md:text-xl font-bold tracking-tight line-clamp-1 text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors"
                             >
                                 {repo.name}
                             </h3>
-
-                            {forks !== "0" && (
-                                <span className="rounded-full border border-[var(--border)] px-2 py-0.5 text-xs text-[var(--muted)] whitespace-nowrap shrink-0">
-                                    <span className="inline-flex items-center gap-1">
-                                        <span className="icon-[tabler--git-fork] size-4" aria-hidden />
-                                        {forks}
-                                    </span>
-                                </span>
-                            )}
                         </div>
 
-                        {repo.description && (
-                            <p className="mt-2 text-sm leading-6 text-[var(--muted)] line-clamp-3" title={repo.description}>
+                        {repo.description ? (
+                            <p className="mt-2 text-sm leading-relaxed text-[var(--muted)] line-clamp-2" title={repo.description}>
                                 {repo.description}
+                            </p>
+                        ) : (
+                            <p className="mt-2 text-sm leading-relaxed text-[var(--muted)] italic">
+                                No description provided.
                             </p>
                         )}
 
                         {bullets.length > 0 && (
-                            <ul className="mt-3 space-y-1.5 text-sm text-[var(--fg)]">
+                            <ul className="mt-4 space-y-2 text-sm text-[var(--fg)]">
                                 {bullets.slice(0, 2).map((b, i) => (
                                     <li key={`${repo.name}-b-${i}`} className="flex items-start gap-2 line-clamp-1">
-                                        <span className="icon-[tabler--circle-check] size-4 mt-0.5 text-[var(--success)]" aria-hidden />
-                                        <span title={b}>{b}</span>
+                                        <span className="icon-[tabler--circle-check] size-4 mt-0.5 text-[var(--success)] shrink-0" aria-hidden />
+                                        <span title={b} className="text-[var(--muted)]">{b}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -158,7 +158,7 @@ export async function RepoCard({ repo }: { repo: Repo }) {
                                 {techStack.map((t) => (
                                     <span
                                         key={t}
-                                        className="rounded-full border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_90%,transparent)] px-2.5 py-1 text-xs text-[var(--muted)]"
+                                        className="rounded-md border border-[var(--border)] bg-[var(--bg)] px-2 py-1 text-[11px] font-medium text-[var(--muted)]"
                                     >
                                         {t}
                                     </span>
@@ -169,7 +169,7 @@ export async function RepoCard({ repo }: { repo: Repo }) {
                         {showLangBar && (
                             <div className="mt-4">
                                 <div
-                                    className="h-2 rounded-full overflow-hidden border border-[var(--border)] bg-[var(--surface)]"
+                                    className="h-1.5 rounded-full overflow-hidden bg-[var(--border)]"
                                     role="img"
                                     aria-label="Language distribution"
                                 >
@@ -193,11 +193,11 @@ export async function RepoCard({ repo }: { repo: Repo }) {
                                     </div>
                                 </div>
 
-                                <div className="mt-2 flex flex-wrap gap-2 text-xs text-[var(--muted)]">
+                                <div className="mt-2 flex flex-wrap gap-3 text-[11px] font-medium text-[var(--muted)]">
                                     {topLangs.slice(0, 3).map((l, i) => (
-                                        <span key={l.name} className="inline-flex items-center gap-1">
+                                        <span key={l.name} className="inline-flex items-center gap-1.5">
                                             <span
-                                                className="inline-block size-2 rounded-[3px]"
+                                                className="inline-block size-2 rounded-full"
                                                 style={{
                                                     background:
                                                         i === 0
@@ -215,15 +215,16 @@ export async function RepoCard({ repo }: { repo: Repo }) {
                             </div>
                         )}
 
-                        <div className="mt-4 pt-3 flex items-center justify-between text-xs text-[var(--muted)] border-t border-[var(--border)]">
-                            <span className="inline-flex items-center gap-1" aria-label={`${forks} forks`}>
+                        {/* `mt-auto` forces this footer to the bottom, aligning all cards perfectly */}
+                        <div className="mt-auto pt-5 flex items-center justify-between text-xs text-[var(--muted)]">
+                            <span className="inline-flex items-center gap-1.5 font-mono" aria-label={`${forks} forks`}>
                                 <span className="icon-[tabler--git-fork] size-4" aria-hidden />
                                 {forks}
                             </span>
 
-                            <span className="inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                                <span className="icon-[tabler--arrow-up-right] size-4" aria-hidden />
+                            <span className="inline-flex items-center gap-1 group-hover:text-[var(--accent)] transition-colors">
                                 View details
+                                <span className="icon-[tabler--arrow-up-right] size-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden />
                             </span>
                         </div>
                     </div>

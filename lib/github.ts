@@ -1,4 +1,3 @@
-// file: lib/github.ts
 const API = "https://api.github.com";
 
 const TIMEOUT_MS = Number(process.env.GITHUB_TIMEOUT_MS || 2500);
@@ -6,7 +5,6 @@ const README_TIMEOUT_MS = Number(process.env.GITHUB_README_TIMEOUT_MS || 1500);
 const MAX_PAGES = Math.max(1, Number(process.env.GITHUB_MAX_PAGES || 5));
 const ENABLE_README_EXTRAS =
     (process.env.GITHUB_ENABLE_README_EXTRAS ?? "false").toLowerCase() === "true";
-
 
 function ghHeaders() {
     const h: Record<string, string> = {
@@ -57,7 +55,6 @@ async function ghPublic<T>(path: string, revalidate = 900) {
     return await res.json() as Promise<T>;
 }
 
-
 export type Repo = {
     name: string;
     fullName: string;
@@ -80,7 +77,6 @@ export type Repo = {
     owner?: { login: string };
 };
 
-// --- NEW PROFILE TYPE ---
 export interface GitHubProfile {
     login: string;
     avatar_url: string;
@@ -118,7 +114,6 @@ function mapRepo(r: any): Repo {
         owner: r.owner ? { login: r.owner.login } : undefined,
     };
 }
-
 
 export async function fetchAllRepos(): Promise<Repo[]> {
     const username = process.env.GITHUB_USERNAME!;
@@ -177,7 +172,6 @@ export async function fetchRepoByName(name: string): Promise<Repo> {
         const repo = await gh<any>(`/repos/${owner}/${encodeURIComponent(name)}`);
         return mapRepo(repo);
     } catch {
-        // Fallback to public endpoint
         const repo = await ghPublic<any>(`/repos/${owner}/${encodeURIComponent(name)}`);
         return mapRepo(repo);
     }
@@ -198,7 +192,6 @@ export async function fetchRepoLanguages(name: string) {
         return [];
     }
 }
-
 
 export async function fetchRepoReadmeRaw(name: string): Promise<string | null> {
     if (!ENABLE_README_EXTRAS) return null;
@@ -222,18 +215,14 @@ function absolutizeReadmeUrl(url: string, owner: string, repo: string, branch: s
     return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${clean}`;
 }
 
-export function extractReadmeMeta(md: {
-    name: string;
-    bytes: number;
-    pct: number
-}[] | any[] | null extends ((value: infer V, ...args: infer _) => any) ? Awaited<V> : never | string | null, owner: string, repo: string, branch: string) {
+export function extractReadmeMeta(md: string | null, owner: string, repo: string, branch: string) {
     let cover: string | null = null;
     const bullets: string[] = [];
 
     if (md) {
         const imgRe = /!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
         let m: RegExpExecArray | null;
-        while ((m = imgRe.exec(md as string))) {
+        while ((m = imgRe.exec(md))) {
             const candidate = (m[1] || "").trim();
             if (!candidate) continue;
             if (/shields\.io|badgen\.net|badge|visitor|coverage|workflow/i.test(candidate)) continue;
@@ -241,7 +230,7 @@ export function extractReadmeMeta(md: {
             break;
         }
 
-        const lines = (md as string).split(/\r?\n/);
+        const lines = md.split(/\r?\n/);
         for (let i = 0; i < Math.min(lines.length, 80); i++) {
             const mm = lines[i].match(/^\s*[-*]\s+(.+?)\s*$/);
             if (mm && mm[1] && mm[1].length < 140) bullets.push(mm[1]);
@@ -250,7 +239,6 @@ export function extractReadmeMeta(md: {
     }
     return { cover, bullets };
 }
-
 
 export async function getRepoCardExtras(repo: Repo) {
     const [langs, readme] = await Promise.allSettled([
@@ -284,8 +272,6 @@ export async function getRepoCardExtras(repo: Repo) {
 
     return { cover, bullets, stack, topLangs };
 }
-
-// --- NEW DATA FETCHERS FOR HOME PAGE ---
 
 export async function fetchProfile(): Promise<GitHubProfile> {
     const username = process.env.GITHUB_USERNAME!;
