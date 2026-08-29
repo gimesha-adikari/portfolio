@@ -24,7 +24,7 @@ export default function Header() {
                         <span className="flex size-6 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--accent)] transition-colors group-hover:border-[var(--accent)] group-hover:bg-[color-mix(in_oklab,var(--accent)_10%,transparent)]">
                             <span className="icon-[tabler--code] size-4" aria-hidden />
                         </span>
-                        gimesha<span className="text-[var(--muted)]">.dev</span>
+                        gimesha<span className="text-[var(--muted)]">.com</span>
                     </Link>
 
                     <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
