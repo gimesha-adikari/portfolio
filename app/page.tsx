@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { fetchAllRepos, fetchProfile, fetchRecentActivity, type Repo } from "@/lib/github";
-import { RepoCard } from "@/components/RepoCard";
-import { orderReposWithPinned } from "@/lib/pins";
+import { PortfolioProjectCard } from "@/components/PortfolioProjectCard";
+import { mapRepositoryFacts } from "@/lib/portfolio-repository-facts";
+import { getAllPortfolioProjects, getFeaturedPortfolioProjects } from "@/lib/portfolio-projects";
 import Reveal from "@/components/Reveal";
 import MotionSection from "@/components/MotionSection";
 import AnimatedCounter from "@/components/AnimatedCounter";
@@ -17,12 +18,21 @@ export default async function HomePage() {
     ]);
 
     const repos = reposData as Repo[];
-    const ordered = Array.isArray(repos) ? orderReposWithPinned(repos) : [];
-    const featured = ordered.slice(0, 4);
+    const featured = getFeaturedPortfolioProjects();
+    const featuredFacts = new Map(
+        featured.map((project) => [
+            project.slug,
+            project.repositories.flatMap((repository) => {
+                const repo = repos.find((candidate) => candidate.name === repository.name);
+                const facts = repo ? mapRepositoryFacts(repository, repo) : null;
+                return facts ? [facts] : [];
+            }),
+        ]),
+    );
 
-    const featuredNames = featured.map(f => f.name);
+    const featuredNames = new Set(featured.flatMap((project) => project.repositories.map((repository) => repository.name)));
     const liveDeployments = repos.filter(
-        (repo) => repo.homepage && repo.homepage.startsWith("http") && !featuredNames.includes(repo.name)
+        (repo) => repo.homepage && repo.homepage.startsWith("http") && !featuredNames.has(repo.name)
     );
 
     const CODING_START_YEAR = 2021;
@@ -225,33 +235,32 @@ export default async function HomePage() {
                         <div>
                             <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_90%,transparent)] px-3 py-1 text-xs text-[var(--muted)]">
                                 <span className="icon-[tabler--folder-star] size-4" aria-hidden />
-                                Pinned Work
+                                Curated Work
                             </div>
                             <h2 className="mt-3 text-2xl md:text-3xl font-semibold tracking-tight text-[var(--fg)]">
-                                Featured Repositories
+                                Featured Projects
                             </h2>
                         </div>
 
                         <Link href="/projects" className="text-sm inline-flex items-center gap-1 hover:text-[var(--accent)] transition-colors group shrink-0">
-                            View all {repos.length}
+                            View all {getAllPortfolioProjects().length}
                             <span className="icon-[tabler--arrow-right] size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
                         </Link>
                     </div>
 
                     {featured.length > 0 ? (
                         <div className="grid gap-6 sm:grid-cols-2 items-stretch">
-                            {featured.map((repo) => {
-                                const key = repo.fullName || repo.name;
+                            {featured.map((project) => {
                                 return (
-                                    <Reveal key={key}>
-                                        <RepoCard repo={repo} />
+                                    <Reveal key={project.slug}>
+                                        <PortfolioProjectCard project={project} facts={featuredFacts.get(project.slug)} />
                                     </Reveal>
                                 );
                             })}
                         </div>
                     ) : (
                         <div className="card p-6 border border-[var(--border)] text-center">
-                            <p className="text-[var(--muted)]">No pinned repositories found.</p>
+                            <p className="text-[var(--muted)]">No curated projects found.</p>
                         </div>
                     )}
                 </div>

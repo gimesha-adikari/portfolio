@@ -9,6 +9,12 @@ import {
     fetchRepoLanguages,
     type Repo,
 } from "@/lib/github";
+import { PortfolioProjectDetail } from "@/components/PortfolioProjectDetail";
+import { fetchPortfolioRepositoryFacts } from "@/lib/portfolio-repository-facts";
+import {
+    getAllPortfolioProjects,
+    getPortfolioProjectBySlug,
+} from "@/lib/portfolio-projects";
 import Reveal from "@/components/Reveal";
 
 export const dynamicParams = true;
@@ -354,16 +360,34 @@ async function loadStory(repo: Repo): Promise<StoryData | null> {
 }
 
 export async function generateStaticParams() {
+    const curatedParams = getAllPortfolioProjects().map((project) => ({ slug: project.slug }));
+
     try {
         const repos = await fetchAllRepos();
-        return repos.slice(0, 100).map((r) => ({ slug: r.name }));
+        const params = [...curatedParams, ...repos.slice(0, 100).map((r) => ({ slug: r.name }))];
+        return params.filter((param, index) => params.findIndex((item) => item.slug === param.slug) === index);
     } catch {
-        return [];
+        return curatedParams;
     }
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
     const { slug } = await params;
+    const project = getPortfolioProjectBySlug(slug);
+
+    if (project) {
+        return {
+            title: project.title,
+            description: project.tagline,
+            alternates: { canonical: `/projects/${project.slug}` },
+            openGraph: {
+                type: "article",
+                title: project.title,
+                description: project.tagline,
+                url: `/projects/${project.slug}`,
+            },
+        };
+    }
 
     try {
         const repo = await fetchRepoByName(slug);
@@ -400,6 +424,12 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 export default async function ProjectPage({ params }: { params: Promise<Params> }) {
     const { slug } = await params;
+    const project = getPortfolioProjectBySlug(slug);
+
+    if (project) {
+        const facts = await fetchPortfolioRepositoryFacts(project, fetchRepoByName).catch(() => []);
+        return <PortfolioProjectDetail project={project} facts={facts} />;
+    }
 
     const repo = await fetchRepoByName(slug).catch(() => null);
     if (!repo) notFound();
@@ -462,7 +492,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
                         <div className="flex-1 min-w-0">
                             <div className="inline-flex items-center gap-2 px-3 py-1 border border-[var(--border)] bg-[var(--surface)] rounded-full text-xs font-medium text-[var(--fg)] shadow-sm">
                                 <span className="icon-[tabler--brand-github] size-4 text-[var(--accent)]" aria-hidden />
-                                {repo.private ? "Private" : "Public"} • {safeLicense}
+                                Repository archive • {repo.private ? "Private" : "Public"} • {safeLicense}
                             </div>
 
                             <h1 className="mt-5 text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight text-[var(--fg)]">
@@ -470,7 +500,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
                             </h1>
 
                             <p className="mt-4 text-lg text-[var(--muted)] max-w-2xl leading-relaxed">
-                                {story?.summary ?? repo.description ?? "A project page with live repository data and a repo-owned story file."}
+                                {story?.summary ?? repo.description ?? "A repository archive entry with optional live source data."}
                             </p>
 
                             <div className="mt-6 flex flex-wrap gap-2 text-sm text-[var(--muted)]">

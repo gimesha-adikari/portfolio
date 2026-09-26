@@ -23,6 +23,11 @@ const casePage = read("app/case-studies/[slug]/page.tsx");
 const header = read("components/Header.tsx");
 const footer = read("components/Footer.tsx");
 const vcard = read("app/api/vcard/route.tsx");
+const portfolioProjects = read("lib/portfolio-projects.ts");
+const portfolioFacts = read("lib/portfolio-repository-facts.ts");
+const projectsPage = read("app/projects/page.tsx");
+const projectDetailPage = read("app/projects/[slug]/page.tsx");
+const repoCard = read("components/RepoCard.tsx");
 const gitFiles = execFileSync("git", ["ls-files"], { cwd: root, encoding: "utf8" });
 
 check(siteConfig.includes('canonicalUrl: "https://www.gimesha.com"'), "siteConfig canonical URL is not the .com URL");
@@ -34,7 +39,9 @@ check(siteConfig.includes('cvPath: "/cv.pdf"'), "siteConfig CV path is missing")
 
 check(sitemap.includes('import { siteConfig } from "@/lib/siteConfig"'), "sitemap does not use siteConfig");
 check(sitemap.includes('import { getAllCaseStudies } from "@/lib/case-studies"'), "sitemap does not use case-study source");
+check(sitemap.includes('import { getAllPortfolioProjects } from "@/lib/portfolio-projects"'), "sitemap does not use curated project source");
 check(sitemap.includes("getAllCaseStudies()"), "sitemap does not derive case-study routes from content");
+check(sitemap.includes("getAllPortfolioProjects()"), "sitemap does not derive project routes from curated content");
 check(sitemap.includes("siteConfig.cvPath"), "sitemap does not include the configured CV route");
 check(!sitemap.includes("/cv`"), "sitemap still includes the stale /cv route");
 check(!sitemap.includes("fetchAllRepos"), "sitemap still derives routes from GitHub repositories");
@@ -70,6 +77,16 @@ check(read("README.md").includes("npm ci"), "README does not document dependency
 check(header.includes("siteConfig.displayDomain"), "header branding is not sourced from siteConfig");
 check(footer.includes("siteConfig.name"), "footer branding is not sourced from siteConfig");
 check(vcard.includes("siteConfig.name"), "vCard branding is not sourced from siteConfig");
+
+check(portfolioProjects.includes("export type PortfolioProject"), "PortfolioProject model is missing");
+check(portfolioProjects.includes("validatePortfolioProjects"), "PortfolioProject runtime validation is missing");
+check(portfolioProjects.includes('slug: "termstead"'), "Termstead is not a curated project");
+check(portfolioProjects.includes('slug: "pdfnest"'), "PDFNest is not a curated project");
+check(portfolioProjects.includes('slug: "banking-platform"'), "Banking Platform is not a curated project");
+check(portfolioFacts.includes("selectRepositoryFacts"), "repository allowlist boundary is missing");
+check(projectsPage.includes("getAllPortfolioProjects"), "projects listing is not curated-data driven");
+check(projectDetailPage.includes("getPortfolioProjectBySlug"), "project detail route does not resolve curated projects first");
+check(repoCard.includes("featured = false"), "repository cards do not make Featured conditional");
 
 const activeFiles = gitFiles
     .split("\n")

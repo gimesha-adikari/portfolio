@@ -24,7 +24,7 @@ function getInitials(name: string) {
         .join("");
 }
 
-export async function RepoCard({ repo }: { repo: Repo }) {
+export async function RepoCard({ repo, featured = false }: { repo: Repo; featured?: boolean }) {
     let cover: string | null = null;
     let bullets: string[] = [];
     let stack: string[] = [];
@@ -92,10 +92,12 @@ export async function RepoCard({ repo }: { repo: Repo }) {
                         )}
 
                         {/* Badges */}
-                        <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-2.5 py-1 text-xs text-[var(--fg)] backdrop-blur-md shadow-sm">
-                            <span className="icon-[tabler--sparkles] size-3.5 text-[var(--accent)]" aria-hidden />
-                            Featured
-                        </div>
+                        {featured && (
+                            <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-2.5 py-1 text-xs text-[var(--fg)] backdrop-blur-md shadow-sm">
+                                <span className="icon-[tabler--sparkles] size-3.5 text-[var(--accent)]" aria-hidden />
+                                Featured
+                            </div>
+                        )}
 
                         <div
                             className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-2.5 py-1 text-xs text-[var(--fg)] backdrop-blur-md shadow-sm"

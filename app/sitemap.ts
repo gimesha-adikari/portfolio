@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllCaseStudies } from "@/lib/case-studies";
+import { getAllPortfolioProjects } from "@/lib/portfolio-projects";
 import { siteConfig } from "@/lib/siteConfig";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -22,5 +23,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.6,
     }));
 
-    return [...staticRoutes, ...caseStudyRoutes];
+    const projectRoutes: MetadataRoute.Sitemap = getAllPortfolioProjects().map((project) => ({
+        url: `${base}/projects/${project.slug}`,
+        lastModified: now,
+        changeFrequency: "monthly" as const,
+        priority: project.featured ? 0.8 : 0.5,
+    }));
+
+    return [...staticRoutes, ...projectRoutes, ...caseStudyRoutes];
 }

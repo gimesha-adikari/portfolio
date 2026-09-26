@@ -6,7 +6,7 @@ Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
 Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Phase 0 and Phase 1 local implementation complete; live production recheck deferred. Phase 2 not started.
+Status: Phase 0, Phase 1, and Phase 2 local implementation complete and validated; live production recheck deferred. Phase 2 changes remain uncommitted.
 
 ## Purpose
 
@@ -153,7 +153,7 @@ GitHub privacy:
 - [x] Stop defaulting private inclusion to true.
 - [x] Prefer /users/<username>/repos for public listing.
 - [x] Reject repo.private even if authenticated data appears.
-- [ ] Use a curated repository allowlist where appropriate.
+- [x] Use a curated repository allowlist where appropriate.
 - [x] Use no token or minimal token scope when public data is enough.
 
 Repository hygiene:
@@ -175,20 +175,20 @@ Exit: no known localhost canonical, stale domain identity, stale sitemap route, 
 
 Goal: replace repository equals project with a curated portfolio model.
 
-- [ ] Define and validate PortfolioProject.
-- [ ] Include slug, title, tagline, status, featured/order, role/period, problem, constraints, architecture, decisions, outcomes/evidence, repositories, media, case studies, and optional live URL.
-- [ ] Make portfolio-owned project content authoritative.
-- [ ] Migrate useful material from data/projects.ts before deleting it.
-- [ ] Group PDFNest frontend/backend/worker under one PDFNest project.
-- [ ] Create a real multi-repository Banking Platform project.
-- [ ] Add Termstead as a first-class curated project.
-- [ ] Evaluate PolyShop as a fourth flagship using verified evidence.
-- [ ] Treat Runyard as Lab/In progress until it has enough story.
-- [ ] Keep NeuroSim experimental/educational unless new evidence changes that.
-- [ ] Make GitHub enrichment optional and non-authoritative.
-- [ ] Ensure project pages still render meaningful content if GitHub fails.
-- [ ] Pick one long-form content architecture. Preferred direction: validated structured metadata plus MDX for deep narratives/evidence.
-- [ ] Remove legacy content systems only after migration.
+- [x] Define and validate PortfolioProject.
+- [x] Include slug, title, tagline, status, featured/order, role/period, problem, constraints, architecture, decisions, outcomes/evidence, repositories, media, case studies, and optional live URL.
+- [x] Make portfolio-owned project content authoritative.
+- [x] Migrate useful material from data/projects.ts before deleting it.
+- [x] Group PDFNest frontend/backend/worker under one PDFNest project.
+- [x] Create a real multi-repository Banking Platform project.
+- [x] Add Termstead as a first-class curated project.
+- [x] Evaluate PolyShop as a fourth flagship using verified evidence.
+- [x] Treat Runyard as Lab/In progress until it has enough story.
+- [x] Keep NeuroSim experimental/educational unless new evidence changes that.
+- [x] Make GitHub enrichment optional and non-authoritative.
+- [x] Ensure project pages still render meaningful content if GitHub fails.
+- [x] Pick one long-form content architecture. Preferred direction: validated structured metadata plus MDX for deep narratives/evidence.
+- [-] Remove legacy content systems only after migration; useful content was migrated, but legacy sources remain intentionally for the later cleanup phase.
 
 Exit: flagship identity/order/story is controlled locally and multi-repo projects work.
 
@@ -348,6 +348,16 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-26 - Phase 2 content ownership and project architecture
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at checkpoint `4a34f903abf0ccbaafff0dba5091e727c21ef513`; Phase 2 changes remain uncommitted. No push, merge, or deployment was performed.
+- Source decisions: `lib/portfolio-projects.ts` is the authoritative, runtime-validated structured project source; `lib/portfolio-repository-facts.ts` maps only explicit public repository assignments into optional mutable facts; future long-form narratives should use MDX by project slug. YAML case studies remain a separate current case-study source, while `data/projects.ts`, legacy `site-content/`, remote MDX, README parsing, and `.portfolio/story.md` support remain legacy/supporting paths.
+- Curated content: added Termstead, PDFNest, Banking Platform, PolyShop, Runyard, and NeuroSim records. PDFNest groups `pdfnest`, `pdfnest-backend`, `pdfnest-worker`, and related `platen-document`; Banking Platform groups `BankingSystem` and `BankApp`. PolyShop is non-featured pending deeper verification; Runyard and NeuroSim remain experimental/lab records. Useful PDFNest/PDFNest Backend content was migrated without unsupported quantitative/production claims.
+- UI/boundary changes: curated project cards and detail pages now own identity, order, featured state, narrative, grouped repositories, and case-study links; GitHub facts are optional. `/projects` separates curated projects from the public repository archive, the homepage's existing featured section consumes curated records, raw repository cards no longer imply `Featured`, and curated project slugs are included in the sitemap. The existing repository-detail fallback is explicitly labeled as an archive entry for uncurated repositories until the Phase 3 resolver refactor.
+- Files/decisions: added the typed model, enrichment boundary, curated card/detail components, Phase 2 tests, and implementation plan; updated README, project routes, sitemap, smoke checks, legacy `data/projects.ts` annotation, and package test script. No dependency version changed in Phase 2. The existing Next.js and MDX upgrade from 16.2.12 to 16.3.6 was part of the Phase 0/1 checkpoint, together with the ESLint/typecheck setup; it was not repeated or expanded here.
+- Validation: `npm ci` PASS (373 packages added; 0 vulnerabilities); `npm audit` PASS (0 vulnerabilities); `npm run lint` PASS; `npx tsc --noEmit` PASS; `npm test` PASS (portfolio smoke plus 5 Phase 2 tests); `npm run build` PASS on Next.js 16.3.6. Local `next start` checks returned content for `/projects`, Termstead, PDFNest, Banking Platform, PolyShop, and an unlisted archive entry; curated pages rendered their local content with GitHub enrichment unavailable; sitemap/robots used the canonical `.com` URLs and curated project routes.
+- Remaining concerns: live production recheck was not performed; the build still reports the existing FlyonUI invalid-icon warnings and Edge-runtime deprecation/static-generation warning; the dependency-free Node test emits a `MODULE_TYPELESS_PACKAGE_JSON` warning; PDFNest/Platen naming remains documented as unresolved; PolyShop flagship promotion and legacy-source removal remain deferred. Next's existing dynamic project fallback renders the `ai-verification` not-found payload locally but returned HTTP 200 in the local `next start` check, so route-status cleanup remains a later route-hardening concern.
 
 ### 2026-09-26 - Phase 0/1 implementation and local validation
 

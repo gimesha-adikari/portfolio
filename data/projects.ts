@@ -1,3 +1,7 @@
+/**
+ * @deprecated Legacy repository/story-shaped content retained during the Phase 2 migration.
+ * Canonical project identity now lives in lib/portfolio-projects.ts.
+ */
 export type ProjectStory = {
     title?: string;
     summary?: string;
