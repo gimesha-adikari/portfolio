@@ -16,7 +16,7 @@ project listing and detail UI
 
 `PortfolioProject` controls the slug, title, tagline, status, featured state, order, role, problem, constraints, architecture, decisions, evidence, repository membership, case-study associations, and optional live URL. A GitHub repository is not a portfolio project by itself.
 
-Evidence-rich project pages attach validated technical evidence to the same `PortfolioProject` record. Termstead's current record uses `lib/project-evidence.ts` for ownership boundaries, lifecycle and IPC sequences, decision cards, methodology-bearing measurements, debugging stories, limitations, and exact source commits. This is structured evidence for the current phase; future long-form narratives can be associated by project slug through the validated metadata plus MDX direction without creating a second project identity source.
+Evidence-rich project pages attach validated technical evidence to the same `PortfolioProject` record. The shared validator in `lib/project-evidence.ts` covers ownership boundaries, topology/workflow matrices, lifecycle sequences, processing paths, failure boundaries, decision cards, methodology-bearing measurements, debugging stories, limitations, and exact source commits. Termstead and Platen PDF use this same model; future long-form narratives can be associated by project slug through the validated metadata plus MDX direction without creating a second project identity source.
 
 Curated records currently include Termstead, Platen PDF, Banking Platform, PolyShop, Runyard, and NeuroSim. Platen PDF groups the `pdfnest`, `pdfnest-backend`, and `pdfnest-worker` repositories, with `platen-document` retained as a related standalone local-first SDK. The stable project route remains `/projects/pdfnest`; repository names remain unchanged. Banking Platform groups `BankingSystem` and `BankApp`. Runyard, NeuroSim, and non-featured PolyShop remain in the labs/secondary layer.
 
@@ -70,7 +70,7 @@ npm run build
 npm run start
 ```
 
-`npm test` runs the lightweight portfolio smoke checks plus dependency-free Phase 2/3/4/5 tests for curated slugs/order, multi-repository grouping, resolver precedence, archive/private-repository boundaries, case-study validation, metadata canonical URLs, GitHub-failure fallback, project-filter URL/count behavior, and homepage content selection.
+`npm test` runs the lightweight portfolio smoke checks plus dependency-free Phase 2/3/4/5/6 tests for curated slugs/order, multi-repository grouping, resolver precedence, archive/private-repository boundaries, case-study validation, metadata canonical URLs, GitHub-failure fallback, project-filter URL/count behavior, homepage content selection, and evidence-model validation.
 
 ## Content editing
 

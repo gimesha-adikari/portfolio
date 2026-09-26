@@ -11,14 +11,14 @@ export function ProjectEvidenceTable({
     const sourcesById = new Map(sources.map((source) => [source.id, source]));
 
     return (
-        <section aria-labelledby="termstead-measurements-title" className="space-y-4">
+        <section aria-labelledby="project-measurements-title" className="space-y-4">
             <div>
-                <h3 id="termstead-measurements-title" className="text-xl font-bold text-[var(--fg)]">Evidence, measurements, and limits</h3>
-                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--muted)]">Values retain their host, sample, method, and boundary so a daemon measurement is not mistaken for display latency or a universal capacity claim.</p>
+                <h3 id="project-measurements-title" className="text-xl font-bold text-[var(--fg)]">Evidence, measurements, and limits</h3>
+                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--muted)]">Values retain their context, sample, method, and limits so an implementation detail is not mistaken for universal capacity or outcome evidence.</p>
             </div>
             <div className="overflow-x-auto rounded-xl border border-[var(--border)] bg-[var(--surface)]">
                 <table className="min-w-[960px] w-full border-collapse text-left text-sm">
-                    <caption className="sr-only">Termstead evidence table with classification, result, method, environment, sample, limitations, and source.</caption>
+                    <caption className="sr-only">Project evidence table with classification, result, method, environment, sample, limitations, and source.</caption>
                     <thead className="bg-[var(--bg)] text-xs uppercase tracking-[0.12em] text-[var(--muted)]">
                         <tr>
                             <th scope="col" className="p-4">Evidence</th>

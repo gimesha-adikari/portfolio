@@ -7,10 +7,10 @@ export function ProjectDebuggingStory({
     stories: readonly DebuggingStory[];
 }) {
     return (
-        <section aria-labelledby="termstead-debugging-title" className="space-y-4">
+        <section aria-labelledby="project-debugging-title" className="space-y-4">
             <div>
-                <h3 id="termstead-debugging-title" className="text-xl font-bold text-[var(--fg)]">Debugging story</h3>
-                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--muted)]">A concrete renderer defect shows how a boundary was tested without overstating the visual proof.</p>
+                <h3 id="project-debugging-title" className="text-xl font-bold text-[var(--fg)]">Failure and recovery stories</h3>
+                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--muted)]">Each story connects a symptom to an owned boundary and keeps verification limits visible.</p>
             </div>
             <div className="space-y-4">
                 {stories.map((story) => (

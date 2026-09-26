@@ -3,6 +3,7 @@ import {
     validateProjectTechnicalEvidence,
     type ProjectTechnicalEvidence,
 } from "./project-evidence.ts";
+import { platenPdfTechnicalEvidence } from "./platen-pdf-evidence.ts";
 
 export type ProjectStatus = "active" | "complete" | "experimental";
 
@@ -340,6 +341,7 @@ const curatedProjectData = [
                 technologies: ["Python", "Document SDK"],
             },
         ],
+        technicalEvidence: platenPdfTechnicalEvidence,
         decisions: [
             {
                 decision: "Represent the frontend, Go backend, worker, and related SDK as one portfolio project with explicit repository roles.",

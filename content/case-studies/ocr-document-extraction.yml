@@ -34,10 +34,10 @@ stack:
     icon: "icon-[tabler--file-text]"
 challenges:
   - "Handling poor scan quality and mixed image/text content"
-  - "Keeping inference and preprocessing efficient enough for real workloads"
+  - "Keeping preprocessing and engine selection explicit without publishing unsupported workload-performance claims"
 results:
-  - "A path toward searchable scanned documents"
-  - "A more practical OCR workflow for document-heavy use cases"
+  - "A documented path toward searchable scanned documents"
+  - "Clearer OCR routing and processing boundaries for document workflows"
 links:
   - label: "Projects"
     url: "/projects"

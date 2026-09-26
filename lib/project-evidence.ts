@@ -34,11 +34,48 @@ export type ProjectIpcBoundary = {
     sources: readonly string[];
 };
 
+export const PROJECT_WORKFLOW_MODES = ["sync", "async", "preview"] as const;
+export type ProjectWorkflowMode = (typeof PROJECT_WORKFLOW_MODES)[number];
+
+export type ProjectWorkflow = {
+    title: string;
+    entryPoint: string;
+    mode: ProjectWorkflowMode;
+    owner: string;
+    processing: string;
+    result: string;
+    classification: EvidenceClassification;
+    sources: readonly string[];
+};
+
 export type ProjectLifecycleStep = {
     phase: string;
     actor: string;
     action: string;
     result: string;
+    classification: EvidenceClassification;
+    sources: readonly string[];
+};
+
+export type ProjectFileLifecycle = {
+    title: string;
+    description: string;
+    steps: readonly ProjectLifecycleStep[];
+};
+
+export type ProjectProcessingPath = {
+    title: string;
+    boundary: string;
+    behavior: string;
+    classification: EvidenceClassification;
+    limitations: readonly string[];
+    sources: readonly string[];
+};
+
+export type ProjectFailureBoundary = {
+    boundary: string;
+    trigger: string;
+    behavior: string;
     classification: EvidenceClassification;
     sources: readonly string[];
 };
@@ -79,7 +116,11 @@ export type ProjectTechnicalEvidence = {
     introduction: string;
     ownership: readonly ProjectOwnershipBoundary[];
     ipc: readonly ProjectIpcBoundary[];
+    workflows?: readonly ProjectWorkflow[];
     lifecycle: readonly ProjectLifecycleStep[];
+    fileLifecycles?: readonly ProjectFileLifecycle[];
+    processingPaths?: readonly ProjectProcessingPath[];
+    failureBoundaries?: readonly ProjectFailureBoundary[];
     decisions: readonly ProjectDecisionCard[];
     measurements: readonly ProjectEvidenceMeasurement[];
     debuggingStories: readonly ProjectDebuggingStory[];
@@ -115,6 +156,14 @@ function classification(value: unknown, path: string): EvidenceClassification {
     const parsed = requiredString(value, path) as EvidenceClassification;
     if (!EVIDENCE_CLASSIFICATIONS.includes(parsed)) {
         throw new Error(`${path} is not a supported evidence classification`);
+    }
+    return parsed;
+}
+
+function workflowMode(value: unknown, path: string): ProjectWorkflowMode {
+    const parsed = requiredString(value, path) as ProjectWorkflowMode;
+    if (!PROJECT_WORKFLOW_MODES.includes(parsed)) {
+        throw new Error(`${path} is not a supported workflow mode`);
     }
     return parsed;
 }
@@ -169,6 +218,24 @@ function parseIpc(value: unknown, path: string): ProjectIpcBoundary[] {
     });
 }
 
+function parseWorkflows(value: unknown, path: string): ProjectWorkflow[] | undefined {
+    if (value === undefined) return undefined;
+    if (!Array.isArray(value) || value.length === 0) throw new Error(`${path} must contain entries`);
+    return value.map((item, index) => {
+        const record = isRecord(item) ? item : {};
+        return {
+            title: requiredString(record.title, `${path}[${index}].title`),
+            entryPoint: requiredString(record.entryPoint, `${path}[${index}].entryPoint`),
+            mode: workflowMode(record.mode, `${path}[${index}].mode`),
+            owner: requiredString(record.owner, `${path}[${index}].owner`),
+            processing: requiredString(record.processing, `${path}[${index}].processing`),
+            result: requiredString(record.result, `${path}[${index}].result`),
+            classification: classification(record.classification, `${path}[${index}].classification`),
+            sources: stringArray(record.sources, `${path}[${index}].sources`),
+        };
+    });
+}
+
 function parseLifecycle(value: unknown, path: string): ProjectLifecycleStep[] {
     if (!Array.isArray(value) || value.length === 0) throw new Error(`${path} must contain entries`);
     return value.map((item, index) => {
@@ -178,6 +245,50 @@ function parseLifecycle(value: unknown, path: string): ProjectLifecycleStep[] {
             actor: requiredString(record.actor, `${path}[${index}].actor`),
             action: requiredString(record.action, `${path}[${index}].action`),
             result: requiredString(record.result, `${path}[${index}].result`),
+            classification: classification(record.classification, `${path}[${index}].classification`),
+            sources: stringArray(record.sources, `${path}[${index}].sources`),
+        };
+    });
+}
+
+function parseFileLifecycles(value: unknown, path: string): ProjectFileLifecycle[] | undefined {
+    if (value === undefined) return undefined;
+    if (!Array.isArray(value) || value.length === 0) throw new Error(`${path} must contain entries`);
+    return value.map((item, index) => {
+        const record = isRecord(item) ? item : {};
+        return {
+            title: requiredString(record.title, `${path}[${index}].title`),
+            description: requiredString(record.description, `${path}[${index}].description`),
+            steps: parseLifecycle(record.steps, `${path}[${index}].steps`),
+        };
+    });
+}
+
+function parseProcessingPaths(value: unknown, path: string): ProjectProcessingPath[] | undefined {
+    if (value === undefined) return undefined;
+    if (!Array.isArray(value) || value.length === 0) throw new Error(`${path} must contain entries`);
+    return value.map((item, index) => {
+        const record = isRecord(item) ? item : {};
+        return {
+            title: requiredString(record.title, `${path}[${index}].title`),
+            boundary: requiredString(record.boundary, `${path}[${index}].boundary`),
+            behavior: requiredString(record.behavior, `${path}[${index}].behavior`),
+            classification: classification(record.classification, `${path}[${index}].classification`),
+            limitations: stringArray(record.limitations, `${path}[${index}].limitations`),
+            sources: stringArray(record.sources, `${path}[${index}].sources`),
+        };
+    });
+}
+
+function parseFailureBoundaries(value: unknown, path: string): ProjectFailureBoundary[] | undefined {
+    if (value === undefined) return undefined;
+    if (!Array.isArray(value) || value.length === 0) throw new Error(`${path} must contain entries`);
+    return value.map((item, index) => {
+        const record = isRecord(item) ? item : {};
+        return {
+            boundary: requiredString(record.boundary, `${path}[${index}].boundary`),
+            trigger: requiredString(record.trigger, `${path}[${index}].trigger`),
+            behavior: requiredString(record.behavior, `${path}[${index}].behavior`),
             classification: classification(record.classification, `${path}[${index}].classification`),
             sources: stringArray(record.sources, `${path}[${index}].sources`),
         };
@@ -243,7 +354,11 @@ export function validateProjectTechnicalEvidence(value: unknown): ProjectTechnic
         introduction: requiredString(record.introduction, "technicalEvidence.introduction"),
         ownership: parseOwnership(record.ownership, "technicalEvidence.ownership"),
         ipc: parseIpc(record.ipc, "technicalEvidence.ipc"),
+        workflows: parseWorkflows(record.workflows, "technicalEvidence.workflows"),
         lifecycle: parseLifecycle(record.lifecycle, "technicalEvidence.lifecycle"),
+        fileLifecycles: parseFileLifecycles(record.fileLifecycles, "technicalEvidence.fileLifecycles"),
+        processingPaths: parseProcessingPaths(record.processingPaths, "technicalEvidence.processingPaths"),
+        failureBoundaries: parseFailureBoundaries(record.failureBoundaries, "technicalEvidence.failureBoundaries"),
         decisions: parseDecisions(record.decisions, "technicalEvidence.decisions"),
         measurements: parseMeasurements(record.measurements, "technicalEvidence.measurements"),
         debuggingStories: parseDebuggingStories(record.debuggingStories, "technicalEvidence.debuggingStories"),
@@ -254,7 +369,11 @@ export function validateProjectTechnicalEvidence(value: unknown): ProjectTechnic
     const references = [
         ...evidence.ownership.flatMap((item) => item.sources),
         ...evidence.ipc.flatMap((item) => item.sources),
+        ...(evidence.workflows?.flatMap((item) => item.sources) ?? []),
         ...evidence.lifecycle.flatMap((item) => item.sources),
+        ...(evidence.fileLifecycles?.flatMap((item) => item.steps.flatMap((step) => step.sources)) ?? []),
+        ...(evidence.processingPaths?.flatMap((item) => item.sources) ?? []),
+        ...(evidence.failureBoundaries?.flatMap((item) => item.sources) ?? []),
         ...evidence.decisions.flatMap((item) => item.sources),
         ...evidence.measurements.flatMap((item) => item.sources),
         ...evidence.debuggingStories.flatMap((item) => item.sources),

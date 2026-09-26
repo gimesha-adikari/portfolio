@@ -3,19 +3,27 @@ import { ProjectEvidenceBadge } from "./ProjectEvidenceBadge";
 
 export function ProjectLifecycleSequence({
     lifecycle,
+    title = "Lifecycle and synchronization",
+    description = "The sequence keeps ownership, state transitions, and evidence classifications visible at each boundary.",
+    caption = "Project lifecycle sequence",
+    id = "project-lifecycle-title",
 }: {
     lifecycle: readonly ProjectLifecycleStep[];
+    title?: string;
+    description?: string;
+    caption?: string;
+    id?: string;
 }) {
     return (
-        <section aria-labelledby="termstead-lifecycle-title" className="space-y-4">
+        <section aria-labelledby={id} className="space-y-4">
             <div>
-                <h3 id="termstead-lifecycle-title" className="text-xl font-bold text-[var(--fg)]">Session lifecycle and synchronization</h3>
+                <h3 id={id} className="text-xl font-bold text-[var(--fg)]">{title}</h3>
                 <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--muted)]">
-                    This sequence follows a GUI detach/reconnect path. Closing a view and terminating a session are intentionally different operations.
+                    {description}
                 </p>
             </div>
             <figure className="card border border-[var(--border)] bg-[var(--surface)] p-4 md:p-6">
-                <figcaption className="sr-only">Termstead session lifecycle sequence from opening a session through synchronization, detach, reconnect, and explicit termination.</figcaption>
+                <figcaption className="sr-only">{caption}</figcaption>
                 <ol className="space-y-3">
                     {lifecycle.map((step, index) => (
                         <li key={step.phase} className="grid gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg)] p-4 md:grid-cols-[auto_1fr_auto] md:items-start">

@@ -2,9 +2,9 @@ import type { EvidenceSource } from "@/lib/project-evidence";
 
 export function ProjectSourceLinks({ sources }: { sources: readonly EvidenceSource[] }) {
     return (
-        <section aria-labelledby="termstead-sources-title" className="space-y-4">
+        <section aria-labelledby="project-sources-title" className="space-y-4">
             <div>
-                <h3 id="termstead-sources-title" className="text-xl font-bold text-[var(--fg)]">Source evidence</h3>
+                <h3 id="project-sources-title" className="text-xl font-bold text-[var(--fg)]">Source evidence</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">Links point to the commits inspected for this page. The classification attached to each claim is more important than the existence of a link alone.</p>
             </div>
             <ul className="grid gap-3 md:grid-cols-2">

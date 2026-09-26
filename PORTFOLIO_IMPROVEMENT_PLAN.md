@@ -6,7 +6,7 @@ Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
 Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Phase 0 through Phase 5 are checkpointed and locally validated; Phase 6A Termstead evidence is locally complete enough for review and remains uncommitted. Platen PDF, Banking Platform, and PolyShop evidence work is deferred. Live production recheck deferred.
+Status: Phase 0 through Phase 5 and Phase 6A are checkpointed and locally validated; Phase 6B Platen PDF evidence is locally complete enough for review and remains uncommitted. Banking Platform and PolyShop evidence work, focused excerpts/screenshots, and live production recheck remain deferred.
 
 ## Purpose
 
@@ -256,8 +256,8 @@ Termstead:
 - [x] Include methodology/caveats with any memory or latency figures. Measurements retain environment, date/commit, method, sample, and limitations; daemon-side markers are not presented as input-to-display latency.
 
 Platen PDF:
-- [ ] Explain frontend -> Go API -> worker/processing topology.
-- [ ] Explain sync vs async work, validation, file lifecycle, queueing, OCR, failure handling, preview vs server processing, scaling constraints, and evolved decisions.
+- [x] Explain frontend -> Go API -> worker/processing topology. Phase 6B records the browser/web, Go API, worker, and related standalone SDK ownership boundaries against exact remote default-branch commits.
+- [x] Explain sync vs async work, validation, file lifecycle, queueing, OCR, failure handling, preview vs server processing, scaling constraints, and evolved decisions. The record includes workflow/file-lifecycle/processing/failure sections, bounded configuration evidence, explicit limitations, and a `NOT TESTED` benchmark entry rather than unsupported throughput claims.
 
 Banking Platform:
 - [ ] Show Spring Boot, React, Android/Kotlin, and FastAPI KYC as one project.
@@ -348,6 +348,17 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 6B Platen PDF evidence
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at the committed Phase 6A checkpoint `59f18fb56394d1a4a4b42ebb83770935ec54fc27`; Phase 6B changes remain uncommitted. No push, merge, deployment, or modification of the external Platen repositories was performed.
+- Evidence basis: the Platen PDF frontend, Go backend, worker, and `platen-document` SDK were reviewed from their remote default-branch snapshots (`70db8e8a5a1466ddb154112ed1ddecee6e6cb57e`, `9faae1a42155843e0e5a6e472d6a4109ccaa25a8`, `9d38852e7ca1e7b657f7f644823d400553886ff0`, and `a5a14413ded0daa93a5839b86554f1fe67d92a93`). Local checkouts on unrelated branches were not used as evidence.
+- Model/content: extended the validated shared technical-evidence model with workflow modes, file lifecycles, processing paths, and failure boundaries. Added `lib/platen-pdf-evidence.ts` and attached it to the canonical `Platen PDF` project record without creating a second project identity source.
+- Platen PDF coverage: documented browser-to-API, API-to-worker, job/artifact, preview, sync, async, OCR, validation, cancellation/stall, cleanup/expiry, and standalone SDK boundaries. The related SDK is explicitly local-first and independent rather than a required web/API/worker service.
+- Accuracy cleanup: softened active Platen PDF case-study and legacy project wording that implied unsupported high-performance, scalability, or production-readiness claims. Retained exact source links and explicit `NOT TESTED`/limitation language; no numeric benchmark result was published.
+- UI/tests: added reusable server-rendered workflow, processing-path, and failure-boundary sections; added a focused runtime-validator regression test; updated README evidence-architecture guidance. Homepage architecture was not redesigned.
+- Validation: final `npm ci`, `npm audit`, lint, TypeScript, tests, production build, `git diff --check`, and targeted local route/browser checks are recorded in the completion report below.
+- Remaining concerns: Banking Platform and PolyShop evidence work, focused code excerpts, technical screenshots, live production validation, the Edge Runtime warning, and the Node module-type warning remain deferred.
 
 ### 2026-09-27 - Phase 6A Termstead evidence
 

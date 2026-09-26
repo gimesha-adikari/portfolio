@@ -6,7 +6,10 @@ import { ProjectEvidenceBadge } from "./ProjectEvidenceBadge";
 import { ProjectEvidenceTable } from "./ProjectEvidenceTable";
 import { ProjectLifecycleSequence } from "./ProjectLifecycleSequence";
 import { ProjectLimitations } from "./ProjectLimitations";
+import { ProjectFailureBoundaries } from "./ProjectFailureBoundaries";
+import { ProjectProcessingPaths } from "./ProjectProcessingPaths";
 import { ProjectSourceLinks } from "./ProjectSourceLinks";
+import { ProjectWorkflowMatrix } from "./ProjectWorkflowMatrix";
 
 export function PortfolioProjectTechnicalEvidence({ project }: { project: PortfolioProject }) {
     const evidence = project.technicalEvidence;
@@ -25,10 +28,10 @@ export function PortfolioProjectTechnicalEvidence({ project }: { project: Portfo
 
             <ProjectArchitectureDiagram ownership={evidence.ownership} />
 
-            <section aria-labelledby="termstead-ipc-title" className="space-y-4">
+            <section aria-labelledby="project-boundaries-title" className="space-y-4">
                 <div>
-                    <h3 id="termstead-ipc-title" className="text-xl font-bold text-[var(--fg)]">IPC and SessionHub boundary</h3>
-                    <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--muted)]">The transport carries identity and wake signals, while snapshots and deltas remain the authority that the renderer validates.</p>
+                    <h3 id="project-boundaries-title" className="text-xl font-bold text-[var(--fg)]">Transport and boundary contracts</h3>
+                    <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--muted)]">Each boundary describes how data, identity, state, or work crosses between owned parts of the system.</p>
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                     {evidence.ipc.map((item) => (
@@ -43,8 +46,27 @@ export function PortfolioProjectTechnicalEvidence({ project }: { project: Portfo
                 </div>
             </section>
 
+            <ProjectWorkflowMatrix workflows={evidence.workflows ?? []} />
             <ProjectDecisionCards decisions={evidence.decisions} />
-            <ProjectLifecycleSequence lifecycle={evidence.lifecycle} />
+            <ProjectLifecycleSequence
+                lifecycle={evidence.lifecycle}
+                title="Primary lifecycle"
+                description="The primary sequence follows input, ownership, processing, result, and cleanup transitions without collapsing synchronous and queued work into one claim."
+                caption="Primary project lifecycle sequence"
+                id="project-primary-lifecycle-title"
+            />
+            {evidence.fileLifecycles?.map((sequence, index) => (
+                <ProjectLifecycleSequence
+                    key={sequence.title}
+                    lifecycle={sequence.steps}
+                    title={sequence.title}
+                    description={sequence.description}
+                    caption={`${sequence.title} sequence`}
+                    id={`project-file-lifecycle-${index}`}
+                />
+            ))}
+            <ProjectProcessingPaths paths={evidence.processingPaths ?? []} />
+            <ProjectFailureBoundaries boundaries={evidence.failureBoundaries ?? []} />
             <ProjectEvidenceTable measurements={evidence.measurements} sources={evidence.sources} />
             <ProjectDebuggingStory stories={evidence.debuggingStories} />
             <ProjectLimitations limitations={evidence.limitations} />

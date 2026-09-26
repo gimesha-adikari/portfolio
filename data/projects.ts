@@ -33,7 +33,7 @@ export const projectStories: Record<string, ProjectStory> = {
     pdfnest: {
         title: "Platen PDF",
         summary:
-            "A full-stack document processing platform that provides a comprehensive suite of PDF tools with an emphasis on performance, usability, and modular architecture.",
+            "A full-stack document processing platform that brings PDF tools together through shared web, API, and worker boundaries.",
 
         role: "Full-Stack Developer",
 
@@ -50,16 +50,16 @@ export const projectStories: Record<string, ProjectStory> = {
         githubUrl: "https://github.com/gimesha-adikari/pdfnest",
 
         overview:
-            "Platen PDF is a modern web application built to simplify PDF workflows through a unified and intuitive interface. Instead of offering only a handful of document utilities, the platform combines dozens of PDF operations into a single consistent experience. The application focuses on speed, maintainability, and extensibility by separating the user interface from the document-processing backend.",
+            "Platen PDF is a web application built to simplify PDF workflows through a shared interface. The product combines document operations while separating browser interaction from backend and worker processing responsibilities.",
 
         problem:
-            "Most online PDF services either offer only a small collection of tools, limit free usage, or provide inconsistent experiences between features. Large document operations can also be slow and difficult to scale. The goal of Platen PDF was to create a platform that feels responsive while supporting a growing collection of document-processing capabilities through a reusable backend architecture.",
+            "PDF operations often have different inputs, outputs, validation rules, and failure modes. The goal of Platen PDF was to provide a consistent workflow while keeping document-processing responsibilities outside the browser shell.",
 
         solution:
-            "The platform was designed with a Next.js frontend and a Go backend that exposes modular processing services for each PDF operation. Shared upload, validation, and processing pipelines reduce code duplication while making it easy to introduce new document tools. Authentication, subscription management, SEO optimization, and responsive UI components were integrated to provide a complete production-ready experience.",
+            "The platform separates a Next.js frontend, Go API, and Python processing boundary. Shared upload, validation, workspace, task, and download paths keep the document workflows explicit while allowing tool-specific behavior where needed.",
 
         features: [
-            "30+ document processing tools",
+            "Document processing tools",
             "Merge, split, rotate, crop, reorder and extract PDF pages",
             "Convert PDFs to images and images to PDFs",
             "PDF compression and optimization",
@@ -78,7 +78,7 @@ export const projectStories: Record<string, ProjectStory> = {
             "Balancing processing speed and memory usage when working with large PDF documents.",
             "Supporting different document types including scanned PDFs, digitally generated PDFs, and image-based workflows.",
             "Maintaining a consistent user experience across a rapidly expanding collection of tools.",
-            "Creating a scalable architecture that allows new PDF features to be implemented with minimal changes to existing code.",
+            "Creating reusable boundaries so new PDF features do not require duplicating the full workflow shell.",
             "Optimizing page rendering, metadata generation, and search engine indexing for a large number of dynamic routes."
         ],
 
@@ -153,7 +153,7 @@ export const projectStories: Record<string, ProjectStory> = {
         title: "Platen PDF Backend",
 
         summary:
-            "A modular Go backend powering Platen PDF, providing scalable APIs and high-performance document processing for a wide range of PDF operations.",
+            "A modular Go backend powering Platen PDF through explicit API, validation, storage, and processing boundaries.",
 
         role: "Backend Developer",
 
@@ -171,7 +171,7 @@ export const projectStories: Record<string, ProjectStory> = {
             "Platen PDF Backend is the core processing engine behind the Platen PDF platform. Built with Go and Fiber, it exposes REST APIs responsible for authentication, document management, subscription handling, and computationally intensive PDF processing while remaining modular and extensible.",
 
         problem:
-            "PDF processing tasks such as merging, OCR, image conversion, cropping, compression, and metadata editing are CPU-intensive and difficult to scale inside a frontend application. A dedicated backend was required to centralize processing while keeping the frontend lightweight and responsive.",
+            "PDF processing tasks such as merging, OCR, image conversion, cropping, compression, and metadata editing should not be owned by a frontend application. A dedicated backend was required to centralize validation, processing, and file lifecycle handling.",
 
         solution:
             "The backend was designed around independent service modules where each document operation is implemented as an isolated processing pipeline. Authentication, billing, uploads, storage, and PDF processing are separated into reusable packages, making it straightforward to introduce additional document tools without affecting existing functionality.",
@@ -191,9 +191,9 @@ export const projectStories: Record<string, ProjectStory> = {
 
         challenges: [
             "Designing reusable processing services shared across dozens of PDF operations.",
-            "Managing memory efficiently while processing large document files.",
+            "Managing memory while processing large document files.",
             "Maintaining consistent API behavior across many independent tools.",
-            "Handling long-running processing tasks without degrading application responsiveness.",
+            "Handling long-running processing tasks while keeping request and UI boundaries explicit.",
             "Keeping the backend extensible as new document-processing features are introduced."
         ],
 
