@@ -22,6 +22,13 @@ const aboutPage = read("app/about/page.tsx");
 const casePage = read("app/case-studies/[slug]/page.tsx");
 const caseStudies = read("lib/case-studies.ts");
 const header = read("components/Header.tsx");
+const layout = read("app/layout.tsx");
+const mobileNavigation = read("components/MobileNavigation.tsx");
+const filters = read("components/ProjectsFilters.tsx");
+const reveal = read("components/Reveal.tsx");
+const motionSection = read("components/MotionSection.tsx");
+const globals = read("app/globals.css");
+const packageJson = read("package.json");
 const footer = read("components/Footer.tsx");
 const vcard = read("app/api/vcard/route.tsx");
 const portfolioProjects = read("lib/portfolio-projects.ts");
@@ -78,6 +85,27 @@ check(read(".gitignore").split(/\r?\n/).some((line) => line.trim() === ".idea/")
 check(read("README.md").includes("Next.js 16.3.6"), "README does not document the current Next.js version");
 check(read("README.md").includes("npm ci"), "README does not document dependency installation");
 check(header.includes("siteConfig.displayDomain"), "header branding is not sourced from siteConfig");
+check(!header.includes("data-overlay"), "desktop header still delegates mobile navigation to FlyonUI");
+check(!header.includes('aria-expanded="false"'), "mobile navigation state is still hard-coded closed");
+check(layout.includes("<SkipLink />"), "SkipLink is not mounted in the root layout");
+check(layout.includes('<main id="content"'), "root layout has no stable skip-link target");
+check(mobileNavigation.includes("aria-expanded={open}"), "mobile navigation does not expose its React state");
+check(mobileNavigation.includes('role="dialog"'), "mobile navigation has no dialog semantics");
+check(mobileNavigation.includes('aria-modal="true"'), "mobile navigation is not marked modal");
+check(mobileNavigation.includes('event.key === "Escape"'), "mobile navigation has no Escape handling");
+check(!mobileNavigation.includes("data-overlay"), "mobile navigation still depends on FlyonUI overlay attributes");
+check(!layout.includes("FlyonuiScript"), "FlyonUI runtime script remains mounted globally");
+check(!filters.includes("typingTimer"), "project filters still use a render-local timer");
+check(!filters.includes(">Apply<"), "project filters still render a redundant Apply button");
+check(filters.includes("value={q}"), "project search input is not controlled");
+check(filters.includes("totalCount"), "project filters do not receive an archive result count");
+check(reveal.includes('from "react"'), "Reveal still imports React types from node_modules");
+check(reveal.includes("useReducedMotion"), "Reveal does not respect reduced motion");
+check(!motionSection.includes("as any"), "MotionSection still uses a broad dynamic-element cast");
+check(globals.includes("scroll-behavior: auto"), "reduced motion does not disable smooth scrolling");
+for (const packageName of ["jquery", "lodash", "nouislider", "datatables.net", "dropzone"]) {
+    check(!packageJson.includes(`\"${packageName}\"`), `${packageName} remains in package.json after runtime removal`);
+}
 check(footer.includes("siteConfig.name"), "footer branding is not sourced from siteConfig");
 check(vcard.includes("siteConfig.name"), "vCard branding is not sourced from siteConfig");
 

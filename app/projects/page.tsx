@@ -6,6 +6,7 @@ import { orderReposWithPinned } from "@/lib/pins";
 import Reveal from "@/components/Reveal";
 import ProjectsFilters from "@/components/ProjectsFilters";
 import { mapRepositoryFacts } from "@/lib/portfolio-repository-facts";
+import { parseProjectFilterParams, type SortKey } from "@/lib/project-filters";
 import {
     getAllPortfolioProjects,
     getCuratedRepositoryNames,
@@ -13,8 +14,6 @@ import {
 } from "@/lib/portfolio-projects";
 
 export const metadata = { title: "Projects" };
-
-type SortKey = "recent" | "stars" | "name";
 
 const collator = new Intl.Collator(undefined, { sensitivity: "base", numeric: true });
 
@@ -52,9 +51,11 @@ export default async function ProjectsPage({
     searchParams: Promise<Record<string, string | undefined>>;
 }) {
     const params = await searchParams;
-    const q = (params.q ?? "").trim();
-    const lang = (params.lang ?? "").trim();
-    const sort = ((params.sort as SortKey) || "recent") as SortKey;
+    const filterParams = new URLSearchParams();
+    if (params.q) filterParams.set("q", params.q);
+    if (params.lang) filterParams.set("lang", params.lang);
+    if (params.sort) filterParams.set("sort", params.sort);
+    const { q, lang, sort } = parseProjectFilterParams(filterParams);
 
     const curatedProjects = getAllPortfolioProjects();
     const repos = (await fetchAllRepos().catch(() => [])) as Repo[];
@@ -72,18 +73,7 @@ export default async function ProjectsPage({
         ]),
     );
 
-    const visibleProjects = curatedProjects.filter((project) => {
-        const query = q.toLowerCase();
-        const matchesQ =
-            !query ||
-            project.title.toLowerCase().includes(query) ||
-            project.tagline.toLowerCase().includes(query) ||
-            project.repositories.some((repository) => repository.name.toLowerCase().includes(query));
-        const matchesLang =
-            !lang ||
-            factsBySlug.get(project.slug)?.some((fact) => fact.language === lang);
-        return matchesQ && matchesLang;
-    });
+    const visibleProjects = curatedProjects;
 
     const langs = uniqueLanguages(archive);
     const counts = languageCounts(archive);
@@ -109,13 +99,7 @@ export default async function ProjectsPage({
             />
 
             <div className="container-xl max-w-7xl mx-auto pt-10 md:pt-14 pb-20">
-                <div className="flex flex-col lg:flex-row gap-8 items-start">
-
-                    <aside className="hidden lg:block sticky top-[calc(var(--header-h,56px)+32px)] w-[280px] shrink-0 z-10">
-                        <ProjectsFilters initialQ={q} initialLang={lang} initialSort={sort} langs={langs} counts={counts} layout="card" />
-                    </aside>
-
-                    <div className="flex-1 w-full min-w-0 space-y-8">
+                <div className="space-y-8">
 
                         <div className="flex flex-col gap-4">
                             <div>
@@ -133,9 +117,6 @@ export default async function ProjectsPage({
                                 </p>
                             </div>
 
-                            <div className="w-full sm:max-w-xl lg:hidden">
-                                <ProjectsFilters initialQ={q} initialLang={lang} initialSort={sort} langs={langs} counts={counts} layout="bar" />
-                            </div>
                         </div>
 
                         {visibleProjects.length > 0 && (
@@ -166,6 +147,10 @@ export default async function ProjectsPage({
                                 <p className="mt-1 text-sm text-[var(--muted)]">
                                     Public repositories not assigned to a curated project. They do not define portfolio identity or featured status.
                                 </p>
+                            </div>
+
+                            <div className="w-full sm:max-w-xl">
+                                <ProjectsFilters initialQ={q} initialLang={lang} initialSort={sort} langs={langs} counts={counts} totalCount={archive.length} />
                             </div>
 
                             {count > 0 ? (
@@ -201,7 +186,6 @@ export default async function ProjectsPage({
                                 </Reveal>
                             )}
                         </section>
-                    </div>
                 </div>
             </div>
         </section>

@@ -5,17 +5,19 @@ import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/navItems";
 import { Icon } from "@/components/Icon";
 import { siteConfig } from "@/lib/siteConfig";
-import { motion } from "framer-motion";
+import MobileNavigation from "@/components/MobileNavigation";
+import { motion, useReducedMotion } from "framer-motion";
 
 type NavItem = { href: string; label: string; icon: string; hideInHeader?: boolean };
 
 export default function Header() {
     const pathname = usePathname();
+    const reduceMotion = useReducedMotion();
     const headerLinks = (NAV_ITEMS as NavItem[]).filter((i) => !i.hideInHeader);
     const [domainName, ...domainParts] = siteConfig.displayDomain.split(".");
 
     return (
-        <header className="sticky top-0 z-40 sm:ps-[var(--sidebar-w)]">
+        <header className="sticky top-0 z-40">
             <div className="border-b border-[var(--border)] bg-[color-mix(in_oklab,var(--bg)_85%,transparent)]/95 backdrop-blur-md">
                 <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
 
@@ -50,7 +52,7 @@ export default function Header() {
                                         <motion.div
                                             layoutId="header-active-pill"
                                             className="absolute inset-0 rounded-full border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_80%,transparent)] shadow-sm"
-                                            transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                                            transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
                                         />
                                     )}
                                     <span className="relative z-10 flex items-center gap-1.5">
@@ -62,17 +64,7 @@ export default function Header() {
                         })}
                     </nav>
 
-                    <button
-                        type="button"
-                        aria-label="Open menu"
-                        className="md:hidden inline-flex items-center justify-center size-9 rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--fg)] hover:border-[var(--accent)] hover:text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] transition-colors"
-                        aria-haspopup="dialog"
-                        aria-expanded="false"
-                        aria-controls="collapsible-mini-sidebar"
-                        data-overlay="#collapsible-mini-sidebar"
-                    >
-                        <span className="icon-[tabler--menu-2] size-5" aria-hidden />
-                    </button>
+                    <MobileNavigation />
                 </div>
             </div>
         </header>

@@ -6,7 +6,7 @@ Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
 Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Phase 0, Phase 1, Phase 2, and Phase 3 local implementation complete and validated; live production recheck deferred. Phase 2 is checkpointed and Phase 3 changes remain uncommitted.
+Status: Phase 0, Phase 1, Phase 2, Phase 3, and Phase 4 local implementation complete and validated; live production recheck deferred. Phase 3 is checkpointed and Phase 4 changes remain uncommitted.
 
 ## Purpose
 
@@ -211,21 +211,21 @@ Exit: route files mostly orchestrate normalized models and metadata/semantics ar
 
 Goal: simplify ordinary interactions and remove unnecessary client complexity.
 
-- [ ] Replace FlyonUI mobile-menu ownership with a small React-controlled accessible drawer/dialog.
-- [ ] Remove FlyonuiScript.tsx after migration.
-- [ ] Remove unused jQuery, Lodash, noUiSlider, DataTables, Dropzone, and FlyonUI dependencies after verifying no consumers.
-- [ ] Synchronize mobile aria-expanded with real state.
-- [ ] Increase mobile trigger target toward at least 44px.
-- [ ] Mount SkipLink in root layout.
-- [ ] Fix Reveal.tsx React type import.
-- [ ] Respect reduced motion in Reveal and other animations.
-- [ ] Disable smooth scrolling under reduced motion.
-- [ ] Fix project-filter debounce with a stable ref/cleanup/deferred approach.
-- [ ] Make filter inputs consistently controlled or URL-derived.
-- [ ] Remove redundant Apply if filters auto-apply.
-- [ ] Make All count equal actual repository/result count.
-- [ ] Move repository filtering to a Labs/Repositories view after flagship curation.
-- [ ] Reconsider pointer glow and reading progress; keep only if clearly useful.
+- [x] Replace FlyonUI mobile-menu ownership with a small React-controlled accessible drawer/dialog.
+- [x] Remove FlyonuiScript.tsx after migration.
+- [x] Remove unused jQuery, Lodash, noUiSlider, DataTables, Dropzone, and FlyonUI dependencies after verifying no consumers. The five browser-compatibility packages and their type packages were removed; `flyonui` remains as an active Tailwind/CSS plugin imported by `app/globals.css`, not as a browser runtime.
+- [x] Synchronize mobile aria-expanded with real state.
+- [x] Increase mobile trigger target toward at least 44px.
+- [x] Mount SkipLink in root layout.
+- [x] Fix Reveal.tsx React type import.
+- [x] Respect reduced motion in Reveal and other animations.
+- [x] Disable smooth scrolling under reduced motion.
+- [x] Fix project-filter debounce with a stable ref/cleanup/deferred approach.
+- [x] Make filter inputs consistently controlled or URL-derived.
+- [x] Remove redundant Apply if filters auto-apply.
+- [x] Make All count equal actual repository/result count.
+- [x] Move repository filtering to a Labs/Repositories view after flagship curation. The existing `/projects` page keeps one filter bar inside the Labs/archive section after curated projects; it does not alter curated identity or order.
+- [x] Reconsider pointer glow and reading progress; keep only if clearly useful. Both global effects were removed because they did not justify global listeners/client state.
 
 Exit: menu no longer needs compatibility UI framework; keyboard/focus/menu state is correct.
 
@@ -348,6 +348,16 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-26 - Phase 4 navigation, client runtime, accessibility, and filter cleanup
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at Phase 3 checkpoint `cddb3e0d5cad33c961996d89c4db32c57f0f4d83`; Phase 4 changes remain uncommitted. No push, merge, or deployment was performed.
+- Audit and ownership: `Header.tsx` was the client desktop/mobile navigation shell; `MiniSidebar.tsx` depended on FlyonUI `data-overlay`, `HSOverlay`, `HSStaticMethods`, DOM mutation observers, and a separate `SidebarWidthSync` bridge. `FlyonuiScript.tsx` globally loaded jQuery, Lodash, noUiSlider, DataTables, Dropzone, and FlyonUI. `GlobalPointerGlow`, `ReadingProgress`, and the layout-level `MotionWrapper` were global client enhancements. No site source consumed the compatibility globals outside that loader.
+- Navigation and accessibility: added `components/MobileNavigation.tsx` with React-owned open state, `aria-expanded`, `aria-controls`, dialog semantics, Escape handling, focus-on-open, focus trapping, focus return, close-on-link, backdrop/body-scroll handling, and 44px controls. Mounted `SkipLink` in the root layout, retained one page-level `main#content`, removed the old FlyonUI sidebar/width bridge, and preserved desktop Header navigation. The mobile implementation was manually checked at 375px; desktop behavior was checked at 768px and 1280px.
+- Client/runtime cleanup: removed `FlyonuiScript.tsx`, `MiniSidebar.tsx`, `SidebarWidthSync.tsx`, `GlobalPointerGlow.tsx`, `ReadingProgress.tsx`, `app/(motion)/motion-wrapper.tsx`, and the unused `global.d.ts` browser-global declarations. Removed `jquery`, `lodash`, `nouislider`, `datatables.net`, `dropzone`, and `@types/dropzone`, `@types/jquery`, `@types/lodash`. `flyonui` remains because `app/globals.css` uses its variants/plugin/source for CSS generation; no FlyonUI browser runtime is loaded.
+- Motion and filters: corrected `Reveal.tsx` to import React types normally, made its initial state visible, added reduced-motion handling, removed the dynamic `any` in `MotionSection`, respected reduced-motion scroll behavior in CSS, and removed the pointer/progress effects. Added typed `lib/project-filters.ts` helpers and controlled, URL-synchronized, debounced archive filters; moved the single filter bar into the Labs/archive section after curated projects, removed Apply, corrected duplicate field IDs, made All use the server-provided archive length, and left curated project identity/order unaffected. README now documents the client/runtime and archive-filter boundaries.
+- Tests and validation: `npm ci` PASS (363 packages added; 364 audited; 0 vulnerabilities); `npm audit` PASS (0 vulnerabilities); `npm run lint` PASS; `npx tsc --noEmit` PASS; `npm test` PASS (portfolio smoke plus 17 dependency-free tests, including 3 Phase 4 filter tests); `npm run build` PASS on Next.js 16.3.6; `git diff --check` PASS. Production-server checks returned 200 for `/`, `/projects`, Termstead, PDFNest, Banking Platform, PolyShop, `/about`, `/case-studies`, and `/contact`; unknown project and case-study routes returned 404. The no-GitHub-discovery build had no archive detail params, so `/projects/i-shop` remained 404 as documented. Playwright checks verified SkipLink focus, mobile menu state/focus/Escape/link close/body scroll at 375px, desktop navigation at 768px/1280px, reduced-motion `scroll-behavior: auto`, debounced URL query updates, controlled synchronization, and Reset.
+- Remaining concerns: live production validation was not performed; archive detail availability remains bounded by public GitHub discovery during the build; `flyonui` remains intentionally as a CSS-generation dependency. The existing Edge-runtime deprecation from `app/og/route.ts` and Node `MODULE_TYPELESS_PACKAGE_JSON` test warning remain deferred. The local browser also logged the pre-existing environment-dependent `/cv.pdf` 404 during navigation prefetch.
 
 ### 2026-09-26 - Phase 2 content ownership and project architecture
 

@@ -26,6 +26,10 @@ Project detail routes use `lib/portfolio-resolver.ts`: curated records resolve f
 
 Case-study YAML enters through the runtime validator in `lib/case-studies.ts`. It validates routing fields, arrays, ordering, and resource URLs before the detail route renders them. Route metadata and JSON-LD are generated from the validated case-study or curated project record using `lib/route-metadata.ts` and `lib/siteConfig.ts`.
 
+Navigation is split between the server-rendered layout and small React islands: desktop links remain in `components/Header.tsx`, while `components/MobileNavigation.tsx` owns the mobile drawer's state, focus, Escape handling, and body-scroll lock. The former FlyonUI browser runtime is not loaded; `flyonui` remains only as the Tailwind/CSS plugin used by `app/globals.css`.
+
+Projects filtering applies to the Labs/repository archive rather than changing curated project identity or order. Query, language, and sort state are URL-backed, debounced, controlled inputs, and the archive result count is supplied by the server page.
+
 ## Local development
 
 Requirements:
@@ -62,7 +66,7 @@ npm run build
 npm run start
 ```
 
-`npm test` runs the lightweight portfolio smoke checks plus dependency-free Phase 2/3 tests for curated slugs/order, multi-repository grouping, resolver precedence, archive/private-repository boundaries, case-study validation, metadata canonical URLs, and GitHub-failure fallback.
+`npm test` runs the lightweight portfolio smoke checks plus dependency-free Phase 2/3/4 tests for curated slugs/order, multi-repository grouping, resolver precedence, archive/private-repository boundaries, case-study validation, metadata canonical URLs, GitHub-failure fallback, and project-filter URL/count behavior.
 
 ## Content editing
 

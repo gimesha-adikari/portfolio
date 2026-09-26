@@ -1,15 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import MiniSidebar from "@/components/MiniSidebar";
-import FlyonuiScript from "@/components/FlyonuiScript";
 import { Footer } from "@/components/Footer";
 import { Inter } from "next/font/google";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Header from "@/components/Header";
-import SidebarWidthSync from "@/components/SidebarWidthSync";
-import GlobalPointerGlow from "@/components/GlobalPointerGlow";
-import ReadingProgress from "@/components/ReadingProgress";
-import MotionWrapper from "@/app/(motion)/motion-wrapper";
+import SkipLink from "@/components/SkipLink";
 import { siteConfig } from "@/lib/siteConfig";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
@@ -47,20 +42,14 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" className={inter.className}>
-        <body className="overlay-body-open overlay-body-open:overflow-hidden min-h-[100svh] antialiased">
-        <GlobalPointerGlow />
-        <ReadingProgress />
+        <body className="min-h-[100svh] antialiased">
+        <SkipLink />
 
-        <MiniSidebar id="collapsible-mini-sidebar" title={siteConfig.displayDomain} />
-        <SidebarWidthSync targetId="collapsible-mini-sidebar" />
-
-        <div className="sm:ps-[var(--sidebar-w)] min-h-full bg-[var(--bg)] duration-300 transition-[padding]">
+        <div className="min-h-full bg-[var(--bg)]">
             <Header />
             <main id="content" className="flex-1 section">
                 <div className="container-xl">
-                    <MotionWrapper>
-                        {children}
-                    </MotionWrapper>
+                    {children}
                 </div>
             </main>
             <Footer />
@@ -70,7 +59,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <ThemeToggle />
         </div>
 
-        <FlyonuiScript />
         </body>
         </html>
     );

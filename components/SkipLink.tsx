@@ -1,4 +1,3 @@
-"use client";
 export default function SkipLink({ href = "#content" }: { href?: string }) {
     return (
         <a
