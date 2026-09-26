@@ -33,6 +33,7 @@ const footer = read("components/Footer.tsx");
 const vcard = read("app/api/vcard/route.tsx");
 const portfolioProjects = read("lib/portfolio-projects.ts");
 const projectEvidence = read("lib/project-evidence.ts");
+const bankingEvidence = read("lib/banking-platform-evidence.ts");
 const portfolioFacts = read("lib/portfolio-repository-facts.ts");
 const projectsPage = read("app/projects/page.tsx");
 const projectDetailPage = read("app/projects/[slug]/page.tsx");
@@ -130,6 +131,12 @@ check(portfolioProjects.includes('title: "Platen PDF"'), "Platen PDF display ide
 check(portfolioProjects.includes('liveUrl: "https://platenpdf.com"'), "Platen PDF live URL is not canonical");
 check(portfolioProjects.includes('role: "Related standalone local-first document/OCR SDK and optional processing engine"'), "platen-document is not described as a related standalone SDK");
 check(portfolioProjects.includes('slug: "banking-platform"'), "Banking Platform is not a curated project");
+check(portfolioProjects.includes("technicalEvidence: bankingPlatformTechnicalEvidence"), "Banking Platform technical evidence is not attached to the canonical project record");
+check(bankingEvidence.includes('owner: "BankingSystem / Spring core"'), "Banking evidence is missing the Spring ownership boundary");
+check(bankingEvidence.includes('owner: "BankApp / Android client"'), "Banking evidence is missing the Android ownership boundary");
+check(bankingEvidence.includes('classification: "NOT TESTED"'), "Banking evidence does not mark unverified outcomes as not tested");
+check(bankingEvidence.includes("5afe20e3797191b1f9535185f2caecbe993cdb38"), "Banking evidence does not pin the BankingSystem source commit");
+check(bankingEvidence.includes("1e59a6b4a780a5ff5c73743c57b195538df7b080"), "Banking evidence does not pin the BankApp source commit");
 check(portfolioFacts.includes("selectRepositoryFacts"), "repository allowlist boundary is missing");
 check(projectsPage.includes("getAllPortfolioProjects"), "projects listing is not curated-data driven");
 check(projectDetailPage.includes("resolvePortfolioProject"), "project detail route does not use the normalized resolver");
@@ -162,6 +169,16 @@ check(homepageHero.includes("siteConfig.cvPath"), "homepage CV CTA does not use 
 check(homepageEvidence.includes("Decision"), "homepage engineering evidence does not expose decisions");
 check(homepageCaseStudies.includes("project.title"), "homepage case-study cards do not expose project association");
 check(portfolioProjectCard.includes('variant === "homepage"'), "homepage project cards do not have a narrative-focused presentation variant");
+check(packageJson.includes("portfolio-phase6c.test.mjs"), "Phase 6C tests are not included in npm test");
+
+const bankingCaseStudySources = [
+    read("content/case-studies/modular-kyc-architecture.yml"),
+    read("content/case-studies/resilient-mobile-payments.yml"),
+    read("site-content/case-studies/multi-platform-banking-system.mdx"),
+    read("site-content/case-studies/banking-system.mdx"),
+    read("site-content/case-studies/bank-app.mdx"),
+].join("\n");
+check(!/Improved KYC false-reject rate|Reduced KYC false rejects|Fewer KYC false-rejects|Fewer manual reviews|reduced visible errors|robust retries/i.test(bankingCaseStudySources), "Banking case-study content still contains unsupported outcome language");
 
 const activeFiles = gitFiles
     .split("\n")

@@ -4,22 +4,22 @@
   <em>Kotlin · Jetpack Compose · Retrofit · Coroutines · Material 3</em>
 </p>
 
-> **TL;DR** — Built wallet features (card reloads, QR payments, bill-pay). A clean Retrofit API layer and resilient UI reduced visible errors and clarified flows.
+> **TL;DR** — Built wallet features for card reloads, QR payments, and bill-pay. The Retrofit API layer maps failures into repository results while the payment view model exposes bounded processing and terminal states.
 
 ---
 
 ### Context & Role
-Android module focused on wallet flows, designed to operate even when core banking features are unavailable.
+Android module focused on wallet flows, with the client communicating through explicit API and PaymentIntent states. External-provider settlement is not treated as verified by this case study.
 
 ### Problem
 - Payment flows were overly coupled to banking onboarding.
-- Intermittent network caused confusing failures and abandons.
+- Asynchronous payment intent states need to remain visible while the client polls for a terminal result.
 
 ### Approach & Architecture
 - Feature-based packages (screens, view models, DI)  
 - Retrofit interfaces with clean DTOs, interceptors, consistent error envelopes  
 - Compose UI with unified components (cards, inputs, buttons) and a11y labels  
-- Robust retries and offline affordances where possible
+- PaymentFlowViewModel with bounded exponential polling and explicit creating, processing, succeeded, failed, and canceled states
 
 ---
 
@@ -48,12 +48,14 @@ Android module focused on wallet flows, designed to operate even when core banki
 ---
 
 ### Challenges & Trade-offs
-- Gateway sandbox limitations → emulated webhooks + idempotent retries in dev  
-- UI complexity → extracted shared components to keep code tidy and reusable
+- Duplicate payment-intent creation → send an Idempotency-Key from the Android repository
+- Long-running requests → poll with backoff capped at ten seconds and a two-minute client timeout
+- UI complexity → keep API/repository failures separate from the view-model state machine
 
 ### Results
-- Fewer user-visible errors in payment flows via defensive UI and API handling  
-- Faster iteration thanks to a clean, testable Retrofit layer
+- The client models payment creation, processing, success, failure, cancellation, and timeout as distinct states
+- Repository methods expose API/network failures instead of treating unsuccessful responses as completed payments
+- External-provider settlement and production payment outcomes remain unverified
 
 ---
 

@@ -6,7 +6,7 @@ Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
 Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Phase 0 through Phase 5 and Phase 6A are checkpointed and locally validated; Phase 6B Platen PDF evidence is locally complete enough for review and remains uncommitted. Banking Platform and PolyShop evidence work, focused excerpts/screenshots, and live production recheck remain deferred.
+Status: Phase 0 through Phase 5 and Phase 6A/6B are checkpointed and locally validated; Phase 6C Banking Platform evidence is locally complete enough for review and remains uncommitted. PolyShop evidence work, focused excerpts/screenshots, and live production recheck remain deferred.
 
 ## Purpose
 
@@ -260,8 +260,8 @@ Platen PDF:
 - [x] Explain sync vs async work, validation, file lifecycle, queueing, OCR, failure handling, preview vs server processing, scaling constraints, and evolved decisions. The record includes workflow/file-lifecycle/processing/failure sections, bounded configuration evidence, explicit limitations, and a `NOT TESTED` benchmark entry rather than unsupported throughput claims.
 
 Banking Platform:
-- [ ] Show Spring Boot, React, Android/Kotlin, and FastAPI KYC as one project.
-- [ ] Remove or substantiate false-reject and similar outcome claims.
+- [x] Show Spring Boot, React, Android/Kotlin, and FastAPI KYC as one project. The curated record now attaches source-pinned evidence for the Spring core, React web client, Android client, and FastAPI KYC boundaries.
+- [x] Remove or substantiate false-reject and similar outcome claims. Active and retained legacy Banking case-study copies now describe implemented policy and explicit limitations; accuracy, false-rejection, manual-review, and production outcomes remain unpublished without labeled evidence.
 
 PolyShop or other flagship:
 - [ ] Verify service boundaries, Kafka/Redis/API gateway, contract/load testing, and saga-related claims directly before publishing.
@@ -349,16 +349,25 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
 
+### 2026-09-27 - Phase 6C Banking Platform evidence
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at the committed Phase 6B checkpoint `e880b1cb35229d6d6f48764ebffc3c6204b49989`; Phase 6C changes remain uncommitted. No push, merge, deployment, or modification of the external BankingSystem or BankApp repositories was performed.
+- Evidence basis: fresh read-only shallow clones of BankingSystem and BankApp were checked at their public `main` commits `5afe20e3797191b1f9535185f2caecbe993cdb38` and `1e59a6b4a780a5ff5c73743c57b195538df7b080`. Source paths used by the portfolio evidence record were verified against those snapshots.
+- Model/content: added `lib/banking-platform-evidence.ts` and attached it to the existing Banking Platform `PortfolioProject`. The record covers Spring Boot ownership/security/account boundaries, React routes/auth/API behavior, Android storage/network/account/KYC/wallet flows, FastAPI KYC checks and policy, lifecycle/failure boundaries, decisions, calibration tooling, test inventories, and exact source links. No second project identity source or homepage flagship was created.
+- Claim discipline: rewrote the active modular KYC and mobile-payment case-study wording plus retained legacy Banking copies to remove unsupported false-rejection, manual-review, reduced-visible-error, resilience, production, and scaling implications. The evidence record explicitly marks labeled accuracy/FAR/FRR, transaction atomicity, external settlement, and production operation as unmeasured or not tested where applicable.
+- Tests/validation: added the Phase 6C focused test and included it in `npm test`; smoke checks now verify the Banking evidence attachment, source commits, ownership boundaries, and cleaned case-study claims. Final `npm ci`, audit, lint, TypeScript, tests, build, route/browser checks, and `git diff --check` are recorded in the completion report for this pass.
+- Remaining concerns: PolyShop remains non-featured pending Phase 6 evidence; focused code excerpts/screenshots, live production validation, the Edge Runtime warning, and the Node module-type warning remain deferred. The account transaction controller and external payment settlement still need separate evidence before outcome claims are made.
+
 ### 2026-09-27 - Phase 6B Platen PDF evidence
 
-- Branch/SHA: `codex/portfolio-improvement-plan` at the committed Phase 6A checkpoint `59f18fb56394d1a4a4b42ebb83770935ec54fc27`; Phase 6B changes remain uncommitted. No push, merge, deployment, or modification of the external Platen repositories was performed.
+- Branch/SHA: `codex/portfolio-improvement-plan` at the Phase 6B checkpoint `e880b1cb35229d6d6f48764ebffc3c6204b49989`; Phase 6B is checkpointed and Phase 6C changes remain uncommitted. No push, merge, deployment, or modification of the external Platen repositories was performed.
 - Evidence basis: the Platen PDF frontend, Go backend, worker, and `platen-document` SDK were reviewed from their remote default-branch snapshots (`70db8e8a5a1466ddb154112ed1ddecee6e6cb57e`, `9faae1a42155843e0e5a6e472d6a4109ccaa25a8`, `9d38852e7ca1e7b657f7f644823d400553886ff0`, and `a5a14413ded0daa93a5839b86554f1fe67d92a93`). Local checkouts on unrelated branches were not used as evidence.
 - Model/content: extended the validated shared technical-evidence model with workflow modes, file lifecycles, processing paths, and failure boundaries. Added `lib/platen-pdf-evidence.ts` and attached it to the canonical `Platen PDF` project record without creating a second project identity source.
 - Platen PDF coverage: documented browser-to-API, API-to-worker, job/artifact, preview, sync, async, OCR, validation, cancellation/stall, cleanup/expiry, and standalone SDK boundaries. The related SDK is explicitly local-first and independent rather than a required web/API/worker service.
 - Accuracy cleanup: softened active Platen PDF case-study and legacy project wording that implied unsupported high-performance, scalability, or production-readiness claims. Retained exact source links and explicit `NOT TESTED`/limitation language; no numeric benchmark result was published.
 - UI/tests: added reusable server-rendered workflow, processing-path, and failure-boundary sections; added a focused runtime-validator regression test; updated README evidence-architecture guidance. Homepage architecture was not redesigned.
-- Validation: final `npm ci`, `npm audit`, lint, TypeScript, tests, production build, `git diff --check`, and targeted local route/browser checks are recorded in the completion report below.
-- Remaining concerns: Banking Platform and PolyShop evidence work, focused code excerpts, technical screenshots, live production validation, the Edge Runtime warning, and the Node module-type warning remain deferred.
+- Validation: Phase 6B checkpoint validation passed for `npm run lint`, `npx tsc --noEmit`, `npm test` (32 tests), and `npm run build` (24 static pages); the checkpoint tree was clean. The Phase 6B completion pass also recorded `npm ci`, `npm audit`, `git diff --check`, and targeted local route/browser checks.
+- Remaining concerns at the time: Banking Platform and PolyShop evidence work, focused code excerpts, technical screenshots, live production validation, the Edge Runtime warning, and the Node module-type warning remained deferred.
 
 ### 2026-09-27 - Phase 6A Termstead evidence
 

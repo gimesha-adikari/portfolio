@@ -1,29 +1,29 @@
 order: 2
 
 title: "Architecting a Modular KYC Microservice Platform"
-blurb: "Modular Spring Boot + FastAPI (AI KYC) with React admin and Android wallet. Focus on clean domains and resilient KYC."
+blurb: "Modular Spring Boot, React, Android, and FastAPI KYC boundaries with an explicit component-check and review path."
 read_time: "3–4 min"
 main_icon: "icon-[devicon--java]"
 tags:
   - "Impact"
   - "Architecture"
   - "Trade-offs"
-subtitle: "Spring Boot · React · Android · FastAPI (AI KYC) · ONNX/OCR"
-tldr: "Designed and implemented a modular platform spanning backend, web, mobile, and an AI KYC microservice. Improved KYC false-reject rate and stabilized flows under real-world constraints."
+subtitle: "Spring Boot · React · Android · FastAPI KYC · OCR/vision modules"
+tldr: "Designed and implemented a modular platform spanning backend, web, mobile, and a FastAPI KYC service. This case study documents service boundaries, check policy, and review states; no population-level accuracy or false-rejection outcome is published without labeled evaluation evidence."
 
-context: "Solo/lead developer across multiple layers. Objectives: secure account flows, robust KYC, and a wallet experience that can operate independently of heavier banking flows."
+context: "Solo/lead developer across multiple layers. The implementation separates secure account flows, KYC case state, and a wallet client that communicates through explicit API boundaries."
 
 problem:
-  - "Fragmented onboarding with brittle KYC caused drop-offs and manual reviews"
-  - "Inconsistent data boundaries across services and clients slowed iteration"
-  - "Accuracy/latency trade-offs in OCR, face match, and liveness checks"
+  - "Keep upload ownership, KYC case state, and component checks explicit across service boundaries"
+  - "Keep web and Android clients aligned with the Spring API without moving authorization into the clients"
+  - "Represent check thresholds and review outcomes without presenting them as measured population results"
 
 architecture:
   - "Domain-oriented Spring Boot modules (auth, accounts, analytics, kyc, wallet)"
-  - "AI KYC microservice (FastAPI): pluggable providers; threshold tuning & retries"
-  - "Android Wallet: card reload, QR pay, bill-pay; Retrofit interfaces & DTOs"
-  - "React Web dashboard with a11y-first forms/tables"
-  - "Observability & CI: safe defaults, lint/type checks, reproducible envs"
+  - "FastAPI KYC service: face, liveness, OCR, document-classification checks, and an aggregate policy"
+  - "Spring orchestration: bounded file reads, persisted check records, and UNDER_REVIEW fallback on service failure"
+  - "Android Wallet: card reload, QR pay, and bill-pay intent flows through Retrofit interfaces and DTOs"
+  - "React Web client with role-gated routes, bearer-token requests, and account flows"
 
 stack:
   - name: "Spring Boot · Hibernate · MySQL"
@@ -32,18 +32,18 @@ stack:
     icon: "icon-[tabler--brand-react]"
   - name: "Kotlin / Android · Retrofit/OkHttp"
     icon: "icon-[tabler--device-mobile]"
-  - name: "FastAPI · ONNX (ArcFace, SCRFD, liveness) · OCR"
+  - name: "FastAPI · component-check policy · OCR/vision modules"
     icon: "icon-[tabler--brain]"
 
 challenges:
-  - "Face-match sensitivity vs UX → tuned thresholds; re-tryable capture & guidance"
-  - "OCR noise → preprocessing + field-level confidence gating"
-  - "Network reliability → graceful fallbacks & cached responses on mobile"
+  - "KYC service failure → persist an error check and move the case to UNDER_REVIEW rather than approving it"
+  - "Upload integrity → require four distinct owned uploads with the expected document categories"
+  - "Model boundary → keep optional ONNX/Tesseract modules distinct from the current simple default factory path"
 
 results:
-  - "Reduced KYC false rejects vs baseline after threshold tuning and OCR cleanup"
-  - "Fewer manual reviews; faster re-submission loops"
-  - "Standalone wallet flows widened the onboarding funnel"
+  - "Implemented explicit KYC upload, case, check, and status boundaries in the reviewed source"
+  - "Implemented APPROVE, UNDER_REVIEW, and REJECT policy branches with reason codes and per-check records"
+  - "Accuracy, false-rejection rate, manual-review volume, and production outcomes remain unmeasured in the reviewed evidence"
 
 links:
   - label: "Projects"
@@ -56,5 +56,5 @@ links:
     is_external: true
 
 next_steps:
-  - "Deeper analytics for KYC decision explainability"
-  - "Payment gateway webhooks with idempotency + retries"
+  - "Run a labeled evaluation and calibration report before publishing KYC error-rate claims"
+  - "Add focused integration coverage for account-plus-opening-transaction atomicity and payment settlement"

@@ -3,6 +3,7 @@ import {
     validateProjectTechnicalEvidence,
     type ProjectTechnicalEvidence,
 } from "./project-evidence.ts";
+import { bankingPlatformTechnicalEvidence } from "./banking-platform-evidence.ts";
 import { platenPdfTechnicalEvidence } from "./platen-pdf-evidence.ts";
 
 export type ProjectStatus = "active" | "complete" | "experimental";
@@ -424,8 +425,8 @@ const curatedProjectData = [
             },
             {
                 boundary: "KYC service",
-                responsibility: "Keep FastAPI identity-verification and document-processing concerns as an explicit service boundary.",
-                technologies: ["FastAPI", "ONNX", "OCR"],
+                responsibility: "Keep FastAPI identity-verification and document-processing concerns as an explicit service boundary; optional ONNX/Tesseract modules are not presented as the default runtime path.",
+                technologies: ["FastAPI", "OCR", "Vision check modules"],
             },
             {
                 boundary: "Android wallet",
@@ -451,7 +452,7 @@ const curatedProjectData = [
             },
             {
                 label: "Claims intentionally scoped",
-                description: "Legacy false-reject, manual-review, and similar outcome claims are not promoted until reproducible evidence is attached.",
+                description: "Legacy false-reject, manual-review, and similar outcome claims remain unpublished because reproducible labeled outcome evidence is not attached.",
                 source: "content/case-studies/modular-kyc-architecture.yml",
             },
         ],
@@ -468,8 +469,10 @@ const curatedProjectData = [
             },
         ],
         caseStudies: ["modular-kyc-architecture", "resilient-mobile-payments"],
+        technicalEvidence: bankingPlatformTechnicalEvidence,
         contentNotes: [
             "The curated slug is banking-platform; BankingSystem and BankApp remain the source repository identities.",
+            "KYC thresholds and decision branches are source-backed policy evidence, not measured accuracy or false-rejection outcomes.",
         ],
     },
     {
