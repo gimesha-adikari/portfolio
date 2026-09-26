@@ -52,7 +52,7 @@ function dependencies(overrides = {}) {
     };
 }
 
-test("resolver returns curated Termstead, PDFNest, and Banking Platform records first", async () => {
+test("resolver returns curated Termstead, Platen PDF, and Banking Platform records first", async () => {
     for (const slug of ["termstead", "pdfnest", "banking-platform"]) {
         const result = await resolveProject(slug, dependencies());
         assert.equal(result?.kind, "curated");
@@ -92,7 +92,7 @@ test("archive data cannot override a curated project identity", async () => {
         dependencies({ getArchiveProject: async () => archiveProject("pdfnest") }),
     );
     assert.equal(result?.kind, "curated");
-    assert.equal(result?.project.title, "PDFNest");
+    assert.equal(result?.project.title, "Platen PDF");
 });
 
 test("case-study YAML files validate and unknown slugs do not load", () => {
@@ -161,7 +161,7 @@ test("about YAML normalization keeps typed sections and ignores malformed entrie
             { title: "Missing description" },
         ],
         selected_work: [
-            { title: "PDFNest", description: "Documents", link: "/projects/pdfnest" },
+            { title: "Platen PDF", description: "Documents", link: "/projects/pdfnest" },
             { title: "Missing description", link: 42 },
         ],
         certifications: [{ title: "CS50x", issuer: "HarvardX" }],
@@ -171,7 +171,7 @@ test("about YAML normalization keeps typed sections and ignores malformed entrie
     assert.deepEqual(parsed.badges, [{ label: "Backend", icon: "icon-[tabler--server]" }]);
     assert.deepEqual(parsed.working_style, [{ title: "Clear", desc: "Useful boundaries" }]);
     assert.deepEqual(parsed.selected_work, [{
-        title: "PDFNest",
+        title: "Platen PDF",
         description: "Documents",
         link: "/projects/pdfnest",
     }]);

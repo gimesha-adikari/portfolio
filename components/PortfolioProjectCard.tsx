@@ -8,9 +8,11 @@ function labelForStatus(status: PortfolioProject["status"]) {
 export function PortfolioProjectCard({
     project,
     facts = [],
+    variant = "default",
 }: {
     project: PortfolioProject;
     facts?: readonly RepositoryFacts[];
+    variant?: "default" | "homepage";
 }) {
     const technologies = Array.from(
         new Set(project.architecture.flatMap((block) => block.technologies)),
@@ -51,19 +53,32 @@ export function PortfolioProjectCard({
                     {project.tagline}
                 </p>
 
-                <div className="mt-5 grid gap-3 text-xs text-[var(--muted)] sm:grid-cols-2">
-                    <div>
-                        <div className="font-semibold uppercase tracking-[0.16em]">Role</div>
-                        <div className="mt-1 text-sm text-[var(--fg)]">{project.role}</div>
-                    </div>
-                    <div>
-                        <div className="font-semibold uppercase tracking-[0.16em]">Repositories</div>
-                        <div className="mt-1 text-sm text-[var(--fg)]">
-                            {project.repositories.length} grouped source{project.repositories.length === 1 ? "" : "s"}
-                            {facts.length > 0 ? ` · ${facts.length} public fact${facts.length === 1 ? "" : "s"}` : ""}
+                {variant === "homepage" ? (
+                    <div className="mt-5 grid gap-3 text-xs text-[var(--muted)] sm:grid-cols-2">
+                        <div>
+                            <div className="font-semibold uppercase tracking-[0.16em]">Problem</div>
+                            <div className="mt-1 text-sm leading-relaxed text-[var(--fg)]">{project.problem}</div>
+                        </div>
+                        <div>
+                            <div className="font-semibold uppercase tracking-[0.16em]">Primary boundary</div>
+                            <div className="mt-1 text-sm text-[var(--fg)]">{project.architecture[0]?.boundary ?? "System architecture"}</div>
                         </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="mt-5 grid gap-3 text-xs text-[var(--muted)] sm:grid-cols-2">
+                        <div>
+                            <div className="font-semibold uppercase tracking-[0.16em]">Role</div>
+                            <div className="mt-1 text-sm text-[var(--fg)]">{project.role}</div>
+                        </div>
+                        <div>
+                            <div className="font-semibold uppercase tracking-[0.16em]">Repositories</div>
+                            <div className="mt-1 text-sm text-[var(--fg)]">
+                                {project.repositories.length} grouped source{project.repositories.length === 1 ? "" : "s"}
+                                {facts.length > 0 ? ` · ${facts.length} public fact${facts.length === 1 ? "" : "s"}` : ""}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {technologies.length > 0 && (
                     <div className="mt-5 flex flex-wrap gap-2" aria-label="Project technologies">
@@ -79,9 +94,13 @@ export function PortfolioProjectCard({
                 )}
 
                 <div className="mt-6 flex items-center justify-between text-xs text-[var(--muted)]">
-                    <span>{project.caseStudies?.length ?? 0} associated case studies</span>
+                    {variant === "homepage" ? (
+                        <span>Portfolio-owned system</span>
+                    ) : (
+                        <span>{project.caseStudies?.length ?? 0} associated case studies</span>
+                    )}
                     <span className="inline-flex items-center gap-1 group-hover:text-[var(--accent)] transition-colors">
-                        View project
+                        {variant === "homepage" ? "Explore system" : "View project"}
                         <span className="icon-[tabler--arrow-up-right] size-4" aria-hidden />
                     </span>
                 </div>

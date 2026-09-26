@@ -9,7 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node scripts/portfolio-smoke.mjs && node --experimental-strip-types --test scripts/portfolio-projects.test.mjs scripts/portfolio-phase3.test.mjs scripts/portfolio-phase4.test.mjs",
+    "test": "node scripts/portfolio-smoke.mjs && node --experimental-strip-types --test scripts/portfolio-projects.test.mjs scripts/portfolio-phase3.test.mjs scripts/portfolio-phase4.test.mjs scripts/portfolio-phase5.test.mjs",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0"
   },
   "dependencies": {

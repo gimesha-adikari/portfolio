@@ -16,7 +16,7 @@ project listing and detail UI
 
 `PortfolioProject` controls the slug, title, tagline, status, featured state, order, role, problem, constraints, architecture, decisions, evidence, repository membership, case-study associations, and optional live URL. A GitHub repository is not a portfolio project by itself.
 
-Curated records currently include Termstead, PDFNest, Banking Platform, PolyShop, Runyard, and NeuroSim. PDFNest groups the `pdfnest`, `pdfnest-backend`, `pdfnest-worker`, and related `platen-document` repositories. Banking Platform groups `BankingSystem` and `BankApp`. Runyard, NeuroSim, and non-featured PolyShop remain in the labs/secondary layer.
+Curated records currently include Termstead, Platen PDF, Banking Platform, PolyShop, Runyard, and NeuroSim. Platen PDF groups the `pdfnest`, `pdfnest-backend`, and `pdfnest-worker` repositories, with `platen-document` retained as a related standalone local-first SDK. The stable project route remains `/projects/pdfnest`; repository names remain unchanged. Banking Platform groups `BankingSystem` and `BankApp`. Runyard, NeuroSim, and non-featured PolyShop remain in the labs/secondary layer.
 
 To add a repository to an existing project, add its public name, role, and source URL to that project's `repositories` array in `lib/portfolio-projects.ts`. To make a project featured, set its portfolio-owned `featured` field to `true` and give it the intended unique `order`; do not feature a repository from GitHub discovery. The enrichment boundary fetches only those explicit names and rejects private records even when authenticated GitHub data is available. If GitHub is unavailable, the curated project still renders from local content.
 
@@ -29,6 +29,8 @@ Case-study YAML enters through the runtime validator in `lib/case-studies.ts`. I
 Navigation is split between the server-rendered layout and small React islands: desktop links remain in `components/Header.tsx`, while `components/MobileNavigation.tsx` owns the mobile drawer's state, focus, Escape handling, and body-scroll lock. The former FlyonUI browser runtime is not loaded; `flyonui` remains only as the Tailwind/CSS plugin used by `app/globals.css`.
 
 Projects filtering applies to the Labs/repository archive rather than changing curated project identity or order. Query, language, and sort state are URL-backed, debounced, controlled inputs, and the archive result count is supplied by the server page.
+
+The homepage is portfolio-first: `lib/homepage-content.ts` derives flagship projects, engineering evidence, and a small case-study selection from the canonical project/case-study sources. The homepage presents those records before optional GitHub activity or external-demo evidence, so GitHub failure does not remove the core story. The helper contains presentation selectors and associations only; it does not define project identity.
 
 ## Local development
 
@@ -66,7 +68,7 @@ npm run build
 npm run start
 ```
 
-`npm test` runs the lightweight portfolio smoke checks plus dependency-free Phase 2/3/4 tests for curated slugs/order, multi-repository grouping, resolver precedence, archive/private-repository boundaries, case-study validation, metadata canonical URLs, GitHub-failure fallback, and project-filter URL/count behavior.
+`npm test` runs the lightweight portfolio smoke checks plus dependency-free Phase 2/3/4/5 tests for curated slugs/order, multi-repository grouping, resolver precedence, archive/private-repository boundaries, case-study validation, metadata canonical URLs, GitHub-failure fallback, project-filter URL/count behavior, and homepage content selection.
 
 ## Content editing
 

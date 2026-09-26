@@ -62,7 +62,7 @@ stack:
     subtext: "High-performance document workflows, page operations, and file automation"
 
 selected_work:
-  - title: "PDFNest"
+  - title: "Platen PDF"
     description: >
       Full-stack PDF SaaS built with Next.js and Go, featuring PDF editing,
       conversion, compression, OCR, page manipulation, document security,

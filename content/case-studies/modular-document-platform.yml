@@ -9,7 +9,7 @@ tags:
   - "UX"
 subtitle: "Next.js · Go · PostgreSQL · JWT/OAuth · PDF Pipeline"
 tldr: "Built a modular document platform where uploads, workspaces, metadata, and downloads all follow one clear flow. Shared layouts and reusable components kept the product scalable as new tools were added."
-context: "Focuses on the overall system design behind PDFNest and how the app was structured to support many document tools without turning the codebase into duplicated one-off pages."
+context: "Focuses on the overall system design behind Platen PDF and how the app was structured to support many document tools without turning the codebase into duplicated one-off pages."
 problem:
   - "Each PDF tool had different inputs, outputs, and validation rules."
   - "Building separate pages for every tool would have created a fragile, hard-to-maintain codebase."

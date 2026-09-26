@@ -292,7 +292,7 @@ const curatedProjectData = [
     },
     {
         slug: "pdfnest",
-        title: "PDFNest",
+        title: "Platen PDF",
         tagline: "A multi-repository document platform that separates the web workspace, Go API, and Python processing boundary.",
         status: "active",
         featured: true,
@@ -305,7 +305,7 @@ const curatedProjectData = [
             "The web application, API, and worker have separate responsibilities and release surfaces.",
             "Uploads, validation, processing, and downloads need reusable boundaries across document workflows.",
             "PDF edge cases, OCR, and long-running processing require explicit failure and resource-handling decisions.",
-            "Repository names currently use both PDFNest and Platen PDF terminology and need a later naming reconciliation.",
+            "The public product is Platen PDF while the web, API, and worker repositories retain their historical PDFNest-era names.",
         ],
         architecture: [
             {
@@ -325,7 +325,7 @@ const curatedProjectData = [
             },
             {
                 boundary: "Related document SDK",
-                responsibility: "Provide the separately published document-processing SDK material extracted from the PDFNest OCR work.",
+                responsibility: "Provide the local-first, separately published document-processing SDK extracted from the earlier PDFNest OCR work; it can integrate through explicit engine selectors without being required by the Platen PDF runtime.",
                 technologies: ["Python", "Document SDK"],
             },
         ],
@@ -342,7 +342,7 @@ const curatedProjectData = [
         outcomes: [
             {
                 label: "Migrated project architecture",
-                description: "The previous PDFNest and PDFNest Backend story material is represented as one grouped system without carrying over unsupported production or performance claims.",
+                description: "The previous document-platform story material is represented as one Platen PDF system without carrying over unsupported production or performance claims.",
                 source: "data/projects.ts",
             },
             {
@@ -369,7 +369,7 @@ const curatedProjectData = [
             },
             {
                 name: "platen-document",
-                role: "Related standalone document/OCR SDK",
+                role: "Related standalone local-first document/OCR SDK and optional processing engine",
                 url: "https://github.com/gimesha-adikari/platen-document",
             },
         ],
@@ -381,10 +381,11 @@ const curatedProjectData = [
             "dynamic-tool-routing-system",
             "ocr-document-extraction",
         ],
-        liveUrl: "https://pdfnest.com",
+        liveUrl: "https://platenpdf.com",
         contentNotes: [
             "The existing static screenshot paths are not tracked in this repository, so they are not promoted into the canonical model.",
-            "The public repository READMEs use both PDFNest and Platen PDF names; this phase records the conflict instead of guessing a final product name.",
+            "Platen PDF is the public product/display name; the stable portfolio route remains /projects/pdfnest.",
+            "The web, API, and worker repositories retain their historical PDFNest-era names, while platen-document remains an independent local-first SDK.",
         ],
     },
     {

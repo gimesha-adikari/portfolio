@@ -37,6 +37,12 @@ const projectsPage = read("app/projects/page.tsx");
 const projectDetailPage = read("app/projects/[slug]/page.tsx");
 const projectDetail = read("components/PortfolioProjectDetail.tsx");
 const repoCard = read("components/RepoCard.tsx");
+const homepage = read("app/page.tsx");
+const homepageContent = read("lib/homepage-content.ts");
+const homepageHero = read("components/HomepageHero.tsx");
+const homepageEvidence = read("components/HomepageEngineeringEvidence.tsx");
+const homepageCaseStudies = read("components/HomepageCaseStudies.tsx");
+const portfolioProjectCard = read("components/PortfolioProjectCard.tsx");
 const gitFiles = execFileSync("git", ["ls-files"], { cwd: root, encoding: "utf8" });
 
 check(siteConfig.includes('canonicalUrl: "https://www.gimesha.com"'), "siteConfig canonical URL is not the .com URL");
@@ -112,7 +118,10 @@ check(vcard.includes("siteConfig.name"), "vCard branding is not sourced from sit
 check(portfolioProjects.includes("export type PortfolioProject"), "PortfolioProject model is missing");
 check(portfolioProjects.includes("validatePortfolioProjects"), "PortfolioProject runtime validation is missing");
 check(portfolioProjects.includes('slug: "termstead"'), "Termstead is not a curated project");
-check(portfolioProjects.includes('slug: "pdfnest"'), "PDFNest is not a curated project");
+check(portfolioProjects.includes('slug: "pdfnest"'), "Platen PDF is not a curated project");
+check(portfolioProjects.includes('title: "Platen PDF"'), "Platen PDF display identity is missing");
+check(portfolioProjects.includes('liveUrl: "https://platenpdf.com"'), "Platen PDF live URL is not canonical");
+check(portfolioProjects.includes('role: "Related standalone local-first document/OCR SDK and optional processing engine"'), "platen-document is not described as a related standalone SDK");
 check(portfolioProjects.includes('slug: "banking-platform"'), "Banking Platform is not a curated project");
 check(portfolioFacts.includes("selectRepositoryFacts"), "repository allowlist boundary is missing");
 check(projectsPage.includes("getAllPortfolioProjects"), "projects listing is not curated-data driven");
@@ -121,6 +130,26 @@ check(projectDetailPage.includes("dynamicParams = false"), "project detail route
 check(projectDetail.includes('"@type": "SoftwareSourceCode"'), "curated project detail has no structured data");
 check(casePage.includes('"@type": "TechArticle"'), "case-study detail has no article structured data");
 check(repoCard.includes("featured = false"), "repository cards do not make Featured conditional");
+
+check(homepage.includes("HomepageHero"), "homepage does not use a portfolio-owned hero component");
+check(homepage.includes("getHomepageFlagshipProjects"), "homepage flagship systems are not selected through the homepage content helper");
+check(homepage.includes("getHomepageEngineeringEvidence"), "homepage does not surface derived engineering evidence");
+check(homepage.includes("getHomepageCaseStudies"), "homepage does not surface selected case studies");
+check(homepage.includes("fetchAllRepos().catch"), "homepage repository enrichment is not failure-tolerant");
+check(homepage.includes("fetchRecentActivity().catch"), "homepage activity enrichment is not failure-tolerant");
+check(!homepage.includes("fetchProfile"), "homepage hero still depends on GitHub profile fetching");
+check(!homepage.includes("if (!profile)"), "homepage still gates portfolio content on GitHub profile availability");
+check(!homepage.includes("Public Repositories"), "homepage still foregrounds repository-count vanity metrics");
+check(!homepage.includes("Years Coding"), "homepage still foregrounds years-coding vanity metrics");
+check(!homepage.includes("GithubCalendar"), "homepage still foregrounds the GitHub contribution calendar");
+check(homepageContent.includes("modular-document-platform"), "homepage case-study selection is missing the document platform study");
+check(homepageContent.includes("modular-kyc-architecture"), "homepage case-study selection is missing the KYC study");
+check(homepageHero.includes("View selected work"), "homepage primary CTA is missing");
+check(homepageHero.includes("Read engineering case studies"), "homepage secondary CTA is missing");
+check(homepageHero.includes("siteConfig.cvPath"), "homepage CV CTA does not use the configured CV route");
+check(homepageEvidence.includes("Decision"), "homepage engineering evidence does not expose decisions");
+check(homepageCaseStudies.includes("project.title"), "homepage case-study cards do not expose project association");
+check(portfolioProjectCard.includes('variant === "homepage"'), "homepage project cards do not have a narrative-focused presentation variant");
 
 const activeFiles = gitFiles
     .split("\n")

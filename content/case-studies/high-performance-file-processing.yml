@@ -9,7 +9,7 @@ tags:
   - "Cleanup"
 subtitle: "Go · File Lifecycle · Validation · Temporary Storage"
 tldr: "Built the backend side of document processing around safe file handling, efficient transformations, and predictable cleanup so large jobs could run reliably."
-context: "This case study focuses on the backend processing layer that powers PDFNest and how it was designed to handle heavy document workloads."
+context: "This case study focuses on the backend processing layer that powers Platen PDF and how it was designed to handle heavy document workloads."
 problem:
   - "Large PDFs could consume too much memory if processed naively."
   - "Temporary files and partial outputs had to be cleaned up safely."

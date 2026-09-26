@@ -31,7 +31,7 @@ export type ProjectStory = {
 
 export const projectStories: Record<string, ProjectStory> = {
     pdfnest: {
-        title: "PDFNest",
+        title: "Platen PDF",
         summary:
             "A full-stack document processing platform that provides a comprehensive suite of PDF tools with an emphasis on performance, usability, and modular architecture.",
 
@@ -45,15 +45,15 @@ export const projectStories: Record<string, ProjectStory> = {
 
         featured: true,
 
-        liveUrl: "https://pdfnest.com",
+        liveUrl: "https://platenpdf.com",
 
         githubUrl: "https://github.com/gimesha-adikari/pdfnest",
 
         overview:
-            "PDFNest is a modern web application built to simplify PDF workflows through a unified and intuitive interface. Instead of offering only a handful of document utilities, the platform combines dozens of PDF operations into a single consistent experience. The application focuses on speed, maintainability, and extensibility by separating the user interface from the document-processing backend.",
+            "Platen PDF is a modern web application built to simplify PDF workflows through a unified and intuitive interface. Instead of offering only a handful of document utilities, the platform combines dozens of PDF operations into a single consistent experience. The application focuses on speed, maintainability, and extensibility by separating the user interface from the document-processing backend.",
 
         problem:
-            "Most online PDF services either offer only a small collection of tools, limit free usage, or provide inconsistent experiences between features. Large document operations can also be slow and difficult to scale. The goal of PDFNest was to create a platform that feels responsive while supporting a growing collection of document-processing capabilities through a reusable backend architecture.",
+            "Most online PDF services either offer only a small collection of tools, limit free usage, or provide inconsistent experiences between features. Large document operations can also be slow and difficult to scale. The goal of Platen PDF was to create a platform that feels responsive while supporting a growing collection of document-processing capabilities through a reusable backend architecture.",
 
         solution:
             "The platform was designed with a Next.js frontend and a Go backend that exposes modular processing services for each PDF operation. Shared upload, validation, and processing pipelines reduce code duplication while making it easy to introduce new document tools. Authentication, subscription management, SEO optimization, and responsive UI components were integrated to provide a complete production-ready experience.",
@@ -93,8 +93,8 @@ export const projectStories: Record<string, ProjectStory> = {
         screenshots: [
             {
                 src: "/projects/pdfnest/home.webp",
-                alt: "PDFNest landing page",
-                caption: "Modern landing page introducing the PDFNest platform."
+                alt: "Platen PDF landing page",
+                caption: "Landing page introducing the Platen PDF platform."
             },
             {
                 src: "/projects/pdfnest/tools.webp",
@@ -150,10 +150,10 @@ export const projectStories: Record<string, ProjectStory> = {
     },
 
     pdfnestBackend: {
-        title: "PDFNest Backend",
+        title: "Platen PDF Backend",
 
         summary:
-            "A modular Go backend powering PDFNest, providing scalable APIs and high-performance document processing for a wide range of PDF operations.",
+            "A modular Go backend powering Platen PDF, providing scalable APIs and high-performance document processing for a wide range of PDF operations.",
 
         role: "Backend Developer",
 
@@ -168,7 +168,7 @@ export const projectStories: Record<string, ProjectStory> = {
         githubUrl: "https://github.com/gimesha-adikari/pdfnest-backend",
 
         overview:
-            "PDFNest Backend is the core processing engine behind the PDFNest platform. Built with Go and Fiber, it exposes REST APIs responsible for authentication, document management, subscription handling, and computationally intensive PDF processing while remaining modular and extensible.",
+            "Platen PDF Backend is the core processing engine behind the Platen PDF platform. Built with Go and Fiber, it exposes REST APIs responsible for authentication, document management, subscription handling, and computationally intensive PDF processing while remaining modular and extensible.",
 
         problem:
             "PDF processing tasks such as merging, OCR, image conversion, cropping, compression, and metadata editing are CPU-intensive and difficult to scale inside a frontend application. A dedicated backend was required to centralize processing while keeping the frontend lightweight and responsive.",

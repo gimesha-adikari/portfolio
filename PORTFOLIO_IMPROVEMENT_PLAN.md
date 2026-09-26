@@ -6,7 +6,7 @@ Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
 Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Phase 0, Phase 1, Phase 2, Phase 3, and Phase 4 local implementation complete and validated; live production recheck deferred. Phase 3 is checkpointed and Phase 4 changes remain uncommitted.
+Status: Phase 0 through Phase 4 are checkpointed and locally validated; Phase 5 homepage storytelling, Platen PDF naming, and fourth-system evaluation are locally complete enough for review but remain uncommitted. Live production recheck deferred.
 
 ## Purpose
 
@@ -179,7 +179,7 @@ Goal: replace repository equals project with a curated portfolio model.
 - [x] Include slug, title, tagline, status, featured/order, role/period, problem, constraints, architecture, decisions, outcomes/evidence, repositories, media, case studies, and optional live URL.
 - [x] Make portfolio-owned project content authoritative.
 - [x] Migrate useful material from data/projects.ts before deleting it.
-- [x] Group PDFNest frontend/backend/worker under one PDFNest project.
+- [x] Group Platen PDF frontend/backend/worker under one Platen PDF project, while retaining the historical repository identifiers.
 - [x] Create a real multi-repository Banking Platform project.
 - [x] Add Termstead as a first-class curated project.
 - [x] Evaluate PolyShop as a fourth flagship using verified evidence.
@@ -236,16 +236,16 @@ Goal: make engineering evidence the first impression.
 Target order:
 Hero -> flagship systems -> engineering evidence/decisions -> featured case studies -> recent engineering activity -> about/contact CTA
 
-- [ ] Rewrite hero toward concrete engineering scope.
-- [ ] Use a primary CTA such as Explore flagship systems.
-- [ ] Use a secondary CTA such as Read engineering case studies.
-- [ ] Demote/remove repo count, years coding, contribution-calendar prominence, vanity language statistics, and raw activity stream where they compete with stronger evidence.
-- [ ] Present PDFNest as one multi-service system.
-- [ ] Make Termstead a flagship technical story.
-- [ ] Present Banking Platform as one system across backend, web, Android, and KYC.
-- [ ] Add a verified fourth strong system such as PolyShop if evidence supports it.
-- [ ] Replace generic reliable/scalable/high-performance language with decisions, constraints, tests, or measurements.
-- [ ] Resolve PDFNest vs Platen PDF naming before marketing expansion.
+- [x] Rewrite hero toward concrete engineering scope. The hero now describes systems/platform engineering and explicit state, service, and failure boundaries.
+- [x] Use a primary CTA such as Explore flagship systems. The primary action is `View selected work`.
+- [x] Use a secondary CTA such as Read engineering case studies. The secondary action is `Read engineering case studies`; CV remains a quieter tertiary action.
+- [x] Demote/remove repo count, years coding, contribution-calendar prominence, vanity language statistics, and raw activity stream where they compete with stronger evidence. Counts, language chips, and the calendar were removed; optional activity is now below portfolio-owned sections.
+- [x] Present Platen PDF as one multi-service system. The homepage renders the single curated Platen PDF record and its grouped web/API/worker architecture; `platen-document` remains a related standalone SDK.
+- [x] Make Termstead a flagship technical story. Termstead is the first curated system and its daemon/session boundary is surfaced in engineering evidence.
+- [x] Present Banking Platform as one system across backend, web, Android, and KYC. The homepage renders the single curated Banking Platform record and cross-stack evidence.
+- [x] Evaluate whether a fourth system has enough verified evidence for homepage promotion. PolyShop was reviewed and remains curated, secondary, experimental, and non-featured because current source evidence does not establish all README-level architecture or operational claims.
+- [x] Replace generic reliable/scalable/high-performance language with decisions, constraints, tests, or measurements in the homepage story. Deeper case-study wording remains a Phase 6 evidence task.
+- [x] Resolve PDFNest vs Platen PDF naming before marketing expansion. The public/display name is Platen PDF; the stable project slug remains `/projects/pdfnest`; historical repository names remain unchanged; `platen-document` is a related standalone local-first SDK.
 
 Exit: visitors can understand the strongest engineering areas without reading GitHub statistics.
 
@@ -255,7 +255,7 @@ Termstead:
 - [ ] Cover daemon-owned terminal/session state, GUI-owned layout/focus, IPC boundaries, lifecycle, renderer boundaries, alternatives considered, stress testing, and measured baselines.
 - [ ] Include methodology/caveats with any memory or latency figures.
 
-PDFNest:
+Platen PDF:
 - [ ] Explain frontend -> Go API -> worker/processing topology.
 - [ ] Explain sync vs async work, validation, file lifecycle, queueing, OCR, failure handling, preview vs server processing, scaling constraints, and evolved decisions.
 
@@ -323,7 +323,7 @@ Avoid for now:
 3. sitemap/robots/link/privacy fixes.
 4. repository hygiene and README.
 5. curated PortfolioProject model and GitHub enrichment boundary.
-6. migrate Termstead/PDFNest/Banking/PolyShop project data.
+6. migrate Termstead/Platen PDF/Banking/PolyShop project data.
 7. refactor project/case-study routes.
 8. replace FlyonUI navigation and remove compatibility dependencies.
 9. accessibility/filter/client cleanup.
@@ -348,6 +348,26 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 5 naming and fourth-system evaluation
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at Phase 4 checkpoint `3b62822`; Phase 5 changes remain uncommitted. No push, merge, or deployment was performed.
+- Naming decision: the current public/display product name is `Platen PDF`. The stable portfolio slug remains `/projects/pdfnest`; `pdfnest`, `pdfnest-backend`, and `pdfnest-worker` remain repository identifiers; `platen-document` is documented as a related standalone local-first SDK and optional processing engine, not a required Platen PDF runtime. A future `/projects/platen-pdf` migration would require separate redirect, canonical, and SEO planning.
+- Content changes: the canonical project record, homepage-derived display, About selection, active case-study contexts/links, README, and legacy project display strings now use Platen PDF where they describe the current product. Repository names, stable URLs, and historical execution-log references were retained where they are identifiers or historical records.
+- PolyShop decision: evaluated source evidence supports service-oriented structure, gateway/shared-library material, Pact contract-test files, k6 load/stress/spike/soak files, and some Kafka implementation. Current `main` does not contain the README-advertised `.github/workflows` or `docs/architecture/events-and-sagas.md`; source review did not establish meaningful Redis implementation, the broader Kafka consumer architecture, a verified saga implementation, production readiness, or proven scalability. PolyShop remains `featured: false` and is excluded from homepage flagship selectors.
+- Tests: added assertions for Platen PDF title/slug/live URL, unchanged repository names, standalone SDK role, singular homepage selection, Termstead-first ordering, Banking grouping, and PolyShop exclusion. Closing validation passed: `npm ci` (363 packages added; 364 audited; 0 vulnerabilities), `npm audit` (0 vulnerabilities), lint, TypeScript, `npm test` (20 passing tests), production build (24/24 static pages), and `git diff --check`.
+- Route/output checks: local production checks returned 200 for `/`, `/projects`, `/projects/pdfnest`, `/projects/polyshop`, `/case-studies/modular-document-platform`, `/case-studies/pdf-edge-case-handling`, and `/about`. Homepage output contained Platen PDF and no unintended PDFNest product branding; the project detail retained only documented historical repository-name references.
+- Remaining concerns: live production validation, a future `/projects/platen-pdf` redirect/canonical migration if desired, and Phase 6 evidence work remain deferred; Edge Runtime and Node module-type warnings remain documented.
+
+### 2026-09-26 - Phase 5 homepage storytelling and portfolio-first hierarchy
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at Phase 4 checkpoint `3b62822`; Phase 5 changes remain uncommitted. No push, merge, or deployment was performed.
+- Homepage audit: the previous order was GitHub-backed profile/hero, live activity, language chips, repository/year metrics, contribution calendar, curated projects, and optional live deployments. The profile gate meant GitHub failure could remove the entire homepage.
+- Content architecture: added `lib/homepage-content.ts` as a derived selector over `PortfolioProject` and validated case studies. It does not define project identity. Added a concrete hero, selected systems, derived engineering decisions, three selected case studies, optional supporting GitHub activity/demos, and a contact-oriented next step.
+- Content decisions: Termstead, PDFNest, and Banking Platform remain the flagship order from curated `order`; PDFNest appears once as one grouped system; Banking Platform appears once as one grouped system; PolyShop remains non-featured and is not promoted; selected case studies are the modular document platform, PDF edge-case handling, and modular KYC architecture. Repository counts, years coding, language statistics, and contribution calendar were removed from the homepage. GitHub activity remains optional and below portfolio-owned content.
+- UI/data changes: removed the GitHub profile dependency and early loading fallback from `app/page.tsx`; optional repository/activity calls still fail closed. Added a homepage-focused project-card variant that shows problem and primary boundary instead of repository/fact metadata. The hero uses `siteConfig.cvPath` for the real CV route.
+- Validation: checkpoint validation passed before Phase 5; targeted homepage selectors passed; local production checks returned 200 for `/`, `/projects`, Termstead, PDFNest, Banking Platform, `/case-studies`, `/about`, and `/contact`. Playwright checks at 375px, 768px, and 1280px verified heading/CTA order, no horizontal overflow, desktop navigation, reduced-motion scroll behavior, and mobile menu preservation. Closing validation passed: `npm ci` (363 packages added; 364 audited; 0 vulnerabilities), `npm audit` (0 vulnerabilities), lint, TypeScript, `npm test` (20 passing tests), production build (24/24 static pages), and `git diff --check`.
+- Remaining concerns: PDFNest/Platen naming remains blocked on a product decision; PolyShop remains deferred pending deeper evidence; live production validation, the Edge Runtime warning, the Node module-type warning, and Phase 6 evidence work remain out of scope.
 
 ### 2026-09-26 - Phase 4 navigation, client runtime, accessibility, and filter cleanup
 

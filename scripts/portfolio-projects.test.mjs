@@ -29,15 +29,20 @@ test("curated project records have unique slugs and deterministic order", () => 
     );
 });
 
-test("PDFNest and Banking Platform group explicit repositories", () => {
+test("Platen PDF and Banking Platform group explicit repositories", () => {
     const pdfnest = getPortfolioProjectBySlug("pdfnest");
     const banking = getPortfolioProjectBySlug("banking-platform");
 
     assert.ok(pdfnest);
+    assert.equal(pdfnest.title, "Platen PDF");
+    assert.equal(pdfnest.slug, "pdfnest");
+    assert.equal(pdfnest.liveUrl, "https://platenpdf.com");
     assert.deepEqual(
         pdfnest.repositories.slice(0, 3).map((repository) => repository.name),
         ["pdfnest", "pdfnest-backend", "pdfnest-worker"],
     );
+    assert.equal(pdfnest.repositories[3]?.name, "platen-document");
+    assert.match(pdfnest.repositories[3]?.role ?? "", /standalone local-first/i);
     assert.ok(banking);
     assert.deepEqual(
         banking.repositories.map((repository) => repository.name),
