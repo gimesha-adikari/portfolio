@@ -6,7 +6,7 @@ Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
 Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Phase 0, Phase 1, and Phase 2 local implementation complete and validated; live production recheck deferred. Phase 2 changes remain uncommitted.
+Status: Phase 0, Phase 1, Phase 2, and Phase 3 local implementation complete and validated; live production recheck deferred. Phase 2 is checkpointed and Phase 3 changes remain uncommitted.
 
 ## Purpose
 
@@ -196,14 +196,14 @@ Exit: flagship identity/order/story is controlled locally and multi-repo project
 
 Goal: align code with the new content architecture.
 
-- [ ] Break app/projects/[slug]/page.tsx into orchestration, resolver, and focused presentation components.
-- [ ] Add a normalized project content resolver.
-- [ ] Replace broad any at content/API boundaries with explicit types and runtime validation where external/YAML/MDX data enters.
-- [ ] Add route-specific metadata for case studies.
-- [ ] Add Article or TechArticle structured data.
-- [ ] Replace nested case-study main with article/section semantics.
-- [ ] Do not render resource buttons without valid URLs.
-- [ ] Reassess remote image handling and remove unoptimized unless documented.
+- [x] Break app/projects/[slug]/page.tsx into orchestration, resolver, and focused presentation components.
+- [x] Add a normalized project content resolver.
+- [x] Replace broad any at content/API boundaries with explicit types and runtime validation where external/YAML/MDX data enters. GitHub, archive/story, remote case-index content, MDX component mappings, the active About YAML consumer, resolver, metadata, and touched route boundaries are typed; unrelated Phase 4 client/integration casts remain outside this item.
+- [x] Add route-specific metadata for case studies.
+- [x] Add Article or TechArticle structured data.
+- [x] Replace nested case-study main with article/section semantics.
+- [x] Do not render resource buttons without valid URLs.
+- [x] Reassess remote image handling and remove unoptimized unless documented.
 
 Exit: route files mostly orchestrate normalized models and metadata/semantics are route-correct.
 
@@ -351,13 +351,33 @@ Add entries newest-first. Include date, branch/SHA, phase, changes, validation, 
 
 ### 2026-09-26 - Phase 2 content ownership and project architecture
 
-- Branch/SHA: `codex/portfolio-improvement-plan` at checkpoint `4a34f903abf0ccbaafff0dba5091e727c21ef513`; Phase 2 changes remain uncommitted. No push, merge, or deployment was performed.
+- Branch/SHA: `codex/portfolio-improvement-plan` at Phase 2 checkpoint `28ba2a65d9ec582d9cbed6678824919c060be1df`; Phase 2 changes are checkpointed. No push, merge, or deployment was performed.
 - Source decisions: `lib/portfolio-projects.ts` is the authoritative, runtime-validated structured project source; `lib/portfolio-repository-facts.ts` maps only explicit public repository assignments into optional mutable facts; future long-form narratives should use MDX by project slug. YAML case studies remain a separate current case-study source, while `data/projects.ts`, legacy `site-content/`, remote MDX, README parsing, and `.portfolio/story.md` support remain legacy/supporting paths.
 - Curated content: added Termstead, PDFNest, Banking Platform, PolyShop, Runyard, and NeuroSim records. PDFNest groups `pdfnest`, `pdfnest-backend`, `pdfnest-worker`, and related `platen-document`; Banking Platform groups `BankingSystem` and `BankApp`. PolyShop is non-featured pending deeper verification; Runyard and NeuroSim remain experimental/lab records. Useful PDFNest/PDFNest Backend content was migrated without unsupported quantitative/production claims.
 - UI/boundary changes: curated project cards and detail pages now own identity, order, featured state, narrative, grouped repositories, and case-study links; GitHub facts are optional. `/projects` separates curated projects from the public repository archive, the homepage's existing featured section consumes curated records, raw repository cards no longer imply `Featured`, and curated project slugs are included in the sitemap. The existing repository-detail fallback is explicitly labeled as an archive entry for uncurated repositories until the Phase 3 resolver refactor.
 - Files/decisions: added the typed model, enrichment boundary, curated card/detail components, Phase 2 tests, and implementation plan; updated README, project routes, sitemap, smoke checks, legacy `data/projects.ts` annotation, and package test script. No dependency version changed in Phase 2. The existing Next.js and MDX upgrade from 16.2.12 to 16.3.6 was part of the Phase 0/1 checkpoint, together with the ESLint/typecheck setup; it was not repeated or expanded here.
 - Validation: `npm ci` PASS (373 packages added; 0 vulnerabilities); `npm audit` PASS (0 vulnerabilities); `npm run lint` PASS; `npx tsc --noEmit` PASS; `npm test` PASS (portfolio smoke plus 5 Phase 2 tests); `npm run build` PASS on Next.js 16.3.6. Local `next start` checks returned content for `/projects`, Termstead, PDFNest, Banking Platform, PolyShop, and an unlisted archive entry; curated pages rendered their local content with GitHub enrichment unavailable; sitemap/robots used the canonical `.com` URLs and curated project routes.
 - Remaining concerns: live production recheck was not performed; the build still reports the existing FlyonUI invalid-icon warnings and Edge-runtime deprecation/static-generation warning; the dependency-free Node test emits a `MODULE_TYPELESS_PACKAGE_JSON` warning; PDFNest/Platen naming remains documented as unresolved; PolyShop flagship promotion and legacy-source removal remain deferred. Next's existing dynamic project fallback renders the `ai-verification` not-found payload locally but returned HTTP 200 in the local `next start` check, so route-status cleanup remains a later route-hardening concern.
+
+### 2026-09-26 - Phase 3 type-safety completion
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at checkpoint `28ba2a65d9ec582d9cbed6678824919c060be1df`; all Phase 3 work remains uncommitted. No push, merge, or deployment was performed.
+- Usage audit: `lib/content.ts` and `components/MDX.tsx` have no active imports in the App Router; they remain retained legacy/support adapters documented in the README. The active About route reads `content/about.yml` directly, so its YAML boundary was included rather than leaving broad casts behind.
+- Boundary changes: `lib/content.ts` now validates environment-derived configuration, treats remote JSON as `unknown`, validates case-index entries through `parseCaseIndex`, decodes API content without broad casts, and preserves API-then-raw fallback behavior. `components/MDX.tsx` now uses `MDXComponents` and concrete React HTML prop types while preserving anchor, heading, image, table, code, and blockquote rendering. `lib/about-content.ts` and `app/about/page.tsx` now normalize known About sections and narrow dynamic legacy sections without `any`.
+- Tests: added focused coverage for malformed/valid remote case-index JSON and About YAML normalization; the Phase 3 suite now has 9 passing tests. The dependency-free Node suite still emits the existing `MODULE_TYPELESS_PACKAGE_JSON` warning.
+- Validation: `npm ci` PASS (373 packages added; 0 vulnerabilities); `npm audit` PASS (0 vulnerabilities); `npm run lint` PASS; `npx tsc --noEmit` PASS; `npm test` PASS (portfolio smoke plus 14 tests); plain `npm run build` PASS; bounded `GITHUB_USERNAME=gimesha-adikari GITHUB_MAX_PAGES=1 npm run build` PASS (38 generated routes); and `git -c core.whitespace=cr-at-eol diff --check` PASS. The unqualified `git diff --check` only reports the expected CRLF endings in the two preserved legacy adapter files. Curated and unknown route checks passed; the bounded archive follow-up was rate-limit-limited by GitHub HTTP 403 (`X-RateLimit-Remaining: 0`) and produced the deliberate not-found artifact for the affected archive candidate. The existing Edge Runtime warning remains isolated to `app/og/route.ts`, and the Node module-type warning remains in dependency-free tests.
+- Remaining concerns: no dependency or lockfile changes were made; archive availability still depends on public GitHub discovery and successful detail enrichment during the build; live production validation, legacy-source removal, and all Phase 4 work remain deferred.
+
+### 2026-09-26 - Phase 3 resolver and route architecture
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at checkpoint `28ba2a65d9ec582d9cbed6678824919c060be1df`; Phase 3 changes remain uncommitted. No push, merge, or deployment was performed.
+- Route ownership: `app/projects/[slug]/page.tsx` is now orchestration only. `lib/portfolio-resolver-core.ts` defines the dependency-injected curated/archive discriminated union; `lib/portfolio-resolver.ts` connects it to curated records, optional public facts, and the normalized archive loader. README and `.portfolio/story.md` parsing moved to `lib/portfolio-archive.ts`, and archive rendering moved to `components/RepositoryArchiveDetail.tsx`.
+- Curated presentation: `PortfolioProjectDetail` now composes focused hero, context, evidence, gallery, and repository-enrichment components. Curated identity, grouped repository URLs, and SoftwareSourceCode JSON-LD remain portfolio-owned; raw GitHub data is not passed to presentation components.
+- Case studies: `lib/case-studies.ts` now validates YAML routing fields, arrays, order values, slugs, and resource URLs at load time; empty resource destinations are filtered and unsafe URLs are rejected. The detail route uses an article, route-specific canonical/OG/Twitter metadata from `siteConfig`, TechArticle JSON-LD, static params, and real not-found behavior.
+- Boundary/type changes: removed broad `any` from `lib/github.ts`, typed the consumed GitHub activity/repository/language shapes, made missing privacy metadata fail closed, and typed the resolver/archive/metadata boundaries. Legacy inactive `lib/content.ts` and `components/MDX.tsx` still contain broad types and remain deferred, so the plan item is partial rather than overstated.
+- Warning handling: corrected `tabler--blueprint` to `tabler--binary-tree`, `tabler--brand-java` to `tabler--braces`, and `tabler--file-cog` to `tabler--file-settings`. The Edge runtime deprecation remains isolated to `app/og/route.ts`; the Node module-type warning remains in dependency-free TypeScript tests. No dependency versions changed.
+- Validation: `npm ci` PASS with 0 vulnerabilities; `npm audit` PASS with 0 vulnerabilities; `npm run lint` PASS; `npx tsc --noEmit` PASS; `npm test` PASS with portfolio smoke plus 12 tests; plain `npm run build` PASS on Next.js 16.3.6 with only the Edge-runtime warning. A bounded `GITHUB_USERNAME=gimesha-adikari GITHUB_MAX_PAGES=1 npm run build` generated 38 pages; local `next start` checks returned 200 for projects, Termstead, PDFNest, Banking Platform, PolyShop, an `i-shop` archive entry, case-study index, and two case-study details, and 404 for unknown project and case-study slugs. Metadata used `https://www.gimesha.com`; sitemap/robots checks passed.
+- Remaining concerns: live production validation was not performed; archive route generation depends on successful public GitHub discovery at build time and is deliberately unavailable when no public repository parameter can be generated; inactive legacy content helpers remain; PDFNest/Platen naming, deeper PolyShop evidence, and legacy-source removal remain deferred. Phase 4 was not started.
 
 ### 2026-09-26 - Phase 0/1 implementation and local validation
 

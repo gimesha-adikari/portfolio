@@ -23,7 +23,7 @@ stack:
   - name: "Go"
     icon: "icon-[tabler--brand-golang]"
   - name: "PDF CPU / Processing"
-    icon: "icon-[tabler--file-cog]"
+    icon: "icon-[tabler--file-settings]"
   - name: "Validation"
     icon: "icon-[tabler--shield-check]"
   - name: "Temporary Files"

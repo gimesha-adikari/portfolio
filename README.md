@@ -22,6 +22,10 @@ To add a repository to an existing project, add its public name, role, and sourc
 
 Structured TypeScript metadata is the canonical project source for this phase. The preferred long-form direction is validated structured metadata plus MDX narratives/evidence associated by project slug. YAML files in `content/case-studies/` remain the current case-study source, but they do not define project identity. `data/projects.ts`, legacy `site-content/` MDX, remote MDX loading, README parsing, and `.portfolio/story.md` support remain legacy/supporting paths until a later phase removes them after useful content has been migrated.
 
+Project detail routes use `lib/portfolio-resolver.ts`: curated records resolve first, then explicitly public repository archive entries resolve through the normalized `RepositoryArchiveProject` boundary. The route does not fetch or parse GitHub data directly. `lib/portfolio-archive.ts` retains README and `.portfolio/story.md` parsing only for archive entries; it cannot add or override curated identity. Unknown slugs return a real not-found response. Because archive route parameters depend on public GitHub discovery at build time, a GitHub outage leaves curated routes available but may leave archive detail routes unavailable until the next successful build.
+
+Case-study YAML enters through the runtime validator in `lib/case-studies.ts`. It validates routing fields, arrays, ordering, and resource URLs before the detail route renders them. Route metadata and JSON-LD are generated from the validated case-study or curated project record using `lib/route-metadata.ts` and `lib/siteConfig.ts`.
+
 ## Local development
 
 Requirements:
@@ -58,7 +62,7 @@ npm run build
 npm run start
 ```
 
-`npm test` runs the lightweight portfolio smoke checks plus dependency-free Phase 2 model tests for curated slugs/order, multi-repository grouping, allowlisting, private-repository rejection, and GitHub-failure fallback.
+`npm test` runs the lightweight portfolio smoke checks plus dependency-free Phase 2/3 tests for curated slugs/order, multi-repository grouping, resolver precedence, archive/private-repository boundaries, case-study validation, metadata canonical URLs, and GitHub-failure fallback.
 
 ## Content editing
 

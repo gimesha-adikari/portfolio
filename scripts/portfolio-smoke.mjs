@@ -20,6 +20,7 @@ const robots = read("app/robots.ts");
 const github = read("lib/github.ts");
 const aboutPage = read("app/about/page.tsx");
 const casePage = read("app/case-studies/[slug]/page.tsx");
+const caseStudies = read("lib/case-studies.ts");
 const header = read("components/Header.tsx");
 const footer = read("components/Footer.tsx");
 const vcard = read("app/api/vcard/route.tsx");
@@ -27,6 +28,7 @@ const portfolioProjects = read("lib/portfolio-projects.ts");
 const portfolioFacts = read("lib/portfolio-repository-facts.ts");
 const projectsPage = read("app/projects/page.tsx");
 const projectDetailPage = read("app/projects/[slug]/page.tsx");
+const projectDetail = read("components/PortfolioProjectDetail.tsx");
 const repoCard = read("components/RepoCard.tsx");
 const gitFiles = execFileSync("git", ["ls-files"], { cwd: root, encoding: "utf8" });
 
@@ -62,7 +64,8 @@ check(!read("content/about.yml").includes("/projects/banking-platform"), "about 
 check(!read("content/about.yml").includes("/projects/ai-verification"), "about content still links to AI Verification route");
 check(!read("content/case-studies/dynamic-tool-routing-system.yml").includes('url: "/tools"'), "case study still links to /tools");
 check(aboutPage.includes("work.link &&"), "about page does not suppress missing work destinations");
-check(casePage.includes("link.url?.trim()"), "case-study page does not suppress empty resource destinations");
+check(casePage.includes("const validLinks = data.links"), "case-study page does not use validated resource destinations");
+check(caseStudies.includes("Empty resource destinations are ignored"), "case-study loader does not suppress empty resource destinations");
 
 check(!github.includes('GITHUB_INCLUDE_PRIVATE ?? "true"'), "GitHub private repositories still default to included");
 check(!github.includes("/user/repos"), "public repository discovery still calls the authenticated /user/repos endpoint");
@@ -85,7 +88,10 @@ check(portfolioProjects.includes('slug: "pdfnest"'), "PDFNest is not a curated p
 check(portfolioProjects.includes('slug: "banking-platform"'), "Banking Platform is not a curated project");
 check(portfolioFacts.includes("selectRepositoryFacts"), "repository allowlist boundary is missing");
 check(projectsPage.includes("getAllPortfolioProjects"), "projects listing is not curated-data driven");
-check(projectDetailPage.includes("getPortfolioProjectBySlug"), "project detail route does not resolve curated projects first");
+check(projectDetailPage.includes("resolvePortfolioProject"), "project detail route does not use the normalized resolver");
+check(projectDetailPage.includes("dynamicParams = false"), "project detail route leaves unknown-slug fallback dynamic");
+check(projectDetail.includes('"@type": "SoftwareSourceCode"'), "curated project detail has no structured data");
+check(casePage.includes('"@type": "TechArticle"'), "case-study detail has no article structured data");
 check(repoCard.includes("featured = false"), "repository cards do not make Featured conditional");
 
 const activeFiles = gitFiles

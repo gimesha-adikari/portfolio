@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { fetchAllRepos, fetchProfile, fetchRecentActivity, type Repo } from "@/lib/github";
+import { fetchAllRepos, fetchProfile, fetchRecentActivity } from "@/lib/github";
 import { PortfolioProjectCard } from "@/components/PortfolioProjectCard";
 import { mapRepositoryFacts } from "@/lib/portfolio-repository-facts";
 import { getAllPortfolioProjects, getFeaturedPortfolioProjects } from "@/lib/portfolio-projects";
@@ -17,7 +17,7 @@ export default async function HomePage() {
         fetchRecentActivity().catch(() => [])
     ]);
 
-    const repos = reposData as Repo[];
+    const repos = reposData;
     const featured = getFeaturedPortfolioProjects();
     const featuredFacts = new Map(
         featured.map((project) => [
@@ -162,7 +162,7 @@ export default async function HomePage() {
                             </div>
 
                             <div className="space-y-3 font-mono text-xs md:text-sm pb-4">
-                                {activity.length > 0 ? activity.slice(0, 5).map((event: any) => (
+                                {activity.length > 0 ? activity.slice(0, 5).map((event) => (
                                     <div key={event.id} className="flex gap-3 text-[var(--muted)] hover:text-[var(--fg)] transition-colors">
                                         <span className="w-16 shrink-0 opacity-60">
                                             {new Date(event.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}

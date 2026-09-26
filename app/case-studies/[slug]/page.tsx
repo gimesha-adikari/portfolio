@@ -1,9 +1,29 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllCaseStudies, getCaseStudyBySlug } from "@/lib/case-studies";
+import { siteConfig } from "@/lib/siteConfig";
+import { absoluteSiteUrl, buildRouteMetadata } from "@/lib/route-metadata";
 
-export const dynamicParams = true;
+export const dynamicParams = false;
 export const revalidate = 3600;
+
+export function generateStaticParams() {
+    return getAllCaseStudies().map((study) => ({ slug: study.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const data = getCaseStudyBySlug(slug);
+    if (!data) return { title: "Not found" };
+
+    return buildRouteMetadata({
+        title: data.title,
+        description: data.tldr || data.blurb || data.subtitle,
+        path: `/case-studies/${data.slug}`,
+        subtitle: "Case study",
+    });
+}
 
 export default async function CasePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
@@ -15,10 +35,25 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
     const idx = list.findIndex((x) => x.slug === slug);
     const prev = idx > 0 ? list[idx - 1] : null;
     const next = idx < list.length - 1 ? list[idx + 1] : null;
-    const validLinks = data.links?.filter((link) => link.url?.trim()) ?? [];
+    const validLinks = data.links;
+    const canonicalUrl = absoluteSiteUrl(`/case-studies/${data.slug}`);
+    const articleJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        headline: data.title,
+        description: data.tldr || data.blurb || data.subtitle,
+        url: canonicalUrl,
+        author: {
+            "@type": "Person",
+            name: siteConfig.name,
+            url: siteConfig.canonicalUrl,
+        },
+        keywords: data.tags,
+        mainEntityOfPage: canonicalUrl,
+    };
 
     return (
-        <main className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <article className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             {/* Top Navigation */}
             <Link
                 href="/case-studies"
@@ -87,7 +122,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                         <section>
                             <h2 className="text-2xl font-bold text-[var(--fg)] flex items-center gap-3 mb-6">
                                 <div className="p-2 rounded-lg bg-[var(--surface)] border border-[var(--border)]">
-                                    <span className="icon-[tabler--blueprint] size-5 text-[var(--accent)]"></span>
+                                    <span className="icon-[tabler--binary-tree] size-5 text-[var(--accent)]"></span>
                                 </div>
                                 Architecture & Approach
                             </h2>
@@ -238,6 +273,8 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                     </Link>
                 ) : <div />}
             </nav>
-        </main>
+
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c") }} />
+        </article>
     );
 }

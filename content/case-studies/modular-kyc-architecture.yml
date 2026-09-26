@@ -27,7 +27,7 @@ architecture:
 
 stack:
   - name: "Spring Boot · Hibernate · MySQL"
-    icon: "icon-[tabler--brand-java]"
+    icon: "icon-[tabler--braces]"
   - name: "TypeScript · React"
     icon: "icon-[tabler--brand-react]"
   - name: "Kotlin / Android · Retrofit/OkHttp"
