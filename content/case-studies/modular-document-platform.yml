@@ -43,10 +43,6 @@ links:
     url: "/projects"
     icon: "icon-[tabler--folder]"
     is_external: false
-  - label: "Live App"
-    url: ""
-    icon: "icon-[tabler--external-link]"
-    is_external: false
 next_steps:
   - "Further refine shared patterns for new document tools"
   - "Improve route-level metadata and content generation"

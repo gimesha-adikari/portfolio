@@ -1,11 +1,13 @@
+import { siteConfig } from "@/lib/siteConfig";
+
 export async function GET() {
     const body = [
         "BEGIN:VCARD",
         "VERSION:3.0",
-        "N:Nirmal;Gimesha;;;",
-        "FN:Gimesha Nirmal",
-        "EMAIL;TYPE=INTERNET,PREF:gimeshanirmal23@gmail.com",
-        "URL:https://gimesha.dev",
+        `N:${siteConfig.familyName};${siteConfig.givenName};;;`,
+        `FN:${siteConfig.name}`,
+        `EMAIL;TYPE=INTERNET,PREF:${siteConfig.email}`,
+        `URL:${siteConfig.canonicalUrl}`,
         "END:VCARD",
         ""
     ].join("\r\n");

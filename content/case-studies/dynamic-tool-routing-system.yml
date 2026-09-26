@@ -43,10 +43,6 @@ links:
     url: "/projects"
     icon: "icon-[tabler--folder]"
     is_external: false
-  - label: "Tools"
-    url: "/tools"
-    icon: "icon-[tabler--tool]"
-    is_external: false
 next_steps:
   - "Make tool configuration even more data-driven"
   - "Expand shared UI patterns for new categories of tools"

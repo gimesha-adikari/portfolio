@@ -75,15 +75,11 @@ selected_work:
       Multi-platform banking system with Spring Boot backend,
       Android application, web dashboard, authentication,
       authorization, and AI-powered identity verification services.
-    link: "/projects/banking-platform"
-    link_text: "View project"
   - title: "AI Verification Service"
     description: >
       FastAPI microservice implementing face matching,
       liveness detection, OCR, and ONNX-based inference
       for digital identity verification.
-    link: "/projects/ai-verification"
-    link_text: "View project"
 
 skills:
   - category: "Backend"

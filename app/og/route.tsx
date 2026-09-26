@@ -1,11 +1,12 @@
 import { NextRequest } from "next/server";
 import { ImageResponse } from "next/og";
+import { siteConfig } from "@/lib/siteConfig";
 
 export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
-    const title = searchParams.get("title") || "gimesha.dev";
+    const title = searchParams.get("title") || siteConfig.displayDomain;
     const subtitle = searchParams.get("subtitle") || "Case Study";
 
     return new ImageResponse(
@@ -31,7 +32,7 @@ export async function GET(req: NextRequest) {
                             "radial-gradient(800px 400px at 20% 20%, rgba(124,58,237,.25), transparent 60%), radial-gradient(700px 350px at 80% 10%, rgba(34,211,238,.25), transparent 60%)",
                     }}
                 />
-                <div style={{ fontSize: 28, opacity: 0.9 }}>gimesha.dev</div>
+                <div style={{ fontSize: 28, opacity: 0.9 }}>{siteConfig.displayDomain}</div>
                 <div
                     style={{
                         fontSize: 74,

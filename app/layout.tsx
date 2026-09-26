@@ -10,31 +10,29 @@ import SidebarWidthSync from "@/components/SidebarWidthSync";
 import GlobalPointerGlow from "@/components/GlobalPointerGlow";
 import ReadingProgress from "@/components/ReadingProgress";
 import MotionWrapper from "@/app/(motion)/motion-wrapper";
+import { siteConfig } from "@/lib/siteConfig";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
-const siteUrl = process.env.SITE_URL ?? "http://localhost:3000";
-const defaultTitle = "Gimesha Nirmal — Software Engineer";
-
 export const metadata: Metadata = {
-    title: { default: defaultTitle, template: "%s | Gimesha Nirmal" },
-    description: "Banking systems, ML verifications, and pragmatic full-stack work.",
-    metadataBase: new URL(siteUrl),
+    title: { default: siteConfig.metadata.defaultTitle, template: siteConfig.metadata.titleTemplate },
+    description: siteConfig.metadata.description,
+    metadataBase: new URL(siteConfig.canonicalUrl),
     icons: { icon: "/favicon.svg" },
     alternates: { canonical: "/" },
     openGraph: {
         type: "website",
-        url: siteUrl,
-        title: defaultTitle,
-        description: "Banking systems, ML verifications, and pragmatic full-stack work.",
-        siteName: "gimesha.dev",
-        images: [{ url: `/og?title=${encodeURIComponent(defaultTitle)}&subtitle=${encodeURIComponent("Portfolio")}` }],
+        url: siteConfig.canonicalUrl,
+        title: siteConfig.metadata.defaultTitle,
+        description: siteConfig.metadata.description,
+        siteName: siteConfig.siteName,
+        images: [{ url: `/og?title=${encodeURIComponent(siteConfig.metadata.defaultTitle)}&subtitle=${encodeURIComponent("Portfolio")}` }],
     },
     twitter: {
         card: "summary_large_image",
-        title: defaultTitle,
-        description: "Banking systems, ML verifications, and pragmatic full-stack work.",
-        images: [{ url: `/og?title=${encodeURIComponent(defaultTitle)}&subtitle=${encodeURIComponent("Portfolio")}` }],
+        title: siteConfig.metadata.defaultTitle,
+        description: siteConfig.metadata.description,
+        images: [{ url: `/og?title=${encodeURIComponent(siteConfig.metadata.defaultTitle)}&subtitle=${encodeURIComponent("Portfolio")}` }],
     },
     robots: { index: true, follow: true },
 };
@@ -53,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GlobalPointerGlow />
         <ReadingProgress />
 
-        <MiniSidebar id="collapsible-mini-sidebar" title="gimesha.dev" />
+        <MiniSidebar id="collapsible-mini-sidebar" title={siteConfig.displayDomain} />
         <SidebarWidthSync targetId="collapsible-mini-sidebar" />
 
         <div className="sm:ps-[var(--sidebar-w)] min-h-full bg-[var(--bg)] duration-300 transition-[padding]">

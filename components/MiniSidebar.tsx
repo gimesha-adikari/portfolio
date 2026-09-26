@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NAV_ITEMS } from '@/lib/navItems';
+import { siteConfig } from '@/lib/siteConfig';
 import { motion, type Variants, type Transition } from 'framer-motion';
 
 export interface MiniSidebarProps {
@@ -32,7 +33,7 @@ const itemVariants: Variants = {
 
 export default function MiniSidebar({
                                         id = 'collapsible-mini-sidebar',
-                                        title = 'gimesha.dev',
+                                        title = siteConfig.displayDomain,
                                         extraItems = [],
                                         showExternalTriggerButton = false,
                                         className = '',

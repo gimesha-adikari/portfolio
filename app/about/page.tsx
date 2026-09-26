@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import fs from "fs";
 import path from "path";
 import * as yaml from "js-yaml";
-
-const siteUrl = process.env.SITE_URL ?? "http://localhost:3000";
+import { siteConfig } from "@/lib/siteConfig";
 
 function getAboutData() {
     try {
@@ -22,10 +21,10 @@ export const metadata: Metadata = {
     alternates: { canonical: "/about" },
     openGraph: {
         type: "article",
-        url: `${siteUrl}/about`,
+        url: `${siteConfig.canonicalUrl}/about`,
         title: "About — 3 min read",
         description: "Software engineer shipping reliable products across web, mobile, and backend.",
-        siteName: "gimesha.dev",
+        siteName: siteConfig.siteName,
         images: [{ url: "/og?title=About&subtitle=3%20min%20read" }],
     },
     twitter: {
@@ -155,9 +154,11 @@ export default function AboutPage() {
                                         <h4 className="font-bold text-[var(--fg)] mb-1">{work.title}</h4>
                                         <p className="text-xs md:text-sm text-[var(--muted)]">{work.description}</p>
                                     </div>
-                                    <a className="inline-flex items-center gap-2 text-xs font-semibold underline hover:no-underline mt-4 text-[var(--accent)]" href={work.link}>
-                                        <span className="icon-[tabler--file-text] size-4"></span> {work.link_text || "Read more"}
-                                    </a>
+                                    {work.link && (
+                                        <a className="inline-flex items-center gap-2 text-xs font-semibold underline hover:no-underline mt-4 text-[var(--accent)]" href={work.link}>
+                                            <span className="icon-[tabler--file-text] size-4"></span> {work.link_text || "Read more"}
+                                        </a>
+                                    )}
                                 </div>
                             ))}
                         </div>

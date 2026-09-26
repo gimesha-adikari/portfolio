@@ -15,6 +15,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
     const idx = list.findIndex((x) => x.slug === slug);
     const prev = idx > 0 ? list[idx - 1] : null;
     const next = idx < list.length - 1 ? list[idx + 1] : null;
+    const validLinks = data.links?.filter((link) => link.url?.trim()) ?? [];
 
     return (
         <main className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -172,10 +173,10 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                     )}
 
                     {/* Links */}
-                    {data.links && (
+                    {validLinks.length > 0 && (
                         <div className="space-y-3">
                             <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--fg)] mb-3 px-1">Resources</h3>
-                            {data.links.map((link, i) => (
+                            {validLinks.map((link, i) => (
                                 <a
                                     key={i}
                                     href={link.url}

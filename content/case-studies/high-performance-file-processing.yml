@@ -43,10 +43,6 @@ links:
     url: "/projects"
     icon: "icon-[tabler--folder]"
     is_external: false
-  - label: "Backend Repo"
-    url: ""
-    icon: "icon-[tabler--brand-github]"
-    is_external: false
 next_steps:
   - "Introduce stronger job tracking for long-running operations"
   - "Explore more parallel processing where it makes sense"

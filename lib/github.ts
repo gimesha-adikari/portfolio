@@ -118,46 +118,33 @@ function mapRepo(r: any): Repo {
 
 export async function fetchAllRepos(): Promise<Repo[]> {
     const username = process.env.GITHUB_USERNAME!;
-    const includePrivate = (process.env.GITHUB_INCLUDE_PRIVATE ?? "true").toLowerCase() === "true";
     const includeForks = (process.env.GITHUB_INCLUDE_FORKS ?? "false").toLowerCase() === "true";
     const includeArchived = (process.env.GITHUB_INCLUDE_ARCHIVED ?? "false").toLowerCase() === "true";
-    const ownerOnly = (process.env.GITHUB_OWNER_ONLY ?? "true").toLowerCase() === "true";
 
-    const authed: Repo[] = [];
+    const publicRepos: Repo[] = [];
     try {
         let page = 1;
         while (page <= MAX_PAGES) {
-            const data = await gh<any[]>(
-                `/user/repos?per_page=100&page=${page}&sort=pushed&direction=desc`
+            const publicList = await ghPublic<any[]>(
+                `/users/${encodeURIComponent(username)}/repos?per_page=100&page=${page}&sort=pushed&direction=desc`
             );
-            if (!data.length) break;
-            authed.push(...data.map(mapRepo));
-            if (data.length < 100) break;
+            publicRepos.push(...publicList.flatMap((repo) => {
+                try {
+                    return [mapPublicRepo(repo)];
+                } catch {
+                    return [];
+                }
+            }));
+            if (publicList.length < 100) break;
             page++;
         }
     } catch {
+        // Keep any complete pages already collected if a later page fails.
     }
 
-    let publicRepos: Repo[];
-    try {
-        const publicList = await ghPublic<any[]>(
-            `/users/${encodeURIComponent(username)}/repos?per_page=100&sort=pushed&direction=desc`
-        );
-        publicRepos = publicList.map(mapRepo);
-    } catch {
-        publicRepos = [];
-    }
-
-    const byKey = new Map<string, Repo>();
-    for (const r of publicRepos) byKey.set(r.fullName.toLowerCase(), r);
-    for (const r of authed) byKey.set(r.fullName.toLowerCase(), r);
-
-    let all = Array.from(byKey.values());
-    if (ownerOnly)
-        all = all.filter(
-            (r) => (r.owner?.login ?? username).toLowerCase() === username.toLowerCase()
-        );
-    if (!includePrivate) all = all.filter((r) => !r.private);
+    let all = publicRepos.filter(
+        (r) => (r.owner?.login ?? username).toLowerCase() === username.toLowerCase()
+    );
     if (!includeForks) all = all.filter((r) => !r.fork);
     if (!includeArchived) all = all.filter((r) => !r.archived);
 
@@ -167,14 +154,22 @@ export async function fetchAllRepos(): Promise<Repo[]> {
     return all;
 }
 
+function mapPublicRepo(r: any): Repo {
+    const repo = mapRepo(r);
+    if (repo.private !== false || !repo.name || !repo.fullName || !repo.owner?.login) {
+        throw new Error(`Invalid or private repository rejected: ${repo.fullName || repo.name || "unknown"}`);
+    }
+    return repo;
+}
+
 export async function fetchRepoByName(name: string): Promise<Repo> {
     const owner = process.env.GITHUB_USERNAME!;
     try {
         const repo = await gh<any>(`/repos/${owner}/${encodeURIComponent(name)}`);
-        return mapRepo(repo);
+        return mapPublicRepo(repo);
     } catch {
         const repo = await ghPublic<any>(`/repos/${owner}/${encodeURIComponent(name)}`);
-        return mapRepo(repo);
+        return mapPublicRepo(repo);
     }
 }
 

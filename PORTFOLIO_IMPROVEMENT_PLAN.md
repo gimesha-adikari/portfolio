@@ -4,8 +4,9 @@ Permanent execution plan for improving gimesha-adikari/portfolio with Codex.
 
 Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
+Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Planned. Implementation has not started.
+Status: Phase 0 and Phase 1 local implementation complete; live production recheck deferred. Phase 2 not started.
 
 ## Purpose
 
@@ -110,14 +111,14 @@ A portfolio project may contain multiple repositories. A repository must never a
 
 Goal: make the work reproducible before changing behavior.
 
-- [ ] Confirm local Node/npm versions and clean working tree.
-- [ ] Record current main SHA in the execution log.
-- [ ] Run npm ci.
-- [ ] Run npm run lint.
-- [ ] Run npx tsc --noEmit.
-- [ ] Run npm run build.
-- [ ] Record baseline failures honestly.
-- [ ] Establish a small route/link/metadata smoke-test approach.
+- [x] Confirm local Node/npm versions and clean working tree.
+- [x] Record current main SHA in the execution log.
+- [x] Run npm ci.
+- [x] Run npm run lint.
+- [x] Run npx tsc --noEmit.
+- [x] Run npm run build.
+- [x] Record baseline failures honestly.
+- [x] Establish a small route/link/metadata smoke-test approach.
 
 Exit: baseline commands and known failures are documented.
 
@@ -126,47 +127,47 @@ Exit: baseline commands and known failures are documented.
 Goal: remove objective defects before redesigning anything.
 
 Identity:
-- [ ] Add a single siteConfig for canonical URL, display domain, name, GitHub, LinkedIn, email, CV route, and default metadata.
-- [ ] Make https://www.gimesha.com the canonical public URL with no localhost production fallback.
-- [ ] Remove stale .dev identity where it is no longer intentional.
-- [ ] Normalize one verified LinkedIn URL.
-- [ ] Update OG branding and vCard through siteConfig.
+- [x] Add a single siteConfig for canonical URL, display domain, name, GitHub, LinkedIn, email, CV route, and default metadata.
+- [x] Make https://www.gimesha.com the canonical public URL with no localhost production fallback.
+- [x] Remove stale .dev identity where it is no longer intentional.
+- [x] Normalize one verified LinkedIn URL.
+- [x] Update OG branding and vCard through siteConfig.
 
 Sitemap and robots:
-- [ ] Generate sitemap from actual static routes plus authoritative project/case-study models.
-- [ ] Remove stale /cv and use /cv.pdf if it remains canonical.
-- [ ] Remove legacy case-study slugs.
-- [ ] Include every current case-study slug.
-- [ ] Keep one robots implementation, preferably app/robots.ts.
-- [ ] Remove public/robots.txt after validation.
+- [x] Generate sitemap from actual static routes plus authoritative project/case-study models.
+- [x] Remove stale /cv and use /cv.pdf if it remains canonical.
+- [x] Remove legacy case-study slugs.
+- [x] Include every current case-study slug.
+- [x] Keep one robots implementation, preferably app/robots.ts.
+- [x] Remove public/robots.txt after validation.
 
 Links and UI correctness:
-- [ ] Fix or temporarily remove broken Banking Platform and AI Verification project links.
-- [ ] Fix/remove /tools case-study resource link.
-- [ ] Do not render resource actions with empty destinations.
-- [ ] Surface /cv.pdf deliberately.
-- [ ] Remove or replace All systems operational.
+- [x] Fix or temporarily remove broken Banking Platform and AI Verification project links.
+- [x] Fix/remove /tools case-study resource link.
+- [x] Do not render resource actions with empty destinations.
+- [x] Surface /cv.pdf deliberately.
+- [x] Remove or replace All systems operational.
 
 GitHub privacy:
-- [ ] Make public repository discovery public-only by construction.
-- [ ] Stop defaulting private inclusion to true.
-- [ ] Prefer /users/<username>/repos for public listing.
-- [ ] Reject repo.private even if authenticated data appears.
+- [x] Make public repository discovery public-only by construction.
+- [x] Stop defaulting private inclusion to true.
+- [x] Prefer /users/<username>/repos for public listing.
+- [x] Reject repo.private even if authenticated data appears.
 - [ ] Use a curated repository allowlist where appropriate.
-- [ ] Use no token or minimal token scope when public data is enough.
+- [x] Use no token or minimal token scope when public data is enough.
 
 Repository hygiene:
-- [ ] Remove .idea from version control.
-- [ ] Add .idea/ to .gitignore.
-- [ ] Rewrite README for Next.js 16 and the real content architecture.
-- [ ] Document local development, env vars, commands, deployment, and content editing.
+- [x] Remove .idea from version control.
+- [x] Add .idea/ to .gitignore.
+- [x] Rewrite README for Next.js 16 and the real content architecture.
+- [x] Document local development, env vars, commands, deployment, and content editing.
 
 Validation:
-- build
-- typecheck
-- link/route smoke
-- generated sitemap/robots/metadata inspection
-- live production recheck after deploy
+- [x] build
+- [x] typecheck
+- [x] link/route smoke
+- [x] generated sitemap/robots/metadata inspection
+- [ ] live production recheck after deploy
 
 Exit: no known localhost canonical, stale domain identity, stale sitemap route, known broken internal link, or private-repo exposure path remains.
 
@@ -347,6 +348,14 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-26 - Phase 0/1 implementation and local validation
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at `0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d`; changes remain uncommitted.
+- Baseline before edits: Node `v24.11.1`, npm `11.6.2`; `npm ci` passed but reported 14 vulnerabilities (4 moderate, 8 high, 2 critical); lint failed because ESLint 9 had no flat config; TypeScript failed on deprecated `baseUrl` without `ignoreDeprecations`; build passed on Next.js 16.2.12 with the pre-existing invalid FlyonUI icon and Edge-runtime warnings.
+- Files/decisions: added `lib/siteConfig.ts` and routed layout, OG, vCard, contact, header/footer/sidebar identity through it; corrected `.com`/LinkedIn identity; rebuilt `app/sitemap.ts` from static routes plus `getAllCaseStudies()`; retained `app/robots.ts` and removed `public/robots.txt`; removed or suppressed the requested broken/empty links; added valid-resource filtering; made GitHub discovery public `/users/<username>/repos` only, paginated, fail-closed on `private`, and kept authenticated access for optional enrichment only; removed tracked `.idea/` and ignored it; added a flat ESLint config, TypeScript deprecation compatibility, and `scripts/portfolio-smoke.mjs`; updated README and aligned Next.js/MDX to 16.3.6. No homepage, navigation rewrite, project model, or Phase 2 work was started.
+- Validation after edits: clean `npm ci` completed with 0 vulnerabilities; `npm audit` reported 0 vulnerabilities; `npm run lint` passed; `npx tsc --noEmit` passed; `npm test` passed; `npm run build` passed on Next.js 16.3.6. Local `next start` inspection confirmed canonical `.com` sitemap/robots/metadata, `/cv.pdf`, all eight current YAML case-study URLs, no `.dev` identity, and no `/tools` resource output.
+- Remaining concerns: live production recheck has not been run and no deployment was performed; the curated repository allowlist remains Phase 2; the build still reports the pre-existing `tabler--blueprint`, `tabler--brand-java`, `tabler--file-cog`, and Edge-runtime warnings. CRLF source files were checked with `core.whitespace=cr-at-eol`.
 
 ### 2026-09-26 - Plan creation / revalidation
 

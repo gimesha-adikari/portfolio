@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/navItems";
 import { Icon } from "@/components/Icon";
+import { siteConfig } from "@/lib/siteConfig";
 import { motion } from "framer-motion";
 
 type NavItem = { href: string; label: string; icon: string; hideInHeader?: boolean };
@@ -11,6 +12,7 @@ type NavItem = { href: string; label: string; icon: string; hideInHeader?: boole
 export default function Header() {
     const pathname = usePathname();
     const headerLinks = (NAV_ITEMS as NavItem[]).filter((i) => !i.hideInHeader);
+    const [domainName, ...domainParts] = siteConfig.displayDomain.split(".");
 
     return (
         <header className="sticky top-0 z-40 sm:ps-[var(--sidebar-w)]">
@@ -24,7 +26,7 @@ export default function Header() {
                         <span className="flex size-6 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--accent)] transition-colors group-hover:border-[var(--accent)] group-hover:bg-[color-mix(in_oklab,var(--accent)_10%,transparent)]">
                             <span className="icon-[tabler--code] size-4" aria-hidden />
                         </span>
-                        gimesha<span className="text-[var(--muted)]">.com</span>
+                        {domainName}<span className="text-[var(--muted)]">{domainParts.length > 0 ? `.${domainParts.join(".")}` : ""}</span>
                     </Link>
 
                     <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
