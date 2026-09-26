@@ -1,3 +1,9 @@
+import {
+    termsteadTechnicalEvidence,
+    validateProjectTechnicalEvidence,
+    type ProjectTechnicalEvidence,
+} from "./project-evidence.ts";
+
 export type ProjectStatus = "active" | "complete" | "experimental";
 
 export type ArchitectureBlock = {
@@ -62,6 +68,7 @@ export type PortfolioProject = {
     caseStudies?: readonly string[];
     liveUrl?: string;
     contentNotes?: readonly string[];
+    technicalEvidence?: ProjectTechnicalEvidence;
 };
 
 const PROJECT_STATUSES: readonly ProjectStatus[] = ["active", "complete", "experimental"];
@@ -198,6 +205,9 @@ function parseProject(value: unknown, index: number): PortfolioProject {
         contentNotes: record.contentNotes === undefined
             ? undefined
             : stringArray(record.contentNotes, `${path}.contentNotes`),
+        technicalEvidence: record.technicalEvidence === undefined
+            ? undefined
+            : validateProjectTechnicalEvidence(record.technicalEvidence),
     };
 }
 
@@ -231,7 +241,7 @@ const curatedProjectData = [
         problem: "Build a native terminal product without mixing GUI layout policy with PTY, process, and terminal-session authority.",
         constraints: [
             "The daemon owns PTYs, child processes, terminal state, revisions, modes, and session lifetime.",
-            "The GUI owns windows, workspaces, tabs, pane layout, focus, commands, and local layout persistence.",
+            "The GUI owns windows, workspaces, tabs, pane layout, focus, commands, and client-side workspace policy.",
             "Terminal state reaches the renderer through validated full snapshots and revision-contiguous deltas.",
             "The optimized terminal canvas must remain separate from ordinary product chrome and per-cell widgets.",
         ],
@@ -243,7 +253,7 @@ const curatedProjectData = [
             },
             {
                 boundary: "GUI shell and workspace",
-                responsibility: "Own windows, tabs, recursive pane layout, focus, overlays, commands, and client-side layout persistence.",
+                responsibility: "Own windows, tabs, recursive pane layout, focus, overlays, commands, and client-side workspace policy.",
                 technologies: ["Rust", "GPUI"],
             },
             {
@@ -278,6 +288,7 @@ const curatedProjectData = [
                 source: "termstead/docs/product-shell-m8-v1-acceptance.md",
             },
         ],
+        technicalEvidence: termsteadTechnicalEvidence,
         repositories: [
             {
                 name: "termstead",

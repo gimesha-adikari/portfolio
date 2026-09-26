@@ -6,7 +6,7 @@ Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
 Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Phase 0 through Phase 4 are checkpointed and locally validated; Phase 5 homepage storytelling, Platen PDF naming, and fourth-system evaluation are locally complete enough for review but remain uncommitted. Live production recheck deferred.
+Status: Phase 0 through Phase 5 are checkpointed and locally validated; Phase 6A Termstead evidence is locally complete enough for review and remains uncommitted. Platen PDF, Banking Platform, and PolyShop evidence work is deferred. Live production recheck deferred.
 
 ## Purpose
 
@@ -252,8 +252,8 @@ Exit: visitors can understand the strongest engineering areas without reading Gi
 ## Phase 6 - Evidence-rich flagship content
 
 Termstead:
-- [ ] Cover daemon-owned terminal/session state, GUI-owned layout/focus, IPC boundaries, lifecycle, renderer boundaries, alternatives considered, stress testing, and measured baselines.
-- [ ] Include methodology/caveats with any memory or latency figures.
+- [x] Cover daemon-owned terminal/session state, GUI-owned layout/focus, IPC boundaries, lifecycle, renderer boundaries, alternatives considered, stress testing, and measured baselines. Phase 6A records claim classifications, source commits, and explicit limits in the validated Termstead evidence record.
+- [x] Include methodology/caveats with any memory or latency figures. Measurements retain environment, date/commit, method, sample, and limitations; daemon-side markers are not presented as input-to-display latency.
 
 Platen PDF:
 - [ ] Explain frontend -> Go API -> worker/processing topology.
@@ -267,12 +267,12 @@ PolyShop or other flagship:
 - [ ] Verify service boundaries, Kafka/Redis/API gateway, contract/load testing, and saga-related claims directly before publishing.
 
 Reusable evidence:
-- [ ] Architecture/system diagrams.
-- [ ] Sequence diagrams where useful.
-- [ ] Decision cards/ADRs.
-- [ ] Benchmark/evidence tables with methodology.
+- [x] Architecture/system diagrams. Phase 6A adds an accessible ownership-boundary diagram for Termstead.
+- [x] Sequence diagrams where useful. Phase 6A adds a semantic detach/reconnect/termination lifecycle sequence.
+- [x] Decision cards/ADRs. Phase 6A records alternatives and classifications for ownership, lifecycle, synchronization, dispatch, and rendering decisions.
+- [x] Benchmark/evidence tables with methodology. Phase 6A surfaces only verified resource, boundedness, daemon-side timing, and renderer geometry evidence with caveats.
 - [ ] Focused code excerpts.
-- [ ] Failure/recovery stories.
+- [x] Failure/recovery stories. Phase 6A includes the force_width debugging story and explicit snapshot/reconnect recovery behavior.
 - [ ] Screenshots only when they communicate behavior or technical context.
 
 Exit: every flagship has concrete decisions/evidence and no unsupported quantitative claim remains.
@@ -348,6 +348,16 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 6A Termstead evidence
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at the Phase 5 checkpoint `d0f8bc4`; Phase 6A changes remain uncommitted. No push, merge, deployment, or Termstead-repository modification was performed.
+- Evidence basis: the Termstead remote default branch was revalidated as `product-shell-m6-layout-persistence` at `0776a19f39539c396df76038c55a14bb55948a53`. The separate local m8 checkout was dirty and was not used as the evidence basis. Architecture, SessionHub, performance, and GPUI acceptance documents are linked by their exact evidence commits.
+- Content architecture: extended the canonical `PortfolioProject` with validated optional technical evidence. Added one Termstead evidence record covering daemon/GUI/IPC ownership, SessionHub bounds, detach/reconnect/termination semantics, architecture alternatives, methodology-bearing measurements, the force_width debugging story, limitations, and exact source links. No second project identity source was introduced.
+- UI: added server-rendered ownership and lifecycle diagrams, decision cards, an evidence table, debugging story, limitations, and source-link components to `/projects/termstead`. Curated identity remains available when GitHub enrichment returns no facts; homepage structure was not redesigned.
+- Evidence discipline: published IMPLEMENTED, MEASURED, ACCEPTED, DESIGNED / PLANNED, DEFERRED, NOT TESTED, and ENVIRONMENT-LIMITED classifications where supported. Daemon crash/reboot/power persistence, pixel-golden proof, physical input, input-to-display latency, zero-CPU claims, and unconditional production claims remain explicitly excluded.
+- Validation: `npm ci` PASS (363 packages added; 364 audited; 0 vulnerabilities); `npm audit` PASS (0 vulnerabilities); lint PASS; TypeScript PASS; `npm test` PASS (25 tests); production build PASS (24 static pages, Next.js 16.3.6); bounded `GITHUB_MAX_PAGES=1` build PASS (38 generated pages); `git diff --check` PASS. Local production checks returned 200 for Termstead, projects, Platen PDF, Banking Platform, case studies, about, contact, and a discovered `i-shop` archive route; an unknown project returned 404. Playwright checks at 375px, 768px, and 1280px found one page-level main, semantic figures/table, no horizontal overflow, and reduced-motion emulation active.
+- Remaining concerns: Phase 6 evidence for Platen PDF, Banking Platform, and PolyShop is not started; focused code excerpts and technical screenshots remain unimplemented; live production validation, the Edge Runtime warning, and the Node module-type warning remain deferred.
 
 ### 2026-09-27 - Phase 5 naming and fourth-system evaluation
 

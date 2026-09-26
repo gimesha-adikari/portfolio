@@ -32,10 +32,14 @@ const packageJson = read("package.json");
 const footer = read("components/Footer.tsx");
 const vcard = read("app/api/vcard/route.tsx");
 const portfolioProjects = read("lib/portfolio-projects.ts");
+const projectEvidence = read("lib/project-evidence.ts");
 const portfolioFacts = read("lib/portfolio-repository-facts.ts");
 const projectsPage = read("app/projects/page.tsx");
 const projectDetailPage = read("app/projects/[slug]/page.tsx");
 const projectDetail = read("components/PortfolioProjectDetail.tsx");
+const technicalEvidence = read("components/PortfolioProjectTechnicalEvidence.tsx");
+const architectureDiagram = read("components/ProjectArchitectureDiagram.tsx");
+const lifecycleSequence = read("components/ProjectLifecycleSequence.tsx");
 const repoCard = read("components/RepoCard.tsx");
 const homepage = read("app/page.tsx");
 const homepageContent = read("lib/homepage-content.ts");
@@ -118,6 +122,9 @@ check(vcard.includes("siteConfig.name"), "vCard branding is not sourced from sit
 check(portfolioProjects.includes("export type PortfolioProject"), "PortfolioProject model is missing");
 check(portfolioProjects.includes("validatePortfolioProjects"), "PortfolioProject runtime validation is missing");
 check(portfolioProjects.includes('slug: "termstead"'), "Termstead is not a curated project");
+check(portfolioProjects.includes("technicalEvidence: termsteadTechnicalEvidence"), "Termstead technical evidence is not attached to the canonical project record");
+check(projectEvidence.includes("EVIDENCE_CLASSIFICATIONS"), "technical evidence classifications are not defined");
+check(projectEvidence.includes("validateProjectTechnicalEvidence"), "technical evidence runtime validation is missing");
 check(portfolioProjects.includes('slug: "pdfnest"'), "Platen PDF is not a curated project");
 check(portfolioProjects.includes('title: "Platen PDF"'), "Platen PDF display identity is missing");
 check(portfolioProjects.includes('liveUrl: "https://platenpdf.com"'), "Platen PDF live URL is not canonical");
@@ -128,6 +135,11 @@ check(projectsPage.includes("getAllPortfolioProjects"), "projects listing is not
 check(projectDetailPage.includes("resolvePortfolioProject"), "project detail route does not use the normalized resolver");
 check(projectDetailPage.includes("dynamicParams = false"), "project detail route leaves unknown-slug fallback dynamic");
 check(projectDetail.includes('"@type": "SoftwareSourceCode"'), "curated project detail has no structured data");
+check(projectDetail.includes("PortfolioProjectTechnicalEvidence"), "curated project detail does not render technical evidence");
+check(technicalEvidence.includes("ProjectArchitectureDiagram"), "technical evidence route does not render an ownership diagram");
+check(technicalEvidence.includes("ProjectLifecycleSequence"), "technical evidence route does not render a lifecycle sequence");
+check(architectureDiagram.includes("<figure"), "ownership diagram has no semantic figure");
+check(lifecycleSequence.includes("<ol"), "lifecycle sequence has no ordered-list semantics");
 check(casePage.includes('"@type": "TechArticle"'), "case-study detail has no article structured data");
 check(repoCard.includes("featured = false"), "repository cards do not make Featured conditional");
 

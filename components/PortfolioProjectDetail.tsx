@@ -6,6 +6,7 @@ import { PortfolioProjectEvidence } from "./PortfolioProjectEvidence";
 import { PortfolioProjectGallery } from "./PortfolioProjectGallery";
 import { PortfolioProjectHero } from "./PortfolioProjectHero";
 import { PortfolioProjectRepositories } from "./PortfolioProjectRepositories";
+import { PortfolioProjectTechnicalEvidence } from "./PortfolioProjectTechnicalEvidence";
 
 export function PortfolioProjectDetail({
     project,
@@ -32,7 +33,9 @@ export function PortfolioProjectDetail({
         <article className="space-y-12 pb-20 container-xl max-w-5xl mx-auto pt-6">
             <PortfolioProjectHero project={project} />
             <PortfolioProjectContext project={project} />
-            <PortfolioProjectEvidence project={project} />
+            {project.technicalEvidence
+                ? <PortfolioProjectTechnicalEvidence project={project} />
+                : <PortfolioProjectEvidence project={project} />}
             <PortfolioProjectGallery project={project} />
             <PortfolioProjectRepositories project={project} facts={facts} />
 
