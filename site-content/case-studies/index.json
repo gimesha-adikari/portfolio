@@ -2,12 +2,12 @@
   {
     "slug": "banking-system",
     "title": "Multi-Platform Platform (Fintech)",
-    "description": "Spring Boot core, React admin, Android wallet, FastAPI verification—modular domains and resilient KYC."
+    "description": "Spring Boot core, React admin, Android wallet, and FastAPI verification with explicit service and review boundaries."
   },
   {
     "slug": "bank-app",
     "title": "BankApp — Android Wallet & Payments",
-    "description": "Compose wallet: cards, reload, QR payments, bill-pay. Clean Retrofit layer and resilient UX."
+    "description": "Compose wallet: cards, reload, QR payments, bill-pay. Clean Retrofit layer and explicit payment states."
   },
   {
     "slug": "neurosim",

@@ -5,11 +5,11 @@ read_time: "3–4 min"
 main_icon: "icon-[tabler--layers-intersect]"
 tags:
   - "Architecture"
-  - "Scalability"
+  - "Service Boundaries"
   - "UX"
 subtitle: "Next.js · Go · PostgreSQL · JWT/OAuth · PDF Pipeline"
-tldr: "Built a modular document platform where uploads, workspaces, metadata, and downloads all follow one clear flow. Shared layouts and reusable components kept the product scalable as new tools were added."
-context: "Focuses on the overall system design behind PDFNest and how the app was structured to support many document tools without turning the codebase into duplicated one-off pages."
+tldr: "Built a modular document platform where uploads, workspaces, metadata, and downloads follow explicit shared flows. Shared layouts and reusable components reduced duplication as new tools were added."
+context: "Focuses on the overall system design behind Platen PDF and how the app was structured to support many document tools without turning the codebase into duplicated one-off pages."
 problem:
   - "Each PDF tool had different inputs, outputs, and validation rules."
   - "Building separate pages for every tool would have created a fragile, hard-to-maintain codebase."
@@ -42,10 +42,6 @@ links:
   - label: "Projects"
     url: "/projects"
     icon: "icon-[tabler--folder]"
-    is_external: false
-  - label: "Live App"
-    url: ""
-    icon: "icon-[tabler--external-link]"
     is_external: false
 next_steps:
   - "Further refine shared patterns for new document tools"

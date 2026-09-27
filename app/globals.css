@@ -25,9 +25,6 @@
     --ring: color-mix(in oklab, var(--accent) 70%, transparent);
     --hover: color-mix(in oklab, var(--surface) 88%, var(--accent) 12%);
     --active: color-mix(in oklab, var(--surface) 84%, var(--accent) 16%);
-    --mx: -100px;
-    --my: -100px;
-    --mop: 0;
     --grad-text-strong: linear-gradient(90deg,
     color-mix(in oklab, var(--fg) 96%, transparent) 0%,
     color-mix(in oklab, var(--accent) 88%, transparent) 48%,
@@ -132,26 +129,20 @@ body::after{
     pointer-events: none;
     z-index: 0;
     background:
-            radial-gradient(280px 200px at var(--mx) var(--my),
-            color-mix(in oklab, var(--accent) 12%, transparent) 0%,
-            transparent 62%),
             linear-gradient(to bottom, color-mix(in oklab, var(--border) 14%, transparent) 1px, transparent 1px),
             linear-gradient(90deg, color-mix(in oklab, var(--border) 14%, transparent) 1px, transparent 1px);
-    background-size: auto, 48px 48px, 48px 48px;
-    background-position: 0 0, 0 0, 0 0;
-    opacity: calc(var(--mop) * .12 + .03);
-    transition: opacity .25s ease;
+    background-size: 48px 48px, 48px 48px;
+    background-position: 0 0, 0 0;
+    opacity: .03;
     mix-blend-mode: normal;
 }
 
 :root[data-theme="dark"] body::after{
     background:
-            radial-gradient(360px 260px at var(--mx) var(--my),
-            color-mix(in oklab, var(--accent) 20%, transparent) 0%,
-            transparent 64%),
             linear-gradient(to bottom, color-mix(in oklab, var(--border) 18%, transparent) 1px, transparent 1px),
             linear-gradient(90deg, color-mix(in oklab, var(--border) 18%, transparent) 1px, transparent 1px);
-    opacity: calc(var(--mop) * .16 + .04);
+    background-size: 48px 48px, 48px 48px;
+    opacity: .04;
 }
 
 .grad-sheen {
@@ -180,6 +171,10 @@ body::after{
 
 .section {
     padding-block: clamp(36px, 6vw, 84px);
+}
+
+.homepage-section {
+    padding-block: clamp(24px, 3.5vw, 40px);
 }
 
 .card {
@@ -244,7 +239,7 @@ body::after{
 }
 
 :focus-visible {
-    outline: 2px solid var(--ring);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
 }
 
@@ -275,7 +270,7 @@ body::after{
 .focus-ring, .btn, a[href]{ outline-offset: 3px; }
 
 .focus-ring:focus-visible, a:focus-visible, button:focus-visible, [role="button"]:focus-visible{
-    outline: 2px solid color-mix(in oklab, var(--accent) 60%, transparent);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
 }
 
@@ -329,53 +324,6 @@ body::after{
     .btn { min-height: 42px; padding: 0 16px; }
     .card { border-radius: 12px; }
 }
-
-.gn-sidebar {
-    background: var(--surface);
-    color: var(--fg);
-    border-color: var(--border);
-}
-.gn-sidebar .drawer-header {
-    border-bottom: 1px solid var(--border);
-}
-.gn-sidebar .menu a {
-    color: var(--fg);
-}
-.gn-sidebar .menu a .iconify,
-.gn-sidebar .menu a [class^="icon-"],
-.gn-sidebar .menu a [class*=" icon-"] {
-    color: var(--muted);
-}
-.gn-sidebar .menu a:hover {
-    background: color-mix(in oklab, var(--surface) 90%, var(--accent) 10%);
-}
-.gn-sidebar .menu a[aria-current="page"] {
-    background: color-mix(in oklab, var(--accent) 12%, transparent);
-    color: var(--fg);
-    outline: 1px solid color-mix(in oklab, var(--accent) 28%, transparent);
-}
-.gn-sidebar .dropdown-menu {
-    background: var(--surface);
-    color: var(--fg);
-    border: 1px solid var(--border);
-    box-shadow: var(--elev);
-}
-.gn-sidebar.overlay-minified .dropdown-menu {
-    box-shadow: var(--elev);
-}
-.gn-sidebar .btn.btn-text,
-.gn-sidebar .btn.btn-circle.btn-text {
-    color: var(--fg);
-}
-.gn-sidebar .btn.btn-text:hover,
-.gn-sidebar .btn.btn-circle.btn-text:hover {
-    background: color-mix(in oklab, var(--surface) 88%, var(--accent) 12%);
-}
-.btn.btn-text.max-sm\:btn-square {
-    color: var(--fg);
-}
-
-@media (min-width:640px){ body { --sidebar-w: 264px; } }
 
 .gn-select {
     background: var(--surface);
@@ -440,8 +388,15 @@ select.gn-select option {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    html, body { scroll-behavior: auto; }
+
     *, *::before, *::after {
         animation: none !important;
         transition: none !important;
+    }
+
+    [data-motion-section] {
+        opacity: 1 !important;
+        transform: none !important;
     }
 }

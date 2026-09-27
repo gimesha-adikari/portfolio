@@ -1,6 +1,6 @@
 order: 3
-title: "Building a High-Performance PDF Processing Pipeline"
-blurb: "Go services handled validation, transformation, cleanup, and file lifecycle management for heavy PDF workloads."
+title: "Designing a File-Safe PDF Processing Pipeline"
+blurb: "Go services handled validation, transformation, cleanup, and file lifecycle management across document workflows."
 read_time: "3–4 min"
 main_icon: "icon-[tabler--speedboat]"
 tags:
@@ -8,8 +8,8 @@ tags:
   - "Backend"
   - "Cleanup"
 subtitle: "Go · File Lifecycle · Validation · Temporary Storage"
-tldr: "Built the backend side of document processing around safe file handling, efficient transformations, and predictable cleanup so large jobs could run reliably."
-context: "This case study focuses on the backend processing layer that powers PDFNest and how it was designed to handle heavy document workloads."
+tldr: "Built the backend side of document processing around safe file handling, explicit validation, and predictable cleanup across synchronous and queued workflows."
+context: "This case study focuses on the backend processing layer that powers Platen PDF and the file, validation, and worker boundaries used by document workflows."
 problem:
   - "Large PDFs could consume too much memory if processed naively."
   - "Temporary files and partial outputs had to be cleaned up safely."
@@ -23,7 +23,7 @@ stack:
   - name: "Go"
     icon: "icon-[tabler--brand-golang]"
   - name: "PDF CPU / Processing"
-    icon: "icon-[tabler--file-cog]"
+    icon: "icon-[tabler--file-settings]"
   - name: "Validation"
     icon: "icon-[tabler--shield-check]"
   - name: "Temporary Files"
@@ -36,16 +36,12 @@ challenges:
   - "Avoiding memory pressure during large document transformations"
   - "Preventing stale temporary files and partial outputs from accumulating"
 results:
-  - "A more reliable backend for long-running document operations"
-  - "Cleaner file lifecycle management across the processing pipeline"
+  - "Explicit file lifecycle handling across document operations"
+  - "Clearer failure and cleanup boundaries for processing workflows"
 links:
   - label: "Projects"
     url: "/projects"
     icon: "icon-[tabler--folder]"
-    is_external: false
-  - label: "Backend Repo"
-    url: ""
-    icon: "icon-[tabler--brand-github]"
     is_external: false
 next_steps:
   - "Introduce stronger job tracking for long-running operations"

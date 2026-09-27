@@ -4,16 +4,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/navItems";
 import { Icon } from "@/components/Icon";
-import { motion } from "framer-motion";
+import { siteConfig } from "@/lib/siteConfig";
+import MobileNavigation from "@/components/MobileNavigation";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { motion, useReducedMotion } from "framer-motion";
 
 type NavItem = { href: string; label: string; icon: string; hideInHeader?: boolean };
 
 export default function Header() {
     const pathname = usePathname();
+    const reduceMotion = useReducedMotion();
     const headerLinks = (NAV_ITEMS as NavItem[]).filter((i) => !i.hideInHeader);
+    const [domainName, ...domainParts] = siteConfig.displayDomain.split(".");
 
     return (
-        <header className="sticky top-0 z-40 sm:ps-[var(--sidebar-w)]">
+        <header className="sticky top-0 z-40">
             <div className="border-b border-[var(--border)] bg-[color-mix(in_oklab,var(--bg)_85%,transparent)]/95 backdrop-blur-md">
                 <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
 
@@ -24,7 +29,7 @@ export default function Header() {
                         <span className="flex size-6 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--accent)] transition-colors group-hover:border-[var(--accent)] group-hover:bg-[color-mix(in_oklab,var(--accent)_10%,transparent)]">
                             <span className="icon-[tabler--code] size-4" aria-hidden />
                         </span>
-                        gimesha<span className="text-[var(--muted)]">.com</span>
+                        {domainName}<span className="text-[var(--muted)]">{domainParts.length > 0 ? `.${domainParts.join(".")}` : ""}</span>
                     </Link>
 
                     <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
@@ -48,7 +53,7 @@ export default function Header() {
                                         <motion.div
                                             layoutId="header-active-pill"
                                             className="absolute inset-0 rounded-full border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_80%,transparent)] shadow-sm"
-                                            transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                                            transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
                                         />
                                     )}
                                     <span className="relative z-10 flex items-center gap-1.5">
@@ -60,17 +65,10 @@ export default function Header() {
                         })}
                     </nav>
 
-                    <button
-                        type="button"
-                        aria-label="Open menu"
-                        className="md:hidden inline-flex items-center justify-center size-9 rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--fg)] hover:border-[var(--accent)] hover:text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] transition-colors"
-                        aria-haspopup="dialog"
-                        aria-expanded="false"
-                        aria-controls="collapsible-mini-sidebar"
-                        data-overlay="#collapsible-mini-sidebar"
-                    >
-                        <span className="icon-[tabler--menu-2] size-5" aria-hidden />
-                    </button>
+                    <div className="flex shrink-0 items-center gap-2">
+                        <ThemeToggle />
+                        <MobileNavigation />
+                    </div>
                 </div>
             </div>
         </header>

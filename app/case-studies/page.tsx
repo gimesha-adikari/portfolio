@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { getAllCaseStudies } from "@/lib/case-studies";
+import { buildRouteMetadata } from "@/lib/route-metadata";
 
-export const metadata = { title: "Case Studies" };
+export const metadata = buildRouteMetadata({
+    title: "Case Studies",
+    description: "Selected engineering case studies covering architecture, trade-offs, failure boundaries, and verified evidence.",
+    path: "/case-studies",
+    type: "website",
+});
 
 export default function CaseStudiesIndex() {
     const cases = getAllCaseStudies();
