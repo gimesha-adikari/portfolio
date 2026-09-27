@@ -34,6 +34,7 @@ const vcard = read("app/api/vcard/route.tsx");
 const portfolioProjects = read("lib/portfolio-projects.ts");
 const projectEvidence = read("lib/project-evidence.ts");
 const bankingEvidence = read("lib/banking-platform-evidence.ts");
+const polyshopEvidence = read("lib/polyshop-evidence.ts");
 const portfolioFacts = read("lib/portfolio-repository-facts.ts");
 const projectsPage = read("app/projects/page.tsx");
 const projectDetailPage = read("app/projects/[slug]/page.tsx");
@@ -137,6 +138,12 @@ check(bankingEvidence.includes('owner: "BankApp / Android client"'), "Banking ev
 check(bankingEvidence.includes('classification: "NOT TESTED"'), "Banking evidence does not mark unverified outcomes as not tested");
 check(bankingEvidence.includes("5afe20e3797191b1f9535185f2caecbe993cdb38"), "Banking evidence does not pin the BankingSystem source commit");
 check(bankingEvidence.includes("1e59a6b4a780a5ff5c73743c57b195538df7b080"), "Banking evidence does not pin the BankApp source commit");
+check(polyshopEvidence.includes("2e818de0c772fd186da27640933da71d1cda43e5"), "PolyShop evidence does not pin the audited source commit");
+check(polyshopEvidence.includes("KafkaTemplate"), "PolyShop evidence does not distinguish the narrow executable Kafka producer");
+check(polyshopEvidence.includes("process-local"), "PolyShop evidence does not qualify the auth rate limiter boundary");
+check(polyshopEvidence.includes("DESIGNED / PLANNED"), "PolyShop evidence does not classify design-only claims");
+check(polyshopEvidence.includes("Pact") && polyshopEvidence.includes("k6"), "PolyShop evidence does not cover the QA asset boundary");
+check(!polyshopEvidence.match(/production-ready|proven scalability|enterprise-grade|bank-grade/i), "PolyShop evidence contains unsupported promotion language");
 check(portfolioFacts.includes("selectRepositoryFacts"), "repository allowlist boundary is missing");
 check(projectsPage.includes("getAllPortfolioProjects"), "projects listing is not curated-data driven");
 check(projectDetailPage.includes("resolvePortfolioProject"), "project detail route does not use the normalized resolver");
@@ -170,6 +177,7 @@ check(homepageEvidence.includes("Decision"), "homepage engineering evidence does
 check(homepageCaseStudies.includes("project.title"), "homepage case-study cards do not expose project association");
 check(portfolioProjectCard.includes('variant === "homepage"'), "homepage project cards do not have a narrative-focused presentation variant");
 check(packageJson.includes("portfolio-phase6c.test.mjs"), "Phase 6C tests are not included in npm test");
+check(packageJson.includes("portfolio-phase6d.test.mjs"), "Phase 6D tests are not included in npm test");
 
 const bankingCaseStudySources = [
     read("content/case-studies/modular-kyc-architecture.yml"),

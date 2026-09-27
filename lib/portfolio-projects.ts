@@ -5,6 +5,7 @@ import {
 } from "./project-evidence.ts";
 import { bankingPlatformTechnicalEvidence } from "./banking-platform-evidence.ts";
 import { platenPdfTechnicalEvidence } from "./platen-pdf-evidence.ts";
+import { polyshopTechnicalEvidence } from "./polyshop-evidence.ts";
 
 export type ProjectStatus = "active" | "complete" | "experimental";
 
@@ -478,50 +479,64 @@ const curatedProjectData = [
     {
         slug: "polyshop",
         title: "PolyShop",
-        tagline: "A service-oriented commerce system retained as a non-featured secondary project pending deeper evidence review.",
+        tagline: "A source-audited service-oriented commerce lab with explicit boundaries, shared contracts, and documented distributed-workflow designs.",
         status: "experimental",
         featured: false,
         order: 40,
         role: "Systems/backend engineer",
         category: "Distributed systems lab",
-        problem: "Explore explicit service boundaries and cross-service coordination in an e-commerce system.",
+        problem: "Explore how an e-commerce system can separate identity, commerce domains, gateway concerns, shared contracts, infrastructure, and verification assets.",
         constraints: [
-            "The repository must be evaluated from its actual service, gateway, infrastructure, and QA layout.",
-            "README-described technologies are useful leads but are not treated as independently verified production outcomes.",
+            "The public main snapshot must be read as the evidence boundary; README and design documents are not treated as runtime proof.",
+            "Implemented auth and narrow messaging evidence must remain distinct from scaffolded services and planned distributed workflows.",
+            "Docker, Kubernetes, Pact, Newman, and k6 assets are recorded without implying that they were built, applied, or executed.",
         ],
         architecture: [
             {
-                boundary: "Service and gateway layout",
-                responsibility: "Organize the commerce system into services behind an API gateway with shared libraries and infrastructure material.",
-                technologies: ["Spring Boot", "API gateway", "Java"],
+                boundary: "Repository service boundaries",
+                responsibility: "Separate auth, product, inventory, order, payment, notification, search, and analytics areas; the audited source shows substantial implementation only in auth.",
+                technologies: ["Spring Boot", "FastAPI", "Express", "Java", "Python", "Node.js"],
             },
             {
-                boundary: "Messaging and data",
-                responsibility: "Record the repository's described messaging, cache, and relational data components without asserting operational scale.",
-                technologies: ["Kafka", "Redis", "PostgreSQL", "MySQL"],
+                boundary: "Gateway and contracts",
+                responsibility: "Pair a gateway module and OpenAPI assets with shared Java, TypeScript, and Python DTO/event helpers; runtime gateway routes remain planned.",
+                technologies: ["Spring Cloud Gateway", "OpenAPI 3.1", "Shared DTOs", "Event contracts"],
             },
             {
-                boundary: "Verification and QA",
-                responsibility: "Keep contract, API, and load-test artifacts associated with the project for later evidence review.",
-                technologies: ["Pact", "k6", "Newman"],
+                boundary: "Messaging, infrastructure, and QA",
+                responsibility: "Keep one narrow auth audit producer, declared Kafka/Redis/Compose/Kubernetes resources, and Pact/Postman/k6 assets visible with their execution limits.",
+                technologies: ["KafkaTemplate", "Redis (planned)", "Docker Compose", "Kubernetes", "Pact", "k6", "Newman"],
             },
         ],
         decisions: [
             {
-                decision: "Keep PolyShop curated but non-featured in this phase.",
-                rationale: "The public repository layout and README support a meaningful project record, but the stronger service-boundary, saga, contract-testing, and load-testing claims still need direct verification before flagship promotion.",
+                decision: "Keep PolyShop curated but non-featured.",
+                rationale: "The source audit supports a useful service/layout/contract record, but the executable distributed workflow and operational evidence are not deep enough for homepage flagship promotion.",
+            },
+            {
+                decision: "Separate executable source from design and test assets.",
+                rationale: "Auth implementation, one optional Kafka audit producer, shared contracts, docs, infrastructure, and QA files have different evidence strengths and should not be collapsed into one runtime claim.",
+            },
+            {
+                decision: "Treat the order saga and Redis boundary as designed/planned.",
+                rationale: "The repository contains design/configuration material, but no executable saga orchestrator or Redis client was found at the audited commit.",
             },
         ],
         outcomes: [
             {
-                label: "Repository evidence",
-                description: "The public repository contains common libraries, gateway, infrastructure, services, and QA areas.",
+                label: "Source-audited boundary",
+                description: "The public main snapshot contains named services, a gateway module, shared OpenAPI/event assets, local infrastructure, Kubernetes manifests, and QA files; implementation depth varies by area.",
                 source: "https://github.com/gimesha-adikari/PolyShop",
             },
             {
+                label: "Implemented core",
+                description: "Auth provides the strongest executable slice: RS256 JWTs, persisted hashed token records, account state, rate-limit filters, and audit persistence with an optional narrow Kafka producer.",
+                source: "https://github.com/gimesha-adikari/PolyShop/blob/2e818de0c772fd186da27640933da71d1cda43e5/services/auth-service/src/main/java/com/polyshop/authservice/controller/AuthController.java",
+            },
+            {
                 label: "Evidence boundary",
-                description: "No production-readiness, scalability, latency, or throughput claim is published from README language alone.",
-                source: "PolyShop README and source audit pending",
+                description: "Saga orchestration, Redis runtime use, full Kafka consumers, CI/CD, deployment, scale, and measured performance remain unpublished because the current source does not establish them.",
+                source: "https://github.com/gimesha-adikari/PolyShop/tree/2e818de0c772fd186da27640933da71d1cda43e5",
             },
         ],
         repositories: [
@@ -532,8 +547,10 @@ const curatedProjectData = [
             },
         ],
         caseStudies: [],
+        technicalEvidence: polyshopTechnicalEvidence,
         contentNotes: [
-            "A direct source-level audit of the distributed-system claims remains a later evidence task.",
+            "PolyShop was audited against public main at 2e818de0c772fd186da27640933da71d1cda43e5; source-backed and design-only claims are separated in the evidence record.",
+            "The project remains non-featured and absent from homepage flagship selectors; a future evidence pass may revisit promotion without changing this record's source boundary.",
         ],
     },
     {

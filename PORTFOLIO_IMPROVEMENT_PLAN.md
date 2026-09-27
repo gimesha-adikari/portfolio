@@ -6,7 +6,7 @@ Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
 Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Phase 0 through Phase 5 and Phase 6A/6B are checkpointed and locally validated; Phase 6C Banking Platform evidence is locally complete enough for review and remains uncommitted. PolyShop evidence work, focused excerpts/screenshots, and live production recheck remain deferred.
+Status: Phase 0 through Phase 5 and Phase 6A/6B are checkpointed and locally validated; Phase 6C Banking Platform is checkpointed at `81f48c7`; Phase 6D PolyShop evidence is locally complete enough for review and remains uncommitted. Focused excerpts/screenshots and live production recheck remain deferred.
 
 ## Purpose
 
@@ -264,7 +264,7 @@ Banking Platform:
 - [x] Remove or substantiate false-reject and similar outcome claims. Active and retained legacy Banking case-study copies now describe implemented policy and explicit limitations; accuracy, false-rejection, manual-review, and production outcomes remain unpublished without labeled evidence.
 
 PolyShop or other flagship:
-- [ ] Verify service boundaries, Kafka/Redis/API gateway, contract/load testing, and saga-related claims directly before publishing.
+- [x] Verify service boundaries, Kafka/Redis/API gateway, contract/load testing, and saga-related claims directly before publishing. Phase 6D audited public `main` at `2e818de0c772fd186da27640933da71d1cda43e5`, attached source-pinned evidence to the existing PolyShop record, and retained it as curated, experimental, and non-featured. Auth/JWT/rate-limit/audit behavior is separated from design-only gateway/Redis/saga/outbox claims and unexecuted Pact/Newman/k6 assets.
 
 Reusable evidence:
 - [x] Architecture/system diagrams. Phase 6A adds an accessible ownership-boundary diagram for Termstead.
@@ -348,6 +348,15 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 6D PolyShop evidence audit
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at the committed Phase 6C checkpoint `81f48c7`; Phase 6D changes remain uncommitted. No push, merge, deployment, or modification of the external PolyShop repository was performed.
+- Evidence basis: a fresh read-only shallow clone confirmed public `main` at `2e818de0c772fd186da27640933da71d1cda43e5` (latest commit `Add MIT License to the project`, 2025-11-19). The audit covered service source/build depth, gateway, auth, Kafka/Redis, idempotency, saga/outbox design, shared contracts, Pact/Postman/Newman/k6 assets, Docker/Compose, Kubernetes, observability, README claims, and CI/CD tree state.
+- Model/content: added `lib/polyshop-evidence.ts` and attached validated evidence to the existing `PolyShop` `PortfolioProject`. The record distinguishes implemented auth and one optional `KafkaTemplate` audit producer from bootstrap-only service areas, design-only gateway/Redis/saga/outbox claims, and unexecuted QA/infrastructure assets. No new project identity source or homepage flagship was created.
+- Promotion decision: PolyShop remains `featured: false`, `experimental`, and absent from homepage flagship selectors. The source audit did not establish executable order orchestration/compensation, Redis client use, a broader Kafka consumer topology, gateway route enforcement, CI/CD execution, deployment, measured performance, or operational scale claims.
+- Tests/validation: added Phase 6D assertions and smoke checks for the pinned commit, evidence classifications/limitations, non-featured status, Termstead-first ordering, and homepage exclusion. Final `npm ci`, `npm audit`, lint, TypeScript, tests, build, bounded GitHub build, route/browser checks, and `git diff --check` are recorded in the completion report for this pass.
+- Remaining concerns: focused code excerpts and screenshots remain unimplemented; external Pact/Newman/k6 suites were not executed because their dependencies/runtimes and service stack were unavailable; the Edge Runtime and Node module-type warnings remain deferred; Phase 7 was not started.
 
 ### 2026-09-27 - Phase 6C Banking Platform evidence
 
