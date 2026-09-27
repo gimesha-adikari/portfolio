@@ -280,7 +280,8 @@ Exit: every flagship has concrete decisions/evidence and no unsupported quantita
 
 - [x] Add project-specific branded OG images. Phase 7A adds one shared server-rendered card/data layer, route-local image generation for the homepage, projects, curated projects, case studies, about, and contact, and a validated generic case-study strategy without GitHub dependencies.
 - [x] Complete project/case-study metadata and canonical coverage. Phase 7A standardizes branded titles, descriptions, canonical URLs, Open Graph URLs/images, Twitter card images, and the stable Platen PDF `/projects/pdfnest` route.
-- [ ] Add reasonable security headers: CSP where practical, X-Content-Type-Options, Referrer-Policy, Permissions-Policy.
+- [x] Add baseline security/privacy response headers. Phase 7B centrally applies `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, a minimal `Permissions-Policy`, and `X-Frame-Options: DENY`, with local production-server verification across HTML, metadata images, sitemap, robots, CV, and current static assets. CSP is evaluated separately below and remains intentionally deferred.
+- [!] Evaluate CSP. Phase 7B defers enforcement: production HTML contains Next.js inline bootstrap/Flight scripts and inline style attributes; strict static directives would need nonce/hash work, nonce infrastructure would force request-time rendering and caching trade-offs, and experimental SRI was not adopted. No unsafe-inline/unsafe-eval policy or invented report endpoint was added.
 - [ ] Add lightweight CI: install -> lint -> typecheck -> tests -> build -> link/metadata smoke.
 - [ ] Add focused tests: route/link smoke, metadata/sitemap, GitHub-failure fallback, accessibility smoke, project filters.
 - [ ] Run Lighthouse on important routes.
@@ -348,6 +349,15 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 7B baseline security headers and CSP evaluation
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at the clean Phase 7A checkpoint `7ae006619347b88a780923af2bfc1edd7dcbb164`; Phase 7B changes remain uncommitted. No push, merge, deployment, or Phase 7C work was performed.
+- Audit: `next.config.mjs` was the only response-header configuration surface. Browser inspection found same-origin Next.js scripts, styles, local `next/font` output, and image requests; GitHub/API/CV traffic remains server/build-time. No browser forms, frames, analytics, third-party widgets, workers, or external resource origins were required.
+- Headers: centralized `/(.*)` headers add `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()`, and `X-Frame-Options: DENY`. No HSTS, COOP, COEP, CORP, or CSP header was added without a deployment/compatibility basis.
+- CSP decision: enforcement is deferred because generated production HTML includes inline Next.js runtime/Flight scripts and inline style attributes. `script-src 'self'`/strict style handling would block current output; `unsafe-inline` would weaken the intended protection; nonce CSP would make the static portfolio request-time rendered with cache implications; experimental SRI was not adopted. `unsafe-eval` was not needed, and no report endpoint exists.
+- Validation: `npm ci`, `npm audit` (0 vulnerabilities), lint, TypeScript, 49 tests, normal build (43 generated pages), bounded GitHub build (57 pages), no-GitHub build (43 pages), and `git diff --check` passed. Production-server checks confirmed the four baseline headers on HTML, OG PNGs, sitemap, robots, CV error response, and current static assets; Playwright found no console errors/warnings or blocked same-origin resources on representative routes and verified mobile menu navigation remained functional.
+- Remaining concerns: HSTS and cross-origin isolation remain deployment-sensitive/unneeded decisions; CSP needs a future static-compatible nonce/hash/SRI strategy if stronger script/style restrictions are desired; `/cv.pdf` still returns the pre-existing local upstream 403 when the GitHub content source is unavailable; the Node `MODULE_TYPELESS_PACKAGE_JSON` warning remains deferred. Phase 7C and deployment validation were not started.
 
 ### 2026-09-27 - Phase 7A branded metadata and Open Graph images
 
