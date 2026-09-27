@@ -1,4 +1,5 @@
 import { getAllCaseStudies, getCaseStudyBySlug } from "./case-studies.ts";
+import { getPublishedEngineeringNoteBySlug, getPublishedEngineeringNotes } from "./engineering-notes.ts";
 import { getAllPortfolioProjects, getPortfolioProjectBySlug, type PortfolioProject } from "./portfolio-projects.ts";
 import { siteConfig } from "./siteConfig.ts";
 
@@ -65,6 +66,33 @@ export function getCaseStudiesOgCard(): PortfolioOgCard {
         title: "Engineering decisions in context",
         description: "Engineering decisions and trade-offs covering architecture, failure boundaries, and verified evidence.",
         evidenceLabel: "Technical narratives",
+        footer: siteConfig.displayDomain,
+    };
+}
+
+export function getEngineeringNotesOgCard(): PortfolioOgCard {
+    return {
+        eyebrow: "Engineering notes",
+        title: "Focused engineering questions",
+        description: "Narrow, source-backed notes about debugging decisions and the evidence behind them.",
+        status: "Engineering Notes",
+        evidenceLabel: "Technical notes",
+        footer: siteConfig.displayDomain,
+    };
+}
+
+export function getEngineeringNoteOgCard(slug: string): PortfolioOgCard | null {
+    const note = getPublishedEngineeringNoteBySlug(slug);
+    if (!note) return null;
+
+    const project = getAllPortfolioProjects().find((candidate) => candidate.slug === note.projectSlug);
+    return {
+        eyebrow: project ? `Engineering note · ${project.title}` : "Engineering note",
+        title: note.title,
+        description: compactText(note.description),
+        status: "Engineering Note",
+        evidenceLabel: project?.title,
+        technologies: note.tags.slice(0, 3),
         footer: siteConfig.displayDomain,
     };
 }
