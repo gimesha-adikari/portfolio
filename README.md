@@ -72,6 +72,10 @@ npm run start
 
 `npm test` runs the lightweight portfolio smoke checks plus dependency-free Phase 2/3/4/5/6 tests for curated slugs/order, multi-repository grouping, resolver precedence, archive/private-repository boundaries, case-study validation, metadata canonical URLs, GitHub-failure fallback, project-filter URL/count behavior, homepage content selection, and evidence-model validation. Phase 6D/6E tests also protect PolyShop's source-pinned classifications, non-featured status, homepage exclusion, bounded evidence excerpts, and exact source-commit links.
 
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on pull requests and pushes to `main`. The single read-only quality job runs `npm ci`, lint, TypeScript, `npm test`, and a production build with `GITHUB_USERNAME` unset so curated local content is validated without optional GitHub enrichment. `npm audit` remains part of manual/release validation rather than a blocking step in this lightweight workflow. No passing-status badge is published until the workflow has run remotely.
+
 ## Content editing
 
 - Update site identity and default metadata in `lib/siteConfig.ts`.

@@ -282,7 +282,7 @@ Exit: every flagship has concrete decisions/evidence and no unsupported quantita
 - [x] Complete project/case-study metadata and canonical coverage. Phase 7A standardizes branded titles, descriptions, canonical URLs, Open Graph URLs/images, Twitter card images, and the stable Platen PDF `/projects/pdfnest` route.
 - [x] Add baseline security/privacy response headers. Phase 7B centrally applies `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, a minimal `Permissions-Policy`, and `X-Frame-Options: DENY`, with local production-server verification across HTML, metadata images, sitemap, robots, CV, and current static assets. CSP is evaluated separately below and remains intentionally deferred.
 - [!] Evaluate CSP. Phase 7B defers enforcement: production HTML contains Next.js inline bootstrap/Flight scripts and inline style attributes; strict static directives would need nonce/hash work, nonce infrastructure would force request-time rendering and caching trade-offs, and experimental SRI was not adopted. No unsafe-inline/unsafe-eval policy or invented report endpoint was added.
-- [ ] Add lightweight CI: install -> lint -> typecheck -> tests -> build -> link/metadata smoke.
+- [x] Add lightweight CI: `.github/workflows/ci.yml` runs one read-only Node 24 quality job on pull requests and pushes to `main`: `npm ci`, lint, TypeScript, the canonical `npm test` suite, and a production build with `GITHUB_USERNAME` unset. No secrets, deployment, or write permissions are used; `npm audit` remains manual/release validation. The workflow is locally validated, but its first remote GitHub Actions run remains pending until a push.
 - [ ] Add focused tests: route/link smoke, metadata/sitemap, GitHub-failure fallback, accessibility smoke, project filters.
 - [ ] Run Lighthouse on important routes.
 - [ ] Record Core Web Vitals or lab equivalents with date/device/profile.
@@ -349,6 +349,16 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 7C lightweight CI quality gate
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at the clean Phase 7B checkpoint `5956316`; Phase 7C changes remain uncommitted. No push, merge, deployment, remote workflow trigger, or Phase 7D work was performed.
+- Audit: no `.github/` directory or workflow existed. `npm test` already runs the portfolio smoke checks and the dependency-free Phase 2–7B regression suite, including project/link/metadata, evidence, OG, and security-header coverage, so no parallel CI-only assertions were added.
+- Workflow: added one `.github/workflows/ci.yml` quality job for pull requests and pushes to `main`, with `contents: read`, `ubuntu-latest`, a 15-minute timeout, obsolete-run cancellation, `actions/checkout@v7` with `persist-credentials: false`, and `actions/setup-node@v7` with Node 24 and npm-lockfile caching. The build runs `env -u GITHUB_USERNAME GITHUB_MAX_PAGES=1 npm run build` and does not receive a GitHub token or application secrets.
+- Supply chain/policy: official action major tags were verified against the `actions/checkout` and `actions/setup-node` repositories. Major tags were retained for maintainability; no third-party actions or SHA pins were introduced. `npm audit` was deliberately excluded from the blocking job because advisory availability and future findings are not deterministic for a lightweight content-quality gate; it remains in manual/release validation.
+- Documentation/tests: README now documents the CI commands and intentionally has no passing badge. `scripts/portfolio-phase7c.test.mjs` validates high-value workflow invariants without implementing a YAML parser and is included in `npm test`.
+- Validation: `npm ci`, lint, TypeScript, 50 tests, no-GitHub build (43 pages), `npm audit` (0 vulnerabilities), normal build (43 pages), bounded GitHub build (57 pages), and `git diff --check` passed. `js-yaml` parsed the workflow and the structural test passed; `actionlint` is not installed. GitHub Actions has not executed the workflow because this task does not push the branch.
+- Remaining concerns: the remote workflow result, runner-specific action behavior, and any future action-tag updates remain unverified until the workflow is pushed. Lighthouse, accessibility, deployment, HSTS production review, and live production validation remain untouched.
 
 ### 2026-09-27 - Phase 7B baseline security headers and CSP evaluation
 
