@@ -299,7 +299,7 @@ Exit: quality claims are supported by recorded checks and CI protects key correc
 
 Only after Phases 1-7 are stable:
 - [-] Engineering Notes after there are enough real notes.
-- [ ] Reusable Engineering Decision Explorer.
+- [-] Reusable Engineering Decision Explorer.
 - [ ] Architecture Lens / reusable architecture visualization.
 - [ ] Project milestones/history where useful.
 - [ ] RSS only when notes are regularly published.
@@ -350,6 +350,16 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 8E Engineering Decision Explorer limited pilot
+
+- Scope/state: one bounded pilot on `codex/phase8e-decision-explorer-pilot`, starting from `04d0978d9472c6ae306dd803197e71075c1e864e` with `origin/main` at `ae2b5571bd0a8510cde9ead104edd410ec22b279`; changes remain uncommitted for review. The public label is `Engineering Decisions` at `/engineering-decisions`. No second Engineering Note, Platen PDF note, Architecture Lens, milestones/history, Systems Trace, RSS, CMS, or other Phase 8 feature was started.
+- Evidence/data boundary: the pilot adapts the existing validated portfolio decision/source records through `lib/engineering-decisions.ts`; it does not create a second CMS/MDX source or depend on GitHub at runtime. Six records are admitted, two per approved project: Termstead ownership of GUI workspace versus daemon sessions; Termstead authoritative snapshots/deltas versus `RenderReady` wake hints; Platen PDF response mode per workload; the optional standalone `platen-document` boundary; Banking Platform server-owned authorization versus local device protection; and Banking Platform's `UNDER_REVIEW` fallback for KYC uncertainty. Every source remains public, portfolio-safe, and commit-pinned. PolyShop is explicitly excluded because its broader architecture evidence is mixed implemented/planned/untested.
+- Claim boundary: records require context, decision, rationale, source evidence, and limitations, while optional constraints, alternatives, and trade-offs are included only where supported. Termstead does not claim crash/reboot persistence, input-to-display latency, or complete GPUI-shell functionality; Platen PDF does not claim universal asynchrony, throughput, speed, or scalability; Banking Platform does not claim security certification, KYC accuracy, or server authorization from Android Keystore/biometrics. The full Termstead session-to-renderer lifecycle remains reserved for a possible Systems Trace experience.
+- UX/discoverability: the route is server-rendered and uses native `<details>/<summary>` disclosures, one project jump navigation, exactly the three approved project sections, and no per-decision routes, graph, animation, filters, search, or client visualization. The three approved project detail pages receive a generic relationship link to the matching section; there is no global-navigation or homepage item, and PolyShop receives no relationship. Existing theme tokens, focus rings, responsive layout, and reduced-motion behavior are reused.
+- Metadata/media: route metadata is canonical to `https://www.gimesha.com/engineering-decisions`; a route-local branded 1200x630 PNG OG image uses the existing renderer and no external font/network dependency. The sitemap contains the index exactly once; no decision records, OG routes, preview hosts, RSS, or nonexistent taxonomy routes are emitted. No structured data was added because this is an index of decisions rather than a forced article type.
+- Validation: focused Phase 8E contract tests pass (13/13); full `npm test` passes (102/102); `npm ci`, `npm audit` (0 vulnerabilities), lint, TypeScript, normal build (48 generated pages), bounded GitHub build (62 pages), no-GitHub build (48 pages), and `git diff --check` pass. Local production route checks returned 200 for the index, all three approved project relationships, the Engineering Notes routes, sitemap, robots, and the PNG OG route; an unknown decision path returned a real 404. Browser checks found no console errors, no page overflow at 320/375/430/768/1024/1280/1600px, working native disclosure keyboard control, theme switching, mobile menu/Escape/focus return, and reduced-motion usability. Axe reported zero violations after transitions settled and one known incomplete `aria-valid-attr-value` result for the portal-mounted hidden mobile drawer; Lighthouse mobile sanity scored Performance 95, Accessibility 100, Best Practices 100, and SEO 100 with LCP 2.8s, TBT 30ms, and CLS 0.001. These are local lab results, not production or WCAG claims.
+- Plan/boundary: the Reusable Engineering Decision Explorer checkbox is now `[-]` to record a limited pilot, not a mature reusable program. Engineering Notes remains `[-]`; Architecture Lens, project milestones/history, RSS, and Termstead Systems Trace remain incomplete/deferred. No dependency or lockfile change occurred, and no commit, push, merge, deployment, or Phase 8F work was performed.
 
 ### 2026-09-27 - Phase 8D optional-feature readiness audit
 

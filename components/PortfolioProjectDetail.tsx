@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatEngineeringNoteDate, getEngineeringNotesForProject } from "@/lib/engineering-notes";
+import { hasEngineeringDecisions } from "@/lib/engineering-decisions";
 import type { PortfolioProject, RepositoryFacts } from "@/lib/portfolio-projects";
 import { siteConfig } from "@/lib/siteConfig";
 import { PortfolioProjectContext } from "./PortfolioProjectContext";
@@ -77,6 +78,23 @@ export function PortfolioProjectDetail({
                                 <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">{note.question}</p>
                             </Link>
                         ))}
+                    </div>
+                </section>
+            )}
+
+            {hasEngineeringDecisions(project.slug) && (
+                <section className="space-y-4" aria-labelledby="related-engineering-decisions-title">
+                    <h2 id="related-engineering-decisions-title" className="text-xl font-bold text-[var(--fg)]">Related Engineering Decisions</h2>
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-6">
+                        <p className="max-w-3xl text-sm leading-relaxed text-[var(--muted)]">
+                            See the selected constraints, alternatives, and evidence behind this project&apos;s key boundaries.
+                        </p>
+                        <Link
+                            href={`/engineering-decisions#${project.slug}`}
+                            className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--bg)] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                        >
+                            Explore {project.title} decisions
+                        </Link>
                     </div>
                 </section>
             )}

@@ -81,6 +81,17 @@ export function getEngineeringNotesOgCard(): PortfolioOgCard {
     };
 }
 
+export function getEngineeringDecisionsOgCard(): PortfolioOgCard {
+    return {
+        eyebrow: "Engineering decisions",
+        title: "Engineering Decisions",
+        description: "Evidence-backed decisions across Termstead, Platen PDF, and Banking Platform.",
+        status: "Selected decisions",
+        technologies: ["Termstead", "Platen PDF", "Banking Platform"],
+        footer: siteConfig.displayDomain,
+    };
+}
+
 export function getEngineeringNoteOgCard(slug: string): PortfolioOgCard | null {
     const note = getPublishedEngineeringNoteBySlug(slug);
     if (!note) return null;
