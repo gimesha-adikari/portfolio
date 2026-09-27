@@ -93,7 +93,7 @@ export default async function HomePage() {
                                     <ul className="mt-5 space-y-3 text-sm text-[var(--muted)]">
                                         {activity.slice(0, 4).map((event) => (
                                             <li key={event.id} className="flex gap-3 leading-relaxed">
-                                                <time dateTime={event.created_at} className="w-20 shrink-0 text-xs font-mono opacity-70">
+                                                <time dateTime={event.created_at} className="w-20 shrink-0 text-xs font-mono text-[var(--muted)]">
                                                     {new Date(event.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                                                 </time>
                                                 <span>

@@ -113,3 +113,10 @@ test("Phase 7F correction keeps the header usable at tablet width", async () => 
     assert.match(navigation, /className="fixed inset-0 z-50 lg:hidden/);
     assert.match(navigation, /className="lg:hidden inline-flex size-11/);
 });
+
+test("Phase 7F keeps dynamic homepage activity dates readable", async () => {
+    const home = await source("app/page.tsx");
+
+    assert.match(home, /<time dateTime=\{event\.created_at\} className="w-20 shrink-0 text-xs font-mono text-\[var\(--muted\)\]"/);
+    assert.doesNotMatch(home, /<time dateTime=\{event\.created_at\} className="[^\"]*opacity-70/);
+});
