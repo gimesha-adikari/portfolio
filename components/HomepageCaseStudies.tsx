@@ -35,7 +35,6 @@ export function HomepageCaseStudies({
                             <Link
                                 href={`/case-studies/${study.slug}`}
                                 className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                                aria-label={`Read ${study.title} case study for ${project.title}`}
                             >
                                 <article className="flex h-full flex-col rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-5 transition-transform duration-300 group-hover:-translate-y-1 md:p-6">
                                     <div className="flex items-center justify-between gap-3 text-xs text-[var(--muted)]">

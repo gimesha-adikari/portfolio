@@ -284,8 +284,8 @@ Exit: every flagship has concrete decisions/evidence and no unsupported quantita
 - [!] Evaluate CSP. Phase 7B defers enforcement: production HTML contains Next.js inline bootstrap/Flight scripts and inline style attributes; strict static directives would need nonce/hash work, nonce infrastructure would force request-time rendering and caching trade-offs, and experimental SRI was not adopted. No unsafe-inline/unsafe-eval policy or invented report endpoint was added.
 - [x] Add lightweight CI: `.github/workflows/ci.yml` runs one read-only Node 24 quality job on pull requests and pushes to `main`: `npm ci`, lint, TypeScript, the canonical `npm test` suite, and a production build with `GITHUB_USERNAME` unset. No secrets, deployment, or write permissions are used; `npm audit` remains manual/release validation. The workflow is locally validated, but its first remote GitHub Actions run remains pending until a push.
 - [x] Add focused tests: route/link smoke, metadata/sitemap, GitHub-failure fallback, accessibility smoke, project filters. Phase 7D adds a dependency-free route/content/filter regression suite; focused browser smoke remains a local validation step, while full axe/contrast/Lighthouse and production checks remain pending below.
-- [ ] Run Lighthouse on important routes.
-- [ ] Record Core Web Vitals or lab equivalents with date/device/profile.
+- [x] Record a reproducible Lighthouse lab baseline and targeted findings on important routes. Phase 7E records three-run mobile medians/ranges for `/`, `/projects`, Termstead, Platen PDF, Banking Platform, and About, plus desktop comparisons for `/` and Termstead; no CI thresholds were added.
+- [ ] Verify production/field Core Web Vitals after deployment if data is available. Lighthouse lab LCP/CLS/TBT values are documented separately and are not field results.
 - [ ] Run axe plus manual keyboard/focus testing.
 - [ ] Run contrast checks.
 - [ ] Test mobile breakpoints and diagram scroll/zoom readability.
@@ -349,6 +349,16 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 7E Lighthouse lab baseline and targeted quality fix
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at the clean Phase 7D checkpoint `9f5423ce985280d0fb06d1d8b9ab841e2b3de433`; Phase 7E changes remain uncommitted. No push, merge, deployment, Lighthouse CI gate, or Phase 7F work was performed.
+- Measurement: built the GitHub-independent production app with `env -u GITHUB_USERNAME GITHUB_MAX_PAGES=1 npm run build`, served it with `PORT=3100 npm run start`, and collected three Lighthouse 13.5.0 mobile runs for `/`, `/projects`, `/projects/termstead`, `/projects/pdfnest`, `/projects/banking-platform`, and `/about`. Three desktop `--preset=desktop` runs were collected for `/` and Termstead. Chrome was `154.0.8037.57` on Linux 7.0.0-34-generic with Node `v24.11.1` and npm `11.6.2`. Environment, throttling, medians, ranges, findings, and candidate budgets are recorded in `docs/quality/lighthouse-baseline.md`.
+- Findings: mobile medians were 91–98 for Performance, 100 for Accessibility/Best Practices/SEO, lab LCP 2,484–3,354 ms, lab CLS 0 on every route, and TBT 36–122 ms. Repeated opportunities were generated CSS render blocking, shared unused/legacy JavaScript, and a `/projects` no-store back/forward-cache limitation. No safe global performance rewrite was justified.
+- Targeted fix: Lighthouse found visible-label/accessibility-name mismatches on project and homepage case-study cards because short `aria-label` overrides excluded other visible text. Removed those overrides and added a focused regression assertion. The post-fix reports no longer contain `label-content-name-mismatch`; performance movement was mixed and is not attributed to the accessibility change.
+- Browser visual smoke: headless Chrome screenshots at 375×900, 768×900, and 1280×900 covered `/`, `/projects`, Termstead, and Platen PDF with non-empty output, no observed missing content or page-level overflow, and preserved navigation/layout. Playwright wrapper reuse was unavailable in this pass because its temporary npx cache had an `ENOTEMPTY` collision; no new browser dependency was added.
+- Validation status: `npm ci`, `npm audit` (0 vulnerabilities), lint, TypeScript, `npm test` (65 tests), normal build (42 pages), bounded GitHub build (56 pages), no-GitHub build (42 pages), and diff checks passed after the fix. The Node `MODULE_TYPELESS_PACKAGE_JSON` warning and FlyonUI build banner remain known. No field Core Web Vitals data was used.
+- Remaining concerns: production/field Core Web Vitals, Lighthouse CI thresholds, full axe/manual accessibility, contrast, deployment, HSTS, production CV verification, and live production recheck remain pending.
 
 ### 2026-09-27 - Phase 7D focused route, link, fallback, filter, and accessibility smoke coverage
 

@@ -386,6 +386,16 @@ test("navigation and motion smoke invariants remain source-backed", async () => 
     assert.match(globals, /prefers-reduced-motion/);
 });
 
+test("project and case-study cards preserve visible labels in their accessible names", async () => {
+    const [projectCard, caseStudyCards] = await Promise.all([
+        source("components/PortfolioProjectCard.tsx"),
+        source("components/HomepageCaseStudies.tsx"),
+    ]);
+
+    assert.doesNotMatch(projectCard, /aria-label=\{`Open details for/);
+    assert.doesNotMatch(caseStudyCards, /aria-label=\{`Read \$\{study\.title\}/);
+});
+
 test("new-tab links keep rel safety and validated content rejects dangerous protocols", async () => {
     const sourceFiles = [
         "app/about/page.tsx",

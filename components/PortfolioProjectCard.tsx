@@ -23,7 +23,6 @@ export function PortfolioProjectCard({
         <Link
             href={`/projects/${project.slug}`}
             className="group block h-full"
-            aria-label={`Open details for ${project.title}`}
             prefetch={false}
         >
             <article
