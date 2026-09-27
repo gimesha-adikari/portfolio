@@ -2,6 +2,7 @@ import Link from "next/link";
 import { buildNotFoundMetadata } from "@/lib/route-metadata";
 
 export const metadata = buildNotFoundMetadata({ label: "Page", path: "/" });
+export const dynamic = "force-dynamic";
 
 export default function NotFound() {
     return (

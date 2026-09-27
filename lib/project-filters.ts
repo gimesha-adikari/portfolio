@@ -1,3 +1,5 @@
+import type { Repo } from "./github";
+
 export type SortKey = "recent" | "stars" | "name";
 
 export type ProjectFilterState = {
@@ -7,6 +9,23 @@ export type ProjectFilterState = {
 };
 
 export type ProjectFilterPatch = Partial<ProjectFilterState>;
+
+export function filterArchiveRepositories(
+    repositories: readonly Repo[],
+    filters: Pick<ProjectFilterState, "q" | "lang">,
+): Repo[] {
+    const query = filters.q.trim().toLowerCase();
+    const language = filters.lang.trim();
+
+    return repositories.filter((repository) => {
+        const matchesQuery =
+            !query ||
+            repository.name.toLowerCase().includes(query) ||
+            (repository.description ?? "").toLowerCase().includes(query);
+        const matchesLanguage = !language || (repository.language ?? "") === language;
+        return matchesQuery && matchesLanguage;
+    });
+}
 
 const SORT_KEYS: readonly SortKey[] = ["recent", "stars", "name"];
 

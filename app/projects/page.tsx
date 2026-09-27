@@ -6,7 +6,7 @@ import { orderReposWithPinned } from "@/lib/pins";
 import Reveal from "@/components/Reveal";
 import ProjectsFilters from "@/components/ProjectsFilters";
 import { mapRepositoryFacts } from "@/lib/portfolio-repository-facts";
-import { parseProjectFilterParams, type SortKey } from "@/lib/project-filters";
+import { filterArchiveRepositories, parseProjectFilterParams, type SortKey } from "@/lib/project-filters";
 import {
     getAllPortfolioProjects,
     getCuratedRepositoryNames,
@@ -84,14 +84,7 @@ export default async function ProjectsPage({
     const langs = uniqueLanguages(archive);
     const counts = languageCounts(archive);
 
-    const filtered = archive.filter((r) => {
-        const matchesQ =
-            !q ||
-            r.name.toLowerCase().includes(q.toLowerCase()) ||
-            (r.description ?? "").toLowerCase().includes(q.toLowerCase());
-        const matchesLang = !lang || (r.language ?? "") === lang;
-        return matchesQ && matchesLang;
-    });
+    const filtered = filterArchiveRepositories(archive, { q, lang });
 
     const list = sortRepos(filtered, sort);
     const count = list.length;
