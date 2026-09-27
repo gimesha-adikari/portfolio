@@ -91,7 +91,7 @@ export default function MobileNavigation() {
 
     const drawer = (
         <div
-            className="fixed inset-0 z-50 md:hidden"
+            className="fixed inset-0 z-50 lg:hidden"
             data-mobile-navigation
             hidden={!open}
         >
@@ -169,7 +169,7 @@ export default function MobileNavigation() {
                 aria-expanded={open}
                 aria-controls={drawerId}
                 onClick={() => (open ? closeMenu() : setOpen(true))}
-                className="md:hidden inline-flex size-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--fg)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                className="lg:hidden inline-flex size-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--fg)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
             >
                 {open ? (
                     <span className="icon-[tabler--x] size-5" aria-hidden />
