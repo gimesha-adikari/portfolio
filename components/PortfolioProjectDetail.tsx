@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatEngineeringNoteDate, getEngineeringNotesForProject } from "@/lib/engineering-notes";
 import type { PortfolioProject, RepositoryFacts } from "@/lib/portfolio-projects";
 import { siteConfig } from "@/lib/siteConfig";
 import { PortfolioProjectContext } from "./PortfolioProjectContext";
@@ -15,6 +16,7 @@ export function PortfolioProjectDetail({
     project: PortfolioProject;
     facts?: readonly RepositoryFacts[];
 }) {
+    const engineeringNotes = getEngineeringNotesForProject(project.slug);
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "SoftwareSourceCode",
@@ -50,6 +52,29 @@ export function PortfolioProjectDetail({
                                 className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--fg)] hover:border-[var(--accent)] transition-colors"
                             >
                                 {slug}
+                            </Link>
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {engineeringNotes.length > 0 && (
+                <section className="space-y-4" aria-labelledby="related-engineering-notes-title">
+                    <h2 id="related-engineering-notes-title" className="text-xl font-bold text-[var(--fg)]">Related Engineering Notes</h2>
+                    <div className="grid gap-4">
+                        {engineeringNotes.map((note) => (
+                            <Link
+                                key={note.slug}
+                                href={`/engineering-notes/${note.slug}`}
+                                className="block rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-[var(--accent)] transition-colors"
+                            >
+                                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--muted)]">
+                                    <span className="font-semibold uppercase tracking-wider text-[var(--accent)]">Engineering Note</span>
+                                    <span aria-hidden>·</span>
+                                    <time dateTime={note.publishedAt}>{formatEngineeringNoteDate(note.publishedAt)}</time>
+                                </div>
+                                <h3 className="mt-2 font-semibold text-[var(--fg)]">{note.title}</h3>
+                                <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">{note.question}</p>
                             </Link>
                         ))}
                     </div>

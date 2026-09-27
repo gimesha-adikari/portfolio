@@ -298,7 +298,7 @@ Exit: quality claims are supported by recorded checks and CI protects key correc
 ## Phase 8 - High-value features after fundamentals
 
 Only after Phases 1-7 are stable:
-- [ ] Engineering Notes after there are enough real notes.
+- [-] Engineering Notes after there are enough real notes.
 - [ ] Reusable Engineering Decision Explorer.
 - [ ] Architecture Lens / reusable architecture visualization.
 - [ ] Project milestones/history where useful.
@@ -350,6 +350,16 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 8B Engineering Notes limited pilot
+
+- Scope: one limited pilot only. Added the published Termstead note `When a Terminal Cell Width Is Not a Text-Run Width` at `/engineering-notes/terminal-cell-width-vs-text-run-width`; no second note, Platen note, Decision Explorer, Architecture Lens, Systems Trace, RSS, CMS, search, comments, or publishing workflow was started. The Phase 8 Engineering Notes checkbox is `[-]`, not complete.
+- Starting state: branch `codex/phase8b-engineering-notes-pilot` was created from the accepted Phase 8A checkpoint `2fae1aa264d4f4f1d5a5c87c7ae2f52c296c224f` on `codex/phase8-engineering-notes-readiness`. The Phase 8A commit and protected `origin/main` base were not modified.
+- Content/evidence: the note is project-associated with `termstead`, asks one narrow renderer question, and links only to public Termstead source pinned to commit `0776a19f39539c396df76038c55a14bb55948a53`, `crates/terminal-render/src/renderer.rs#L916-L920`. The note uses a short `forced_cell_width` excerpt and the focused `forced_width_is_one_cell_per_glyph_not_the_full_run_width` regression-test evidence. It explicitly does not claim pixel-golden, cross-device, physical-input/IME, complete-Unicode, performance, frame-rate, input-latency, production-scale, or complete GPUI-shell proof.
+- Architecture: local `content/engineering-notes/*.mdx` is loaded by the typed/runtime-validated `lib/engineering-notes.ts`; only published notes are rendered, linked, emitted to the sitemap, and eligible for metadata/OG generation. The index and detail route reuse existing site metadata, MDX, project identity, OG, and layout conventions. The project detail page has a generic data-driven Related Engineering Notes section; no global navigation item was added.
+- Metadata/discoverability: index/detail metadata, canonical URLs, Twitter/OG metadata, shared 1200x630 branded OG images, `TechArticle` JSON-LD with actual note fields only, and published-note sitemap entries were implemented. Unknown/unpublished slugs return 404. RSS remains deferred until regular publication is justified.
+- Validation: `npm ci` completed with 363 packages added and 0 vulnerabilities; `npm audit` reported 0 vulnerabilities; lint, TypeScript, the focused Phase 8B contract suite (14/14), the full test suite (89/89), default build (46 static pages), bounded GitHub build (60 static pages), no-GitHub build (46 static pages), route/metadata/OG/sitemap checks, responsive browser checks at 320/375/768/1024/1280/1600px, mobile-menu/Escape, theme-toggle, keyboard, project-link/back-navigation, and a mobile Lighthouse sanity run were completed. Lighthouse 13.5.0 scored Performance 97, Accessibility 100, Best Practices 100, and SEO 100; LCP was 2.6s, TBT 60ms, and CLS 0.001 in this local run. The only observed browser console error was the existing local `/cv.pdf` proxy returning 403 during shared-footer prefetch; no pilot-route hydration or navigation error was observed.
+- Remaining concerns: this is a deliberately limited pilot, not evidence that a durable notes program or RSS is ready. The note has no screenshot because a decorative image would not improve the explanation; its code excerpt and source link are sufficient. Changes remain uncommitted for review; no push, merge, deployment, or later Phase 8 work occurred.
 
 ### 2026-09-27 - Phase 8A Engineering Notes readiness audit
 
