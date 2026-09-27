@@ -8,6 +8,7 @@ import SkipLink from "@/components/SkipLink";
 import { siteConfig } from "@/lib/siteConfig";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
+const defaultOgImage = new URL("/opengraph-image", siteConfig.canonicalUrl).toString();
 
 export const metadata: Metadata = {
     title: { default: siteConfig.metadata.defaultTitle, template: siteConfig.metadata.titleTemplate },
@@ -21,13 +22,13 @@ export const metadata: Metadata = {
         title: siteConfig.metadata.defaultTitle,
         description: siteConfig.metadata.description,
         siteName: siteConfig.siteName,
-        images: [{ url: `/og?title=${encodeURIComponent(siteConfig.metadata.defaultTitle)}&subtitle=${encodeURIComponent("Portfolio")}` }],
+        images: [{ url: defaultOgImage, alt: `${siteConfig.name} engineering portfolio` }],
     },
     twitter: {
         card: "summary_large_image",
         title: siteConfig.metadata.defaultTitle,
         description: siteConfig.metadata.description,
-        images: [{ url: `/og?title=${encodeURIComponent(siteConfig.metadata.defaultTitle)}&subtitle=${encodeURIComponent("Portfolio")}` }],
+        images: [{ url: defaultOgImage, alt: `${siteConfig.name} engineering portfolio` }],
     },
     robots: { index: true, follow: true },
 };

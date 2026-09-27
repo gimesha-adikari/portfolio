@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllCaseStudies, getCaseStudyBySlug } from "@/lib/case-studies";
 import { siteConfig } from "@/lib/siteConfig";
-import { absoluteSiteUrl, buildRouteMetadata } from "@/lib/route-metadata";
+import { absoluteSiteUrl, buildNotFoundMetadata, buildRouteMetadata } from "@/lib/route-metadata";
 
 export const dynamicParams = false;
 export const revalidate = 3600;
@@ -15,13 +15,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
     const data = getCaseStudyBySlug(slug);
-    if (!data) return { title: "Not found" };
+    if (!data) {
+        return buildNotFoundMetadata({ label: "Case study", path: `/case-studies/${slug}` });
+    }
 
     return buildRouteMetadata({
         title: data.title,
         description: data.tldr || data.blurb || data.subtitle,
         path: `/case-studies/${data.slug}`,
-        subtitle: "Case study",
     });
 }
 

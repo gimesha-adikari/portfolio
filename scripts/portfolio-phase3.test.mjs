@@ -185,18 +185,20 @@ test("route metadata uses the canonical domain for projects and case studies", (
         title: "Termstead",
         description: "A systems project",
         path: "/projects/termstead",
-        subtitle: "Project",
+        ogImagePath: "/projects/termstead/opengraph-image",
     }, config);
     const caseMetadata = buildRouteMetadataWithConfig({
         title: "Modular Document Platform",
         description: "A case study",
         path: "/case-studies/modular-document-platform",
-        subtitle: "Case study",
+        ogImagePath: "/case-studies/modular-document-platform/opengraph-image",
     }, config);
 
     assert.equal(projectMetadata.alternates.canonical, "https://www.gimesha.com/projects/termstead");
     assert.equal(caseMetadata.alternates.canonical, "https://www.gimesha.com/case-studies/modular-document-platform");
     assert.equal(projectMetadata.title, "Termstead");
     assert.equal(caseMetadata.title, "Modular Document Platform");
+    assert.equal(projectMetadata.openGraph.images[0].url, "https://www.gimesha.com/projects/termstead/opengraph-image");
+    assert.equal(caseMetadata.twitter.images[0].url, "https://www.gimesha.com/case-studies/modular-document-platform/opengraph-image");
     assert.ok(!JSON.stringify({ projectMetadata, caseMetadata }).match(/localhost|gimesha\.dev/i));
 });

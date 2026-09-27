@@ -12,6 +12,6 @@ export const siteConfig = {
     metadata: {
         defaultTitle: "Gimesha Nirmal — Software Engineer",
         titleTemplate: "%s | Gimesha Nirmal",
-        description: "Banking systems, ML verifications, and pragmatic full-stack work.",
+        description: "Engineering portfolio covering systems architecture, backend platforms, developer tooling, and document-processing work.",
     },
 } as const;

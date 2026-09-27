@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PortfolioProjectDetail } from "@/components/PortfolioProjectDetail";
 import { RepositoryArchiveDetail } from "@/components/RepositoryArchiveDetail";
-import { buildRouteMetadata } from "@/lib/route-metadata";
+import { buildNotFoundMetadata, buildRouteMetadata } from "@/lib/route-metadata";
 import { getProjectRouteParams, resolvePortfolioProject } from "@/lib/portfolio-resolver";
 
 export const dynamicParams = false;
@@ -18,14 +18,15 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     const { slug } = await params;
     const resolved = await resolvePortfolioProject(slug);
 
-    if (!resolved) return { title: "Not found" };
+    if (!resolved) {
+        return buildNotFoundMetadata({ label: "Project", path: `/projects/${slug}` });
+    }
 
     if (resolved.kind === "curated") {
         return buildRouteMetadata({
             title: resolved.project.title,
             description: resolved.project.tagline,
             path: `/projects/${resolved.project.slug}`,
-            subtitle: "Project",
         });
     }
 
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
         title,
         description,
         path: `/projects/${resolved.project.repository.name}`,
-        subtitle: "Repository archive",
+        ogImagePath: "/projects/opengraph-image",
     });
 }
 

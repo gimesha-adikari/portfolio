@@ -2,13 +2,15 @@
 import type { Metadata } from "next";
 import ContactCards from "@/components/ContactCards";
 import Reveal from "@/components/Reveal";
+import { buildRouteMetadata } from "@/lib/route-metadata";
 import { siteConfig } from "@/lib/siteConfig";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildRouteMetadata({
     title: "Contact",
     description: `Get in touch with ${siteConfig.name} — email or connect on GitHub and LinkedIn.`,
-    alternates: { canonical: "/contact" },
-};
+    path: "/contact",
+    type: "website",
+});
 
 export default function ContactPage() {
     const jsonLd = {

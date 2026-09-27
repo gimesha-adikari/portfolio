@@ -23,6 +23,10 @@ const casePage = read("app/case-studies/[slug]/page.tsx");
 const caseStudies = read("lib/case-studies.ts");
 const header = read("components/Header.tsx");
 const layout = read("app/layout.tsx");
+const notFoundPage = read("app/not-found.tsx");
+const routeMetadataCore = read("lib/route-metadata-core.ts");
+const ogContent = read("lib/portfolio-og-content.ts");
+const ogRenderer = read("lib/portfolio-og.tsx");
 const mobileNavigation = read("components/MobileNavigation.tsx");
 const filters = read("components/ProjectsFilters.tsx");
 const reveal = read("components/Reveal.tsx");
@@ -102,6 +106,17 @@ check(!header.includes("data-overlay"), "desktop header still delegates mobile n
 check(!header.includes('aria-expanded="false"'), "mobile navigation state is still hard-coded closed");
 check(layout.includes("<SkipLink />"), "SkipLink is not mounted in the root layout");
 check(layout.includes('<main id="content"'), "root layout has no stable skip-link target");
+check(notFoundPage.includes("buildNotFoundMetadata"), "global not-found boundary does not use safe metadata");
+check(notFoundPage.includes("Page not found"), "global not-found boundary has no user-facing fallback");
+check(layout.includes("/opengraph-image"), "root metadata does not use the default OG image convention");
+check(!layout.includes("/og?"), "root metadata still uses the query-driven OG route");
+check(!existsSync(join(root, "app/og/route.tsx")), "legacy query-driven OG route still exists");
+check(routeMetadataCore.includes("opengraph-image"), "route metadata does not use route-local OG image paths");
+check(routeMetadataCore.includes("brandedTitle"), "route metadata does not brand social titles consistently");
+check(ogContent.includes("getPortfolioProjectOgCard"), "project OG cards are not derived from curated projects");
+check(ogContent.includes("getCaseStudyOgCard"), "case-study OG cards are not derived from validated content");
+check(ogRenderer.includes("ImageResponse"), "shared OG renderer does not use ImageResponse");
+check(ogRenderer.includes("siteConfig.displayDomain"), "shared OG renderer does not use siteConfig branding");
 check(mobileNavigation.includes("aria-expanded={open}"), "mobile navigation does not expose its React state");
 check(mobileNavigation.includes('role="dialog"'), "mobile navigation has no dialog semantics");
 check(mobileNavigation.includes('aria-modal="true"'), "mobile navigation is not marked modal");
@@ -184,6 +199,7 @@ check(portfolioProjectCard.includes('variant === "homepage"'), "homepage project
 check(packageJson.includes("portfolio-phase6c.test.mjs"), "Phase 6C tests are not included in npm test");
 check(packageJson.includes("portfolio-phase6d.test.mjs"), "Phase 6D tests are not included in npm test");
 check(packageJson.includes("portfolio-phase6e.test.mjs"), "Phase 6E tests are not included in npm test");
+check(packageJson.includes("portfolio-phase7a.test.mjs"), "Phase 7A tests are not included in npm test");
 
 const bankingCaseStudySources = [
     read("content/case-studies/modular-kyc-architecture.yml"),

@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import * as yaml from "js-yaml";
 import { parseAboutData, type AboutData } from "@/lib/about-content";
-import { siteConfig } from "@/lib/siteConfig";
+import { buildRouteMetadata } from "@/lib/route-metadata";
 
 function getAboutData(): AboutData {
     try {
@@ -29,25 +29,12 @@ function formatValue(value: unknown): string {
     return "";
 }
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildRouteMetadata({
     title: "About",
     description: "Software engineer shipping reliable products across web, mobile, and backend.",
-    alternates: { canonical: "/about" },
-    openGraph: {
-        type: "article",
-        url: `${siteConfig.canonicalUrl}/about`,
-        title: "About — 3 min read",
-        description: "Software engineer shipping reliable products across web, mobile, and backend.",
-        siteName: siteConfig.siteName,
-        images: [{ url: "/og?title=About&subtitle=3%20min%20read" }],
-    },
-    twitter: {
-        card: "summary_large_image",
-        title: "About — 3 min read",
-        description: "Software engineer shipping reliable products across web, mobile, and backend.",
-        images: [{ url: "/og?title=About&subtitle=3%20min%20read" }],
-    },
-};
+    path: "/about",
+    type: "article",
+});
 
 export default function AboutPage() {
     const aboutData = getAboutData();

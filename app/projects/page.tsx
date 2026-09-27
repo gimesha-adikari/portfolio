@@ -12,8 +12,14 @@ import {
     getCuratedRepositoryNames,
     type RepositoryFacts,
 } from "@/lib/portfolio-projects";
+import { buildRouteMetadata } from "@/lib/route-metadata";
 
-export const metadata = { title: "Projects" };
+export const metadata = buildRouteMetadata({
+    title: "Projects",
+    description: "Selected portfolio-owned systems followed by a public repository archive.",
+    path: "/projects",
+    type: "website",
+});
 
 const collator = new Intl.Collator(undefined, { sensitivity: "base", numeric: true });
 

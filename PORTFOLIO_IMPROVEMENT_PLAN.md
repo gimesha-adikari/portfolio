@@ -6,7 +6,7 @@ Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
 Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Phase 0 through Phase 6C are checkpointed and locally validated; Phase 6D PolyShop evidence is checkpointed at `6e881b3`; Phase 6E evidence polish is locally complete enough for review and remains uncommitted. Focused code excerpts are implemented, screenshot candidates were evaluated without adding a weak asset, and the live production recheck is tracked in the Phase 7 post-deployment gate.
+Status: Phase 0 through Phase 6E are checkpointed and locally validated at `bf4da01`; Phase 7A metadata/OG work is locally complete enough for review and remains uncommitted. The old query-driven OG route was replaced with route-local branded image generation; broader Phase 7 quality/security work remains pending.
 
 ## Purpose
 
@@ -278,8 +278,8 @@ Exit: every flagship has concrete decisions/evidence and no unsupported quantita
 
 ## Phase 7 - SEO, quality gates, security headers, measured validation
 
-- [ ] Add project-specific branded OG images.
-- [ ] Complete project/case-study metadata and canonical coverage.
+- [x] Add project-specific branded OG images. Phase 7A adds one shared server-rendered card/data layer, route-local image generation for the homepage, projects, curated projects, case studies, about, and contact, and a validated generic case-study strategy without GitHub dependencies.
+- [x] Complete project/case-study metadata and canonical coverage. Phase 7A standardizes branded titles, descriptions, canonical URLs, Open Graph URLs/images, Twitter card images, and the stable Platen PDF `/projects/pdfnest` route.
 - [ ] Add reasonable security headers: CSP where practical, X-Content-Type-Options, Referrer-Policy, Permissions-Policy.
 - [ ] Add lightweight CI: install -> lint -> typecheck -> tests -> build -> link/metadata smoke.
 - [ ] Add focused tests: route/link smoke, metadata/sitemap, GitHub-failure fallback, accessibility smoke, project filters.
@@ -348,6 +348,15 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 7A branded metadata and Open Graph images
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at the clean Phase 6E checkpoint `bf4da0164ab38447df58d11bd8f7e80ab0be7dbd`; Phase 7A changes remain uncommitted. No push, merge, deployment, or Phase 7B work was performed.
+- Metadata architecture: replaced the query-driven `app/og/route.tsx` Edge route with Next.js 16.3.6 route-local `opengraph-image.tsx` files. A shared `lib/portfolio-og-content.ts` derives card data from `siteConfig`, validated case studies, and canonical `PortfolioProject` records; `lib/portfolio-og.tsx` renders one restrained, server-side `ImageResponse` treatment.
+- Coverage: added default, listing, curated-project, case-study, about, and contact image routes. Project cards use Termstead, Platen PDF, Banking Platform, and PolyShop portfolio-owned identity; Platen PDF keeps `/projects/pdfnest` and its historical repository identifiers; PolyShop remains explicitly secondary/non-featured. Case-study cards derive their title, summary, tags, and associated project from validated YAML and the canonical project model.
+- Metadata cleanup: standardized static and dynamic route metadata through `buildRouteMetadata`, including `.com` canonical URLs, branded social titles, route-matching `openGraph.url`, shared OG/Twitter image paths, and local descriptions. Added the global `app/not-found.tsx` metadata boundary so real 404 responses are noindex and image-free. The root default metadata now uses the same portfolio-owned default image and a systems/backend/platform-oriented description.
+- Validation: image endpoints returned HTTP 200, `image/png`, non-empty 1200x630 PNGs for the homepage, project, and case-study cards; unknown project/case image routes returned 404. Generated HTML checks passed for title, canonical, OG, and Twitter fields on all requested representative routes; sitemap/robots remained page-only and canonical. Phase 7A tests increased the suite to 48 passing tests; lint, TypeScript, build, and the bounded GitHub build passed. `npm audit` remained at 0 vulnerabilities and `git diff --check` passed.
+- Warning/result boundary: the previous Edge Runtime/static-generation warning disappeared because the deprecated custom Edge route was removed and replaced by static-compatible metadata image conventions. The Node `MODULE_TYPELESS_PACKAGE_JSON` test warning remains deferred; broader headers, CI, Lighthouse, axe, contrast, responsive, and post-deployment checks remain untouched Phase 7 work.
 
 ### 2026-09-27 - Phase 6D PolyShop evidence audit
 
