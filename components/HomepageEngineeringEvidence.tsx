@@ -8,7 +8,7 @@ export function HomepageEngineeringEvidence({
     evidence: readonly EngineeringEvidence[];
 }) {
     return (
-        <section className="section" aria-labelledby="homepage-engineering-evidence-title">
+        <section className="homepage-section" aria-labelledby="homepage-engineering-evidence-title">
             <div className="container-xl mx-auto max-w-5xl">
                 <header className="mb-8 max-w-3xl">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">How I build</p>

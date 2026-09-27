@@ -173,6 +173,10 @@ body::after{
     padding-block: clamp(36px, 6vw, 84px);
 }
 
+.homepage-section {
+    padding-block: clamp(24px, 3.5vw, 40px);
+}
+
 .card {
     position: relative;
     overflow: hidden;
@@ -389,5 +393,10 @@ select.gn-select option {
     *, *::before, *::after {
         animation: none !important;
         transition: none !important;
+    }
+
+    [data-motion-section] {
+        opacity: 1 !important;
+        transform: none !important;
     }
 }

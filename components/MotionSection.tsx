@@ -13,10 +13,11 @@ type Props = {
 
 export default function MotionSection({ as = "div", className, children, delay = 0, y = 10 }: Props) {
     const reduce = useReducedMotion();
+    const baseProps = { className, "data-motion-section": "true" };
     const motionProps = reduce
-        ? { className }
+        ? baseProps
         : {
-            className,
+            ...baseProps,
             initial: { opacity: 0, y },
             whileInView: { opacity: 1, y: 0 },
             viewport: { once: true, margin: "0px 0px -10% 0px" },

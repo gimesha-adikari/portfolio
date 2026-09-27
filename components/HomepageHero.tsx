@@ -3,7 +3,7 @@ import { siteConfig } from "@/lib/siteConfig";
 
 export function HomepageHero() {
     return (
-        <section className="section pt-12 md:pt-20" aria-labelledby="homepage-hero-title">
+        <section className="homepage-section" aria-labelledby="homepage-hero-title">
             <div className="container-xl mx-auto max-w-5xl">
                 <div className="max-w-4xl space-y-7">
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">

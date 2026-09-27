@@ -8,7 +8,7 @@ export function HomepageCaseStudies({
     caseStudies: readonly HomepageCaseStudy[];
 }) {
     return (
-        <section className="section" aria-labelledby="homepage-case-studies-title">
+        <section className="homepage-section" aria-labelledby="homepage-case-studies-title">
             <div className="container-xl mx-auto max-w-5xl">
                 <header className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                     <div className="max-w-3xl">

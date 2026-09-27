@@ -69,3 +69,36 @@ test("Phase 7F gives footer icon links touch-sized containers", async () => {
     assert.equal((footer.match(/min-h-11 min-w-11 items-center justify-center/g) ?? []).length, 3);
     assert.match(theme, /btn btn-ghost !min-h-11 !min-w-11 focus-ring/);
 });
+
+test("Phase 7F correction keeps homepage rhythm content-driven and mounts theme controls in the header", async () => {
+    const [home, hero, evidence, caseStudies, header, layout, motionSection, globals] = await Promise.all([
+        source("app/page.tsx"),
+        source("components/HomepageHero.tsx"),
+        source("components/HomepageEngineeringEvidence.tsx"),
+        source("components/HomepageCaseStudies.tsx"),
+        source("components/Header.tsx"),
+        source("app/layout.tsx"),
+        source("components/MotionSection.tsx"),
+        source("app/globals.css"),
+    ]);
+
+    assert.match(home, /relative space-y-6 pb-12 md:space-y-8/);
+    assert.doesNotMatch(home, /space-y-16 md:space-y-24/);
+    assert.match(hero, /homepage-section/);
+    assert.match(evidence, /homepage-section/);
+    assert.match(caseStudies, /homepage-section/);
+    assert.match(header, /<ThemeToggle \/>/);
+    assert.doesNotMatch(layout, /fixed bottom-4 right-4/);
+    assert.match(motionSection, /data-motion-section/);
+    assert.match(globals, /\[data-motion-section\]/);
+});
+
+test("Phase 7F correction keeps the mobile drawer outside the filtered header containing block", async () => {
+    const navigation = await source("components/MobileNavigation.tsx");
+
+    assert.match(navigation, /createPortal/);
+    assert.match(navigation, /document\.body/);
+    assert.match(navigation, /aria-controls=\{drawerId\}/);
+    assert.match(navigation, /hidden=\{!open\}/);
+    assert.match(navigation, /onClick=\{closeMenu\}/);
+});

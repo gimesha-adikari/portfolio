@@ -6,6 +6,7 @@ import { NAV_ITEMS } from "@/lib/navItems";
 import { Icon } from "@/components/Icon";
 import { siteConfig } from "@/lib/siteConfig";
 import MobileNavigation from "@/components/MobileNavigation";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { motion, useReducedMotion } from "framer-motion";
 
 type NavItem = { href: string; label: string; icon: string; hideInHeader?: boolean };
@@ -64,7 +65,10 @@ export default function Header() {
                         })}
                     </nav>
 
-                    <MobileNavigation />
+                    <div className="flex shrink-0 items-center gap-2">
+                        <ThemeToggle />
+                        <MobileNavigation />
+                    </div>
                 </div>
             </div>
         </header>

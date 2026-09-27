@@ -28,7 +28,7 @@ export default async function HomePage() {
         .slice(0, 4);
 
     return (
-        <div className="relative space-y-16 pb-20 md:space-y-24">
+        <div className="relative space-y-6 pb-12 md:space-y-8">
             <div
                 aria-hidden
                 className="pointer-events-none absolute inset-x-0 top-[-18vh] h-[50vh] bg-[radial-gradient(55%_55%_at_50%_10%,color-mix(in_oklab,var(--accent),transparent_85%)_0%,transparent_64%)] opacity-70"
@@ -36,7 +36,7 @@ export default async function HomePage() {
 
             <HomepageHero />
 
-            <MotionSection as="section" className="section" delay={0.08}>
+            <MotionSection as="section" className="homepage-section" delay={0.08}>
                 <div className="container-xl mx-auto max-w-5xl">
                     <header className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div className="max-w-3xl">
@@ -76,7 +76,7 @@ export default async function HomePage() {
             <HomepageCaseStudies caseStudies={caseStudies} />
 
             {(activity.length > 0 || liveDeployments.length > 0) && (
-                <MotionSection as="section" className="section" delay={0.12}>
+                <MotionSection as="section" className="homepage-section" delay={0.12}>
                     <div className="container-xl mx-auto max-w-5xl">
                         <header className="mb-8 max-w-3xl">
                             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Supporting evidence</p>
@@ -137,7 +137,7 @@ export default async function HomePage() {
                 </MotionSection>
             )}
 
-            <MotionSection as="section" className="section pb-10" delay={0.16}>
+            <MotionSection as="section" className="homepage-section" delay={0.16}>
                 <div className="container-xl mx-auto max-w-5xl">
                     <div className="rounded-[14px] border border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_70%,transparent)] p-6 md:p-8">
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Next step</p>

@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { Inter } from "next/font/google";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import Header from "@/components/Header";
 import SkipLink from "@/components/SkipLink";
 import { siteConfig } from "@/lib/siteConfig";
@@ -54,10 +53,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </div>
             </main>
             <Footer />
-        </div>
-
-        <div className="fixed bottom-4 right-4 z-40">
-            <ThemeToggle />
         </div>
 
         </body>
