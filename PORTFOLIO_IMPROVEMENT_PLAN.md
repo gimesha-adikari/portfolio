@@ -350,6 +350,15 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
 
+### 2026-09-27 - Phase 7G remote CI, preview validation, and production deployment gate
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at `f67ac10d4190ad1f47db21867cb20e9848ad62fc`; the feature branch was pushed normally and PR #3 (`https://github.com/gimesha-adikari/portfolio/pull/3`) was opened against `main` without merge authorization. No force-push, merge, or Phase 8 work was performed.
+- Remote CI: GitHub Actions run `36321417359` (`https://github.com/gimesha-adikari/portfolio/actions/runs/36321417359`) ran on the pull-request commit and passed. The single `Quality gates` job completed checkout, Node setup, `npm ci`, lint, TypeScript, 73 tests, and the no-GitHub production build successfully.
+- Preview: Vercel deployment `dpl_Bt1L7eCJ22bMRAKAwbvB4oyP1Hb9` was READY at `https://portfolio-jbmzpf5om-gimeshas-projects.vercel.app/` for the accepted SHA. Browser checks confirmed the corrected homepage hierarchy, visible theme toggle with a real light/dark visual change, curated project/case-study routes, and evidence content. The preview was not promoted.
+- Production gate: the existing Vercel Git integration identifies production as deployment `dpl_691qmR5dzDKTwKtGrdjH41AV9R5D` from `main` at `b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e`. The project dashboard explicitly states that production is updated by pushing to `main`; therefore production deployment requires merge authorization. The PR remains open and unmerged, and no production deployment or production validation was attempted. A pre-deploy snapshot only confirmed the current production homepage still served the older main-branch UI.
+- Local validation before the remote action: `npm run lint`, `npx tsc --noEmit`, `npm test` (73 passing tests), normal build, sequential no-GitHub build, and `git diff --check` passed. The known Node `MODULE_TYPELESS_PACKAGE_JSON` warning remains; no repository code or dependency change was required for the remote gate.
+- Remaining concerns: production deployment, production headers/metadata/sitemap/robots/404/CV checks, HSTS decision, production accessibility/Lighthouse checks, field Core Web Vitals, and the live production recheck remain pending because merging to `main` is not authorized. The Phase 7 deployment-dependent checkboxes remain unchanged.
+
 ### 2026-09-27 - Phase 7F axe, manual accessibility, contrast, and reflow review
 
 - Branch/SHA: `codex/portfolio-improvement-plan` at the clean Phase 7E checkpoint `fb2dceeae046cb04ffbae96e92ab5ebb671453fe`; Phase 7F changes remain uncommitted. No push, merge, deployment, production validation, Lighthouse gate, or Phase 7G work was performed.
