@@ -235,7 +235,7 @@ body::after{
 }
 
 :focus-visible {
-    outline: 2px solid var(--ring);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
 }
 
@@ -266,7 +266,7 @@ body::after{
 .focus-ring, .btn, a[href]{ outline-offset: 3px; }
 
 .focus-ring:focus-visible, a:focus-visible, button:focus-visible, [role="button"]:focus-visible{
-    outline: 2px solid color-mix(in oklab, var(--accent) 60%, transparent);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
 }
 

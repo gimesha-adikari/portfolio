@@ -18,7 +18,12 @@ export function ProjectWorkflowMatrix({ workflows }: { workflows: readonly Proje
                     The product keeps immediate responses, queued processing, and page previews as distinct contracts.
                 </p>
             </div>
-            <div className="overflow-x-auto rounded-xl border border-[var(--border)] bg-[var(--surface)]">
+            <div
+                tabIndex={0}
+                role="region"
+                aria-label="Scrollable workflow table"
+                className="overflow-x-auto rounded-xl border border-[var(--border)] bg-[var(--surface)]"
+            >
                 <table className="min-w-[920px] w-full border-collapse text-left text-sm">
                     <caption className="sr-only">Workflow modes with entry point, owner, processing boundary, result, and evidence classification.</caption>
                     <thead className="bg-[var(--bg)] text-xs uppercase tracking-[0.12em] text-[var(--muted)]">

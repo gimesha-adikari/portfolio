@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <div className="min-h-full bg-[var(--bg)]">
             <Header />
-            <main id="content" className="flex-1 section">
+            <main id="content" tabIndex={-1} className="flex-1 section">
                 <div className="container-xl">
                     {children}
                 </div>

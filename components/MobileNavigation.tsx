@@ -102,8 +102,11 @@ export default function MobileNavigation() {
                 )}
             </button>
 
-            {open && (
-                <div className="fixed inset-0 z-50 md:hidden" data-mobile-navigation>
+            <div
+                className="fixed inset-0 z-50 md:hidden"
+                data-mobile-navigation
+                hidden={!open}
+            >
                     <div
                         aria-hidden="true"
                         className="absolute inset-0 bg-slate-950/40"
@@ -165,8 +168,7 @@ export default function MobileNavigation() {
                             </ul>
                         </nav>
                     </div>
-                </div>
-            )}
+            </div>
         </>
     );
 }

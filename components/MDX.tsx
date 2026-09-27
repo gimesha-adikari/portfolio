@@ -133,7 +133,7 @@ const defaultComponents: MDXComponents = {
         <code className="px-1 py-0.5 rounded bg-[var(--surface)]" {...props} />
     ),
     pre: (props: React.HTMLAttributes<HTMLPreElement>) => (
-        <pre className="p-4 rounded bg-[var(--surface)] overflow-x-auto" {...props} />
+        <pre tabIndex={0} className="p-4 rounded bg-[var(--surface)] overflow-x-auto" {...props} />
     ),
 
     blockquote: (props: React.BlockquoteHTMLAttributes<HTMLElement>) => (

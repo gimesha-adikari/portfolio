@@ -80,7 +80,7 @@ export function PortfolioProjectCard({
                 )}
 
                 {technologies.length > 0 && (
-                    <div className="mt-5 flex flex-wrap gap-2" aria-label="Project technologies">
+                    <div className="mt-5 flex flex-wrap gap-2">
                         {technologies.map((technology) => (
                             <span
                                 key={technology}

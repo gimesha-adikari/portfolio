@@ -286,9 +286,9 @@ Exit: every flagship has concrete decisions/evidence and no unsupported quantita
 - [x] Add focused tests: route/link smoke, metadata/sitemap, GitHub-failure fallback, accessibility smoke, project filters. Phase 7D adds a dependency-free route/content/filter regression suite; focused browser smoke remains a local validation step, while full axe/contrast/Lighthouse and production checks remain pending below.
 - [x] Record a reproducible Lighthouse lab baseline and targeted findings on important routes. Phase 7E records three-run mobile medians/ranges for `/`, `/projects`, Termstead, Platen PDF, Banking Platform, and About, plus desktop comparisons for `/` and Termstead; no CI thresholds were added.
 - [ ] Verify production/field Core Web Vitals after deployment if data is available. Lighthouse lab LCP/CLS/TBT values are documented separately and are not field results.
-- [ ] Run axe plus manual keyboard/focus testing.
-- [ ] Run contrast checks.
-- [ ] Test mobile breakpoints and diagram scroll/zoom readability.
+- [x] Run axe plus manual keyboard/focus testing. Phase 7F audited representative light/dark routes with temporary `@axe-core/playwright` tooling (zero final violations), then manually exercised SkipLink, mobile dialog focus/escape/navigation, filters, theme control, evidence/source links, landmarks, headings, and touch targets. The audit is local smoke coverage, not a full WCAG or screen-reader claim.
+- [x] Run contrast checks. Phase 7F reviewed active light/dark ocean theme text, focus, link, border, gradient, and decorative-background behavior with rendered token ratios plus visual inspection; no active-token change was required. Gradient/pseudo-element cases remain explicitly limited by automated contrast tooling, and the dormant violet declaration is not exposed by the current layout.
+- [x] Test mobile breakpoints and diagram scroll/zoom readability. Phase 7F checked representative routes at 320px, 375px, 768px, and 1280px, plus a controlled CSS 2× reflow approximation. Wide evidence tables and code excerpts remain local keyboard-scroll regions without page-level overflow; native browser chrome zoom and full visual breakpoint review remain outside this smoke pass.
 - [ ] Verify production headers, sitemap, robots, canonical/OG output, and 404 behavior after deploy.
 - [ ] Run the live production recheck after deploy; this deployment-dependent gate was moved here from the earlier validation checklist and remains pending.
 
@@ -349,6 +349,15 @@ Use targeted browser checks for changed routes. Do not mark a browser-dependent 
 ## Execution log
 
 Add entries newest-first. Include date, branch/SHA, phase, changes, validation, and remaining concerns.
+
+### 2026-09-27 - Phase 7F axe, manual accessibility, contrast, and reflow review
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at the clean Phase 7E checkpoint `fb2dceeae046cb04ffbae96e92ab5ebb671453fe`; Phase 7F changes remain uncommitted. No push, merge, deployment, production validation, Lighthouse gate, or Phase 7G work was performed.
+- Automated review: temporary `@axe-core/playwright@4.13.0` with Playwright `1.63.0` and Chrome `154.0.8037.57` covered the homepage, projects, Termstead, Platen PDF, Banking Platform, PolyShop, case-study index/detail, About, and Contact at representative light/dark mobile and desktop sizes. The initial run found focusability defects on wide evidence regions and a case-study heading-order defect; the final 17-job rerun reported zero violations and no captured console errors/warnings. Axe still reports two incomplete rule families: hidden mobile `aria-controls` resolution and gradient/overlap contrast analysis; manual DOM/accessibility-tree checks confirmed the mobile target and open dialog semantics.
+- Fixes: added a focusable `main#content` target and solid SkipLink outline, made the filter summary a polite atomic status region, constrained code excerpts to local horizontal scrolling, normalized the mobile-menu, theme, and footer icon controls to touch-sized targets, corrected the Executive Summary heading to `h2`, removed generic card ARIA labels that overrode visible names, kept the mobile dialog target mounted/hidden when closed, and preserved meaningful theme action labels. No new dependency or runtime package was added.
+- Manual checks: keyboard tests covered SkipLink focus, mobile-menu open/Tab/Escape/focus return/navigation close, theme action state, filter query/reset, source links, evidence tables/code, and touch targets. Representative routes retained one main landmark, one h1, unique IDs, reduced-motion-visible content, and no page-level overflow at 320/375/768/1280px. Unknown project/case-study routes remained HTTP 404/noindex/image-free. The Termstead code excerpt became a local scroll region at 320px; CSS 2× zoom was used as a documented reflow approximation rather than native browser zoom.
+- Contrast/scope: active light/dark ocean token ratios were reviewed and rendered focus indicators were inspected. No full screen-reader session, WCAG conformance claim, production check, or field accessibility result was made. Raw axe reports and screenshots remain outside the repository under `/tmp/portfolio-a11y.LEYMON`.
+- Validation: `npm ci`, `npm audit` (0 vulnerabilities), lint, TypeScript, `npm test` (71 tests), normal build (42 generated pages), bounded GitHub build (56 pages), no-GitHub build (42 pages), local route/browser checks, final axe rerun (0 violations across 17 jobs), and `git diff --check` passed. Known Node `MODULE_TYPELESS_PACKAGE_JSON` and FlyonUI informational warnings remain; the prior Edge Runtime warning remains absent.
 
 ### 2026-09-27 - Phase 7E Lighthouse lab baseline and targeted quality fix
 

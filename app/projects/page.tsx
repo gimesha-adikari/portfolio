@@ -105,7 +105,7 @@ export default async function ProjectsPage({
                                 <h1 id="projects-title" className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--fg)]">
                                     Projects
                                 </h1>
-                                <p className="mt-2 text-[var(--muted)] leading-relaxed flex flex-wrap items-center gap-x-2 gap-y-1">
+                                <p role="status" aria-live="polite" aria-atomic="true" className="mt-2 text-[var(--muted)] leading-relaxed flex flex-wrap items-center gap-x-2 gap-y-1">
                                     <span>Selected work and experiments</span>
                                     {totalCount > 0 && <span className="opacity-50">•</span>}
                                     {totalCount > 0 && <span>{visibleProjects.length} curated project{visibleProjects.length === 1 ? "" : "s"}{count > 0 ? ` · ${count} archive entr${count === 1 ? "y" : "ies"}` : ""}</span>}

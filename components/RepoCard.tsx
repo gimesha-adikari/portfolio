@@ -49,7 +49,6 @@ export async function RepoCard({ repo, featured = false }: { repo: Repo; feature
     const language = repo.language ?? topLangs[0]?.name ?? "Code";
 
     const href = `/projects/${repo.name}`;
-    const title = `Open details for ${repo.name}`;
     const initials = getInitials(repo.name);
 
     const titleId = `${repo.name.replace(/[^a-zA-Z0-9-]/g, '-')}-title`;
@@ -58,8 +57,6 @@ export async function RepoCard({ repo, featured = false }: { repo: Repo; feature
         <Link
             href={href}
             className="group block h-full"
-            aria-label={`Open details for ${repo.name}`}
-            title={title}
             prefetch={false}
         >
             <div className="relative h-full rounded-[14px] p-[1px] transition-transform duration-300 group-hover:-translate-y-1">
@@ -99,10 +96,7 @@ export async function RepoCard({ repo, featured = false }: { repo: Repo; feature
                             </div>
                         )}
 
-                        <div
-                            className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-2.5 py-1 text-xs text-[var(--fg)] backdrop-blur-md shadow-sm"
-                            aria-label={`${stars} stars`}
-                        >
+                        <div className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-2.5 py-1 text-xs text-[var(--fg)] backdrop-blur-md shadow-sm">
                             <span className="icon-[tabler--star] size-3.5 text-[var(--accent)]" aria-hidden />
                             {stars}
                         </div>
@@ -153,7 +147,7 @@ export async function RepoCard({ repo, featured = false }: { repo: Repo; feature
                         )}
 
                         {techStack.length > 0 && (
-                            <div className="mt-4 flex flex-wrap gap-2" aria-label="Tech stack">
+                            <div className="mt-4 flex flex-wrap gap-2">
                                 {techStack.map((t) => (
                                     <span
                                         key={t}
@@ -215,7 +209,7 @@ export async function RepoCard({ repo, featured = false }: { repo: Repo; feature
                         )}
 
                         <div className="mt-auto pt-5 flex items-center justify-between text-xs text-[var(--muted)]">
-                            <span className="inline-flex items-center gap-1.5 font-mono" aria-label={`${forks} forks`}>
+                            <span className="inline-flex items-center gap-1.5 font-mono">
                                 <span className="icon-[tabler--git-fork] size-4" aria-hidden />
                                 {forks}
                             </span>

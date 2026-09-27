@@ -84,9 +84,9 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
             {/* TL;DR Highlight Card */}
             <div className="bg-[var(--surface)] border border-[var(--accent)]/30 rounded-2xl p-6 md:p-8 mb-12 shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-[var(--accent)]"></div>
-                <h3 className="text-sm font-bold tracking-wider text-[var(--accent)] uppercase mb-2 flex items-center gap-2">
+                <h2 className="text-sm font-bold tracking-wider text-[var(--accent)] uppercase mb-2 flex items-center gap-2">
                     <span className="icon-[tabler--bolt] size-4"></span> Executive Summary
-                </h3>
+                </h2>
                 <p className="text-[var(--fg)] md:text-lg leading-relaxed font-medium">
                     {data.tldr}
                 </p>

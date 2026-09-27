@@ -11,12 +11,12 @@ export function ProjectCodeExcerpts({ excerpts }: { excerpts: readonly ProjectCo
             </div>
             <div className="grid gap-4">
                 {excerpts.map((excerpt) => (
-                    <article key={`${excerpt.title}-${excerpt.source}`} className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5">
+                    <article key={`${excerpt.title}-${excerpt.source}`} className="min-w-0 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5">
                         <div className="flex flex-wrap items-start justify-between gap-3">
                             <h4 className="text-lg font-semibold text-[var(--fg)]">{excerpt.title}</h4>
                             <span className="rounded-full border border-[var(--border)] px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--muted)]">{excerpt.language}</span>
                         </div>
-                        <pre className="mt-4 max-w-full overflow-x-auto rounded-lg border border-[var(--border)] bg-[var(--bg)] p-4 text-xs leading-relaxed text-[var(--fg)]"><code>{excerpt.code}</code></pre>
+                        <pre tabIndex={0} className="mt-4 w-full min-w-0 max-w-full overflow-x-auto rounded-lg border border-[var(--border)] bg-[var(--bg)] p-4 text-xs leading-relaxed text-[var(--fg)]"><code>{excerpt.code}</code></pre>
                         <p className="mt-4 text-sm leading-relaxed text-[var(--muted)]">{excerpt.explanation}</p>
                         {excerpt.limitation ? <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]"><span className="font-semibold text-[var(--fg)]">Limit:</span> {excerpt.limitation}</p> : null}
                         <p className="mt-4 break-words text-xs leading-relaxed text-[var(--muted)]">

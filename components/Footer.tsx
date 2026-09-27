@@ -33,7 +33,7 @@ export function Footer() {
                                 href={siteConfig.github}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-[var(--muted)] hover:text-[var(--fg)] hover:-translate-y-0.5 transition-all"
+                                className="inline-flex min-h-11 min-w-11 items-center justify-center text-[var(--muted)] hover:text-[var(--fg)] hover:-translate-y-0.5 transition-all"
                                 aria-label="GitHub Profile"
                             >
                                 <span className="icon-[tabler--brand-github] size-5" />
@@ -42,14 +42,14 @@ export function Footer() {
                                 href={siteConfig.linkedin}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-[var(--muted)] hover:text-[#0a66c2] hover:-translate-y-0.5 transition-all"
+                                className="inline-flex min-h-11 min-w-11 items-center justify-center text-[var(--muted)] hover:text-[#0a66c2] hover:-translate-y-0.5 transition-all"
                                 aria-label="LinkedIn Profile"
                             >
                                 <span className="icon-[tabler--brand-linkedin] size-5" />
                             </a>
                             <a
                                 href={`mailto:${siteConfig.email}`}
-                                className="text-[var(--muted)] hover:text-[var(--accent)] hover:-translate-y-0.5 transition-all"
+                                className="inline-flex min-h-11 min-w-11 items-center justify-center text-[var(--muted)] hover:text-[var(--accent)] hover:-translate-y-0.5 transition-all"
                                 aria-label="Email Me"
                             >
                                 <span className="icon-[tabler--mail] size-5" />
