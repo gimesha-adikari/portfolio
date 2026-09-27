@@ -102,3 +102,14 @@ test("Phase 7F correction keeps the mobile drawer outside the filtered header co
     assert.match(navigation, /hidden=\{!open\}/);
     assert.match(navigation, /onClick=\{closeMenu\}/);
 });
+
+test("Phase 7F correction keeps the header usable at tablet width", async () => {
+    const [header, navigation] = await Promise.all([
+        source("components/Header.tsx"),
+        source("components/MobileNavigation.tsx"),
+    ]);
+
+    assert.match(header, /<nav className="hidden lg:flex/);
+    assert.match(navigation, /className="fixed inset-0 z-50 lg:hidden/);
+    assert.match(navigation, /className="lg:hidden inline-flex size-11/);
+});

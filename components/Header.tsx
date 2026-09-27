@@ -32,7 +32,7 @@ export default function Header() {
                         {domainName}<span className="text-[var(--muted)]">{domainParts.length > 0 ? `.${domainParts.join(".")}` : ""}</span>
                     </Link>
 
-                    <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
+                    <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
                         {headerLinks.map((item) => {
                             const isActive = item.href === "/"
                                 ? pathname === item.href
