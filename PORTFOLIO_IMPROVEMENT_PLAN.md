@@ -6,7 +6,7 @@ Plan created: 2026-09-26
 Revalidated baseline: main at b8ea4a7e8fd77c49536bdcb5a58f2a4044053c5e
 Implementation branch baseline: codex/portfolio-improvement-plan at 0d6fc0cbd405459bf9d1f01602c30e2bf1d2575d
 Primary production domain: https://www.gimesha.com
-Status: Phase 0 through Phase 5 and Phase 6A/6B are checkpointed and locally validated; Phase 6C Banking Platform is checkpointed at `81f48c7`; Phase 6D PolyShop evidence is locally complete enough for review and remains uncommitted. Focused excerpts/screenshots and live production recheck remain deferred.
+Status: Phase 0 through Phase 6C are checkpointed and locally validated; Phase 6D PolyShop evidence is checkpointed at `6e881b3`; Phase 6E evidence polish is locally complete enough for review and remains uncommitted. Focused code excerpts are implemented, screenshot candidates were evaluated without adding a weak asset, and the live production recheck is tracked in the Phase 7 post-deployment gate.
 
 ## Purpose
 
@@ -167,7 +167,6 @@ Validation:
 - [x] typecheck
 - [x] link/route smoke
 - [x] generated sitemap/robots/metadata inspection
-- [ ] live production recheck after deploy
 
 Exit: no known localhost canonical, stale domain identity, stale sitemap route, known broken internal link, or private-repo exposure path remains.
 
@@ -271,9 +270,9 @@ Reusable evidence:
 - [x] Sequence diagrams where useful. Phase 6A adds a semantic detach/reconnect/termination lifecycle sequence.
 - [x] Decision cards/ADRs. Phase 6A records alternatives and classifications for ownership, lifecycle, synchronization, dispatch, and rendering decisions.
 - [x] Benchmark/evidence tables with methodology. Phase 6A surfaces only verified resource, boundedness, daemon-side timing, and renderer geometry evidence with caveats.
-- [ ] Focused code excerpts.
+- [x] Focused code excerpts. Phase 6E adds four short, source-commit-pinned excerpts through the shared validated evidence model and server-rendered presentation component.
 - [x] Failure/recovery stories. Phase 6A includes the force_width debugging story and explicit snapshot/reconnect recovery behavior.
-- [ ] Screenshots only when they communicate behavior or technical context.
+- [x] Evaluate screenshots and include them only when they communicate behavior or technical context. Existing candidates were reviewed; no sufficiently valuable technical screenshot was added.
 
 Exit: every flagship has concrete decisions/evidence and no unsupported quantitative claim remains.
 
@@ -290,6 +289,7 @@ Exit: every flagship has concrete decisions/evidence and no unsupported quantita
 - [ ] Run contrast checks.
 - [ ] Test mobile breakpoints and diagram scroll/zoom readability.
 - [ ] Verify production headers, sitemap, robots, canonical/OG output, and 404 behavior after deploy.
+- [ ] Run the live production recheck after deploy; this deployment-dependent gate was moved here from the earlier validation checklist and remains pending.
 
 Exit: quality claims are supported by recorded checks and CI protects key correctness issues.
 
@@ -356,7 +356,17 @@ Add entries newest-first. Include date, branch/SHA, phase, changes, validation, 
 - Model/content: added `lib/polyshop-evidence.ts` and attached validated evidence to the existing `PolyShop` `PortfolioProject`. The record distinguishes implemented auth and one optional `KafkaTemplate` audit producer from bootstrap-only service areas, design-only gateway/Redis/saga/outbox claims, and unexecuted QA/infrastructure assets. No new project identity source or homepage flagship was created.
 - Promotion decision: PolyShop remains `featured: false`, `experimental`, and absent from homepage flagship selectors. The source audit did not establish executable order orchestration/compensation, Redis client use, a broader Kafka consumer topology, gateway route enforcement, CI/CD execution, deployment, measured performance, or operational scale claims.
 - Tests/validation: added Phase 6D assertions and smoke checks for the pinned commit, evidence classifications/limitations, non-featured status, Termstead-first ordering, and homepage exclusion. Final `npm ci`, `npm audit`, lint, TypeScript, tests, build, bounded GitHub build, route/browser checks, and `git diff --check` are recorded in the completion report for this pass.
-- Remaining concerns: focused code excerpts and screenshots remain unimplemented; external Pact/Newman/k6 suites were not executed because their dependencies/runtimes and service stack were unavailable; the Edge Runtime and Node module-type warnings remain deferred; Phase 7 was not started.
+- Remaining concerns at the Phase 6D checkpoint: focused code excerpts and screenshots were deferred to Phase 6E; external Pact/Newman/k6 suites were not executed because their dependencies/runtimes and service stack were unavailable; the Edge Runtime and Node module-type warnings remain deferred; Phase 7 was not started.
+
+### 2026-09-27 - Phase 6E evidence polish and Phase 6 closure
+
+- Branch/SHA: `codex/portfolio-improvement-plan` at the local Phase 6D checkpoint `6e881b3`; Phase 6E changes remain uncommitted. No push, merge, deployment, or external repository modification was performed.
+- Evidence presentation: extended the shared validated `ProjectTechnicalEvidence` model with bounded `ProjectCodeExcerpt` records and added the server-rendered `ProjectCodeExcerpts` component. Four excerpts are attached to the existing Termstead, Platen PDF, Banking Platform, and PolyShop evidence records; each is short, source-linked, and pinned to the already audited commit.
+- Selection decisions: the excerpts show the Termstead per-cell GPUI width correction, Platen PDF worker-dispatch cleanup, Banking KYC policy states, and PolyShop's process-local rate limiter. No new engineering claim was added. Existing limitations remain visible beside each excerpt.
+- Screenshot audit: reviewed tracked portfolio images and available evidence candidates. No sufficiently valuable technical screenshot was added because the available images were generic UI/decorative assets or temporary portfolio captures rather than source-consistent behavior evidence.
+- Plan boundary: removed the deployment-dependent production recheck from the earlier validation checklist and added it to Phase 7's post-deployment gate. It remains pending and does not block Phase 6 closure.
+- Validation: `npm ci` and `npm audit` reported 0 vulnerabilities; lint and TypeScript passed; `npm test` passed with 43 tests; both normal and `GITHUB_USERNAME=gimesha-adikari GITHUB_MAX_PAGES=1 npm run build` passed; local route/status checks and 375/768/1280 browser checks passed; `git diff --check` passed. Existing Edge Runtime and Node module-type warnings remain deferred.
+- Remaining concerns: external QA assets and deployment-dependent production validation remain unexecuted; Phase 7 implementation was not started.
 
 ### 2026-09-27 - Phase 6C Banking Platform evidence
 

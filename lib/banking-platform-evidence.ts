@@ -503,6 +503,25 @@ export const bankingPlatformTechnicalEvidence: ProjectTechnicalEvidence = valida
             sources: ["kyc-calibration", "kyc-tests", "kyc-policy"],
         },
     ],
+    codeExcerpts: [
+        {
+            title: "KYC policy decision states",
+            language: "python",
+            code: `if not reasons:
+    return "APPROVE", reasons
+
+fm = checks.get("FACE_MATCH", {}).get("score")
+lv = checks.get("LIVENESS", {}).get("score")
+if (fm is not None and fm < 0.40) or (lv is not None and lv < 0.40):
+    return "REJECT", reasons
+
+return "UNDER_REVIEW", reasons`,
+            explanation: "The policy makes the three decision states and low-score reject boundary explicit; it shows implementation policy rather than a measured accuracy or false-rejection result.",
+            source: bankingSystemUrl("ai-service/bank-ai-service/app/core/policy.py#L29-L37"),
+            sourceCommit: BANKING_SYSTEM_COMMIT,
+            limitation: "Thresholds are implementation rules. The audited repository does not establish labeled model quality, FAR/FRR, or false-rejection improvement.",
+        },
+    ],
     limitations: [
         "Evidence is based on the public default-branch snapshots BankingSystem main at 5afe20e3797191b1f9535185f2caecbe993cdb38 and BankApp main at 1e59a6b4a780a5ff5c73743c57b195538df7b080. Neither external repository was modified.",
         "The source establishes one Spring/React/FastAPI monorepo plus a separate Android client; it does not establish a deployed production topology, banking-grade controls, regulatory compliance, or operational SLO.",

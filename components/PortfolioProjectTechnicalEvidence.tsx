@@ -1,5 +1,6 @@
 import type { PortfolioProject } from "@/lib/portfolio-projects";
 import { ProjectArchitectureDiagram } from "./ProjectArchitectureDiagram";
+import { ProjectCodeExcerpts } from "./ProjectCodeExcerpts";
 import { ProjectDecisionCards } from "./ProjectDecisionCards";
 import { ProjectDebuggingStory } from "./ProjectDebuggingStory";
 import { ProjectEvidenceBadge } from "./ProjectEvidenceBadge";
@@ -66,6 +67,7 @@ export function PortfolioProjectTechnicalEvidence({ project }: { project: Portfo
                 />
             ))}
             <ProjectProcessingPaths paths={evidence.processingPaths ?? []} />
+            <ProjectCodeExcerpts excerpts={evidence.codeExcerpts ?? []} />
             <ProjectFailureBoundaries boundaries={evidence.failureBoundaries ?? []} />
             <ProjectEvidenceTable measurements={evidence.measurements} sources={evidence.sources} />
             <ProjectDebuggingStory stories={evidence.debuggingStories} />

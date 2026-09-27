@@ -112,6 +112,16 @@ export type ProjectDebuggingStory = {
     sources: readonly string[];
 };
 
+export type ProjectCodeExcerpt = {
+    title: string;
+    language: string;
+    code: string;
+    explanation: string;
+    source: string;
+    sourceCommit?: string;
+    limitation?: string;
+};
+
 export type ProjectTechnicalEvidence = {
     introduction: string;
     ownership: readonly ProjectOwnershipBoundary[];
@@ -124,6 +134,7 @@ export type ProjectTechnicalEvidence = {
     decisions: readonly ProjectDecisionCard[];
     measurements: readonly ProjectEvidenceMeasurement[];
     debuggingStories: readonly ProjectDebuggingStory[];
+    codeExcerpts?: readonly ProjectCodeExcerpt[];
     limitations: readonly string[];
     sources: readonly EvidenceSource[];
 };
@@ -345,6 +356,36 @@ function parseDebuggingStories(value: unknown, path: string): ProjectDebuggingSt
     });
 }
 
+function parseCodeExcerpts(value: unknown, path: string): ProjectCodeExcerpt[] | undefined {
+    if (value === undefined) return undefined;
+    if (!Array.isArray(value) || value.length === 0) throw new Error(`${path} must contain entries`);
+
+    return value.map((item, index) => {
+        const record = isRecord(item) ? item : {};
+        const code = requiredString(record.code, `${path}[${index}].code`);
+        const lineCount = code.split(/\r?\n/).length;
+        if (lineCount > 24) throw new Error(`${path}[${index}].code must contain at most 24 lines`);
+
+        const source = requiredString(record.source, `${path}[${index}].source`);
+        if (!/^https:\/\//i.test(source)) throw new Error(`${path}[${index}].source must use https`);
+
+        const sourceCommit = optionalString(record.sourceCommit, `${path}[${index}].sourceCommit`);
+        if (sourceCommit !== undefined && !/^[0-9a-f]{40}$/i.test(sourceCommit)) {
+            throw new Error(`${path}[${index}].sourceCommit must be a 40-character commit SHA`);
+        }
+
+        return {
+            title: requiredString(record.title, `${path}[${index}].title`),
+            language: requiredString(record.language, `${path}[${index}].language`),
+            code,
+            explanation: requiredString(record.explanation, `${path}[${index}].explanation`),
+            source,
+            sourceCommit,
+            limitation: optionalString(record.limitation, `${path}[${index}].limitation`),
+        };
+    });
+}
+
 export function validateProjectTechnicalEvidence(value: unknown): ProjectTechnicalEvidence {
     const record = isRecord(value) ? value : {};
     const sources = parseSources(record.sources, "technicalEvidence.sources");
@@ -362,6 +403,7 @@ export function validateProjectTechnicalEvidence(value: unknown): ProjectTechnic
         decisions: parseDecisions(record.decisions, "technicalEvidence.decisions"),
         measurements: parseMeasurements(record.measurements, "technicalEvidence.measurements"),
         debuggingStories: parseDebuggingStories(record.debuggingStories, "technicalEvidence.debuggingStories"),
+        codeExcerpts: parseCodeExcerpts(record.codeExcerpts, "technicalEvidence.codeExcerpts"),
         limitations: stringArray(record.limitations, "technicalEvidence.limitations"),
         sources,
     } satisfies ProjectTechnicalEvidence;
@@ -667,6 +709,21 @@ export const termsteadTechnicalEvidence = {
             classification: "ACCEPTED",
             limitations: ["The correction was not validated with a pixel-golden screenshot.", "Visual acceptance remained environment-limited because physical/compositor capture was unavailable."],
             sources: ["gpui-final-acceptance", "renderer-source"],
+        },
+    ],
+    codeExcerpts: [
+        {
+            title: "Pass one cell advance to GPUI",
+            language: "rust",
+            code: `fn forced_cell_width(text: &str, columns: u16, cell_width: gpui::Pixels) -> Option<gpui::Pixels> {
+    // GPUI's \`force_width\` is the advance assigned to each glyph, not the
+    // total width of the shaped run.
+    should_force_cell_width(text, columns).then_some(cell_width)
+}`,
+            explanation: "The renderer correction passes one cell advance per glyph instead of a shaped run's total width, making the root cause concrete without claiming pixel-perfect output.",
+            source: termsteadUrl(TERMSTEAD_REPOSITORY_COMMIT, "crates/terminal-render/src/renderer.rs#L916-L920"),
+            sourceCommit: TERMSTEAD_REPOSITORY_COMMIT,
+            limitation: "The correction was covered by focused geometry/shaping evidence, not a pixel-golden or cross-device rendering proof.",
         },
     ],
     limitations: [

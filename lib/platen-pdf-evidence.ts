@@ -436,6 +436,33 @@ export const platenPdfTechnicalEvidence: ProjectTechnicalEvidence = validateProj
             sources: ["backend-markdown", "backend-task"],
         },
     ],
+    codeExcerpts: [
+        {
+            title: "Release state when worker dispatch fails",
+            language: "go",
+            code: `req.Header.Set("Content-Type", "application/json")
+resp, err := worker.Do(req)
+if err != nil || resp.StatusCode >= 400 {
+    releaseReservation()
+    tasks.Registry.Set(taskId, "FAILED", 0, "", "Failed to submit job to worker")
+    idempotency.Release(c, nil)
+    errMsg := "Failed to submit job to worker"
+    if err != nil {
+        errMsg += ": " + err.Error()
+    } else if resp != nil {
+        errMsg += fmt.Sprintf(" (HTTP %d)", resp.StatusCode)
+    }
+    return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
+        "code":    "WORKER_DISPATCH_ERR",
+        "message": errMsg,
+    })
+}`,
+            explanation: "This async conversion boundary delegates to the worker and releases reservation, task, and idempotency state when submission fails.",
+            source: sourceUrl("pdfnest-backend", PLATEN_PDF_BACKEND_COMMIT, "internal/conversion/pdfToMarkdown.go#L196-L212"),
+            sourceCommit: PLATEN_PDF_BACKEND_COMMIT,
+            limitation: "This is one representative asynchronous route; it is not a throughput, retry-rate, or universal PDF-processing claim.",
+        },
+    ],
     limitations: [
         "Evidence is based on the remote default branches audited at the recorded commits: pdfnest main 70db8e8a5a1466ddb154112ed1ddecee6e6cb57e, pdfnest-backend master 9faae1a42155843e0e5a6e472d6a4109ccaa25a8, pdfnest-worker main 9d38852e7ca1e7b657f7f644823d400553886ff0, and platen-document main a5a14413ded0daa93a5839b86554f1fe67d92a93.",
         "The source confirms implemented boundaries and defaults, not a deployed production topology, operational SLO, or universal capacity result.",

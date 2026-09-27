@@ -40,6 +40,7 @@ const projectsPage = read("app/projects/page.tsx");
 const projectDetailPage = read("app/projects/[slug]/page.tsx");
 const projectDetail = read("components/PortfolioProjectDetail.tsx");
 const technicalEvidence = read("components/PortfolioProjectTechnicalEvidence.tsx");
+const codeExcerpts = read("components/ProjectCodeExcerpts.tsx");
 const architectureDiagram = read("components/ProjectArchitectureDiagram.tsx");
 const lifecycleSequence = read("components/ProjectLifecycleSequence.tsx");
 const repoCard = read("components/RepoCard.tsx");
@@ -152,6 +153,10 @@ check(projectDetail.includes('"@type": "SoftwareSourceCode"'), "curated project 
 check(projectDetail.includes("PortfolioProjectTechnicalEvidence"), "curated project detail does not render technical evidence");
 check(technicalEvidence.includes("ProjectArchitectureDiagram"), "technical evidence route does not render an ownership diagram");
 check(technicalEvidence.includes("ProjectLifecycleSequence"), "technical evidence route does not render a lifecycle sequence");
+check(technicalEvidence.includes("ProjectCodeExcerpts"), "technical evidence route does not render focused code excerpts");
+check(codeExcerpts.includes("<pre"), "focused code excerpts do not use semantic preformatted code");
+check(codeExcerpts.includes("overflow-x-auto"), "focused code excerpts do not scroll locally");
+check(codeExcerpts.includes("View exact source"), "focused code excerpts do not expose exact source links");
 check(architectureDiagram.includes("<figure"), "ownership diagram has no semantic figure");
 check(lifecycleSequence.includes("<ol"), "lifecycle sequence has no ordered-list semantics");
 check(casePage.includes('"@type": "TechArticle"'), "case-study detail has no article structured data");
@@ -178,6 +183,7 @@ check(homepageCaseStudies.includes("project.title"), "homepage case-study cards 
 check(portfolioProjectCard.includes('variant === "homepage"'), "homepage project cards do not have a narrative-focused presentation variant");
 check(packageJson.includes("portfolio-phase6c.test.mjs"), "Phase 6C tests are not included in npm test");
 check(packageJson.includes("portfolio-phase6d.test.mjs"), "Phase 6D tests are not included in npm test");
+check(packageJson.includes("portfolio-phase6e.test.mjs"), "Phase 6E tests are not included in npm test");
 
 const bankingCaseStudySources = [
     read("content/case-studies/modular-kyc-architecture.yml"),

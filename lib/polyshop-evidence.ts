@@ -333,6 +333,27 @@ export const polyshopTechnicalEvidence: ProjectTechnicalEvidence = validateProje
             sources: ["auth-rate", "docker-compose", "redis-design", "source-search"],
         },
     ],
+    codeExcerpts: [
+        {
+            title: "Process-local rate-limit buckets",
+            language: "java",
+            code: `private record Bucket(AtomicInteger count, long resetAt){}
+private final ConcurrentHashMap<String, Bucket> ipMap = new ConcurrentHashMap<>();
+public boolean allow(String key, int max, int windowSeconds) {
+    long now = Instant.now().getEpochSecond();
+    var b = ipMap.compute(key, (k, old) -> {
+        if (old == null || old.resetAt() <= now) return new Bucket(new AtomicInteger(1), now + windowSeconds);
+        old.count().incrementAndGet();
+        return old;
+    });
+    return b.count().get() <= max;
+}`,
+            explanation: "The executable limiter stores buckets in a process-local ConcurrentHashMap, making the absence of established Redis runtime usage visible without overstating the broader architecture.",
+            source: repositoryUrl("services/auth-service/src/main/java/com/polyshop/authservice/security/RateLimitService.java#L10-L19"),
+            sourceCommit: POLYSHOP_COMMIT,
+            limitation: "This source excerpt does not establish distributed rate limiting, deployment behavior, or load-test results.",
+        },
+    ],
     limitations: [
         "The audited public main commit is source evidence only; no claim is made about later commits or private work.",
         "Only auth has substantial executable domain/controller/persistence code in this snapshot; the other named services are mostly scaffolds or stubs.",
