@@ -555,6 +555,25 @@ body::after{
     transform: translateX(2px);
 }
 
+.homepage-case-study__link h3 {
+    transition: color 180ms ease;
+}
+
+.homepage-case-study__link:hover h3,
+.homepage-case-study__link:focus-visible h3 {
+    color: var(--accent);
+}
+
+.homepage-case-study__arrow {
+    transition: transform 180ms ease, color 180ms ease;
+}
+
+.homepage-case-study__link:hover .homepage-case-study__arrow,
+.homepage-case-study__link:focus-visible .homepage-case-study__arrow {
+    color: var(--accent);
+    transform: translateX(2px);
+}
+
 :root[data-theme="dark"] .project-fingerprint {
     --fingerprint-line: color-mix(in oklab, var(--muted) 82%, transparent);
     --fingerprint-route: color-mix(in oklab, var(--accent) 84%, var(--muted) 16%);

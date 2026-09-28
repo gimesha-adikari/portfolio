@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { HomepageCaseStudy } from "@/lib/homepage-content";
-import Reveal from "@/components/Reveal";
 
 export function HomepageCaseStudies({
     caseStudies,
@@ -31,28 +30,27 @@ export function HomepageCaseStudies({
 
                 <div className="grid gap-5 md:grid-cols-3">
                     {caseStudies.map(({ study, project, focus }) => (
-                        <Reveal key={study.slug}>
-                            <Link
-                                href={`/case-studies/${study.slug}`}
-                                className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                            >
-                                <article className="flex h-full flex-col rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-5 transition-transform duration-300 group-hover:-translate-y-1 md:p-6">
-                                    <div className="flex items-center justify-between gap-3 text-xs text-[var(--muted)]">
-                                        <span className="font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">{project.title}</span>
-                                        <span>{study.read_time}</span>
-                                    </div>
-                                    <h3 className="mt-5 text-lg font-bold tracking-tight text-[var(--fg)] group-hover:text-[var(--accent)]">{study.title}</h3>
-                                    <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">{study.blurb}</p>
-                                    <div className="mt-auto flex items-end justify-between gap-3 border-t border-[var(--border)] pt-5">
-                                        <span className="text-xs font-medium text-[var(--muted)]">{focus}</span>
-                                        <span className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-[var(--fg)]">
-                                            Read study
-                                            <span className="icon-[tabler--arrow-up-right] size-4" aria-hidden />
-                                        </span>
-                                    </div>
-                                </article>
-                            </Link>
-                        </Reveal>
+                        <Link
+                            key={study.slug}
+                            href={`/case-studies/${study.slug}`}
+                            className="homepage-case-study__link group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                        >
+                            <article className="flex h-full flex-col rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-5 md:p-6">
+                                <div className="flex items-center justify-between gap-3 text-xs text-[var(--muted)]">
+                                    <span className="font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">{project.title}</span>
+                                    <span>{study.read_time}</span>
+                                </div>
+                                <h3 className="mt-5 text-lg font-bold tracking-tight text-[var(--fg)]">{study.title}</h3>
+                                <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">{study.blurb}</p>
+                                <div className="mt-auto flex items-end justify-between gap-3 border-t border-[var(--border)] pt-5">
+                                    <span className="text-xs font-medium text-[var(--muted)]">{focus}</span>
+                                    <span className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-[var(--fg)]">
+                                        Read study
+                                        <span className="homepage-case-study__arrow icon-[tabler--arrow-up-right] size-4" aria-hidden />
+                                    </span>
+                                </div>
+                            </article>
+                        </Link>
                     ))}
                 </div>
             </div>
