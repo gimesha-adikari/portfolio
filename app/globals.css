@@ -556,7 +556,9 @@ body::after{
 }
 
 .homepage-case-study__link h3 {
-    transition: color 180ms ease;
+    transition-property: color;
+    transition-duration: 180ms;
+    transition-timing-function: ease;
 }
 
 .homepage-case-study__link:hover h3,
@@ -565,7 +567,9 @@ body::after{
 }
 
 .homepage-case-study__arrow {
-    transition: transform 180ms ease, color 180ms ease;
+    transition-property: transform, color;
+    transition-duration: 180ms;
+    transition-timing-function: ease;
 }
 
 .homepage-case-study__link:hover .homepage-case-study__arrow,
