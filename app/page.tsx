@@ -7,7 +7,6 @@ import { PortfolioProjectCard } from "@/components/PortfolioProjectCard";
 import { getHomepageCaseStudies, getHomepageEngineeringEvidence, getHomepageFlagshipProjects } from "@/lib/homepage-content";
 import { getAllCaseStudies } from "@/lib/case-studies";
 import { getAllPortfolioProjects } from "@/lib/portfolio-projects";
-import Reveal from "@/components/Reveal";
 import MotionSection from "@/components/MotionSection";
 
 export default async function HomePage() {
@@ -58,9 +57,7 @@ export default async function HomePage() {
                     {featured.length > 0 ? (
                         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             {featured.map((project) => (
-                                <Reveal key={project.slug}>
-                                    <PortfolioProjectCard project={project} variant="homepage" />
-                                </Reveal>
+                                <PortfolioProjectCard key={project.slug} project={project} variant="homepage" />
                             ))}
                         </div>
                     ) : (
