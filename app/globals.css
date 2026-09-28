@@ -371,11 +371,23 @@ body::after{
     transition: opacity 180ms ease;
 }
 
+.project-fingerprint__signal {
+    fill: none;
+    stroke: var(--fingerprint-accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0;
+    pointer-events: none;
+    stroke-dasharray: 0.24 1;
+    stroke-dashoffset: 1.24;
+}
+
 .project-fingerprint__boundary {
     stroke: var(--fingerprint-boundary);
     stroke-width: 1.2;
     stroke-dasharray: 2 4;
     opacity: 0.92;
+    transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
 }
 
 .project-fingerprint__node {
@@ -383,6 +395,8 @@ body::after{
     stroke: var(--fingerprint-node-stroke);
     stroke-width: 1.35;
     transition: opacity 180ms ease, stroke 180ms ease;
+    transform-box: fill-box;
+    transform-origin: center;
 }
 
 .project-fingerprint__node--secondary {
@@ -425,6 +439,111 @@ body::after{
 .portfolio-project-card__link:hover .project-fingerprint__connectors,
 .portfolio-project-card__link:focus-visible .project-fingerprint__connectors {
     opacity: 0.94;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint__signal,
+.portfolio-project-card__link:focus-visible .project-fingerprint__signal {
+    animation: project-fingerprint-signal 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint__node--secondary,
+.portfolio-project-card__link:focus-visible .project-fingerprint__node--secondary {
+    animation: project-fingerprint-node-activate 420ms ease-out both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--termstead .project-fingerprint__boundary,
+.portfolio-project-card__link:focus-visible .project-fingerprint--termstead .project-fingerprint__boundary {
+    animation: project-fingerprint-boundary 420ms ease-out 100ms both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--termstead .project-fingerprint__node--authority,
+.portfolio-project-card__link:focus-visible .project-fingerprint--termstead .project-fingerprint__node--authority {
+    animation: project-fingerprint-node-settle 420ms ease-out 160ms both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--platen .project-fingerprint__node--api,
+.portfolio-project-card__link:focus-visible .project-fingerprint--platen .project-fingerprint__node--api {
+    animation: project-fingerprint-node-activate 420ms ease-out both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--platen .project-fingerprint__signal,
+.portfolio-project-card__link:focus-visible .project-fingerprint--platen .project-fingerprint__signal {
+    animation-delay: 120ms;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--platen .project-fingerprint__boundary--worker,
+.portfolio-project-card__link:focus-visible .project-fingerprint--platen .project-fingerprint__boundary--worker {
+    animation: project-fingerprint-boundary 420ms ease-out 120ms both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--platen .project-fingerprint__node--direct,
+.portfolio-project-card__link:focus-visible .project-fingerprint--platen .project-fingerprint__node--direct,
+.portfolio-project-card__link:hover .project-fingerprint--platen .project-fingerprint__node--worker,
+.portfolio-project-card__link:focus-visible .project-fingerprint--platen .project-fingerprint__node--worker {
+    animation: project-fingerprint-node-settle 420ms ease-out 160ms both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--banking .project-fingerprint__connectors,
+.portfolio-project-card__link:focus-visible .project-fingerprint--banking .project-fingerprint__connectors {
+    animation: project-fingerprint-relationships 420ms ease-out both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--banking .project-fingerprint__node--core,
+.portfolio-project-card__link:focus-visible .project-fingerprint--banking .project-fingerprint__node--core {
+    animation: project-fingerprint-core 420ms ease-out both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--banking .project-fingerprint__node--secondary,
+.portfolio-project-card__link:focus-visible .project-fingerprint--banking .project-fingerprint__node--secondary,
+.portfolio-project-card__link:hover .project-fingerprint--banking .project-fingerprint__node--accent,
+.portfolio-project-card__link:focus-visible .project-fingerprint--banking .project-fingerprint__node--accent {
+    animation: project-fingerprint-node-settle 420ms ease-out 80ms both;
+}
+
+@keyframes project-fingerprint-signal {
+    0% {
+        stroke-dashoffset: 1.24;
+        opacity: 0;
+    }
+
+    18% {
+        opacity: 0.94;
+    }
+
+    84% {
+        stroke-dashoffset: 0;
+        opacity: 0.94;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes project-fingerprint-node-activate {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    42% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes project-fingerprint-node-settle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    44% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes project-fingerprint-boundary {
+    0%, 100% { opacity: 0.92; stroke-width: 1.2; }
+    44% { opacity: 1; stroke-width: 1.6; }
+}
+
+@keyframes project-fingerprint-relationships {
+    0%, 100% { opacity: 0.94; }
+    40% { opacity: 1; }
+}
+
+@keyframes project-fingerprint-core {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    42% { opacity: 1; transform: scale(1.07); }
 }
 
 .portfolio-project-card__arrow {
@@ -580,6 +699,7 @@ body::after{
     bottom: 0.42rem;
     width: 1px;
     background: linear-gradient(to bottom, color-mix(in oklab, var(--accent) 62%, var(--border) 38%), color-mix(in oklab, var(--muted) 60%, transparent));
+    transform-origin: top center;
 }
 
 .homepage-engineering-evidence__connector::after {
@@ -592,6 +712,46 @@ body::after{
     border-bottom: 1px solid var(--accent);
     content: "";
     transform: rotate(45deg);
+}
+
+.homepage-engineering-evidence__motion {
+    position: relative;
+}
+
+[data-evidence-motion="active"] .homepage-engineering-evidence__connector-dot {
+    animation: evidence-connector-dot 180ms ease-out var(--evidence-delay, 0ms) both;
+}
+
+[data-evidence-motion="active"] .homepage-engineering-evidence__connector-line {
+    animation: evidence-connector-line-vertical 460ms cubic-bezier(0.22, 1, 0.36, 1) var(--evidence-delay, 0ms) both;
+}
+
+[data-evidence-motion="active"] .homepage-engineering-evidence__connector::after {
+    animation: evidence-connector-arrow-vertical 120ms ease-out calc(var(--evidence-delay, 0ms) + 360ms) both;
+}
+
+[data-evidence-motion="active"] .homepage-engineering-evidence__decision::before {
+    animation: evidence-decision-rail 240ms ease-out calc(var(--evidence-delay, 0ms) + 360ms) both;
+}
+
+@keyframes evidence-connector-dot {
+    0% { opacity: 0; scale: 0.5; }
+    100% { opacity: 1; scale: 1; }
+}
+
+@keyframes evidence-connector-line-vertical {
+    0% { opacity: 0; transform: scaleY(0); }
+    100% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes evidence-connector-arrow-vertical {
+    0% { opacity: 0; transform: translateY(-0.15rem) rotate(45deg) scale(0.55); }
+    100% { opacity: 1; transform: rotate(45deg) scale(1); }
+}
+
+@keyframes evidence-decision-rail {
+    0% { opacity: 0; transform: scaleY(0); }
+    100% { opacity: 0.56; transform: scaleY(1); }
 }
 
 .homepage-engineering-evidence__decision {
@@ -609,6 +769,7 @@ body::after{
     background: var(--accent);
     content: "";
     opacity: 0.56;
+    transform-origin: top center;
 }
 
 .homepage-engineering-evidence__label--decision {
@@ -713,6 +874,7 @@ body::after{
         width: auto;
         height: 1px;
         background: linear-gradient(to right, color-mix(in oklab, var(--accent) 62%, var(--border) 38%), color-mix(in oklab, var(--muted) 60%, transparent));
+        transform-origin: left center;
     }
 
     .homepage-engineering-evidence__connector::after {
@@ -721,6 +883,14 @@ body::after{
         bottom: auto;
         left: auto;
         transform: translateY(-50%) rotate(-45deg);
+    }
+
+    [data-evidence-motion="active"] .homepage-engineering-evidence__connector-line {
+        animation-name: evidence-connector-line-horizontal;
+    }
+
+    [data-evidence-motion="active"] .homepage-engineering-evidence__connector::after {
+        animation-name: evidence-connector-arrow-horizontal;
     }
 
     .homepage-engineering-evidence__decision {
@@ -744,6 +914,16 @@ body::after{
         margin-top: 0;
         padding-top: 0;
     }
+}
+
+@keyframes evidence-connector-line-horizontal {
+    0% { opacity: 0; transform: scaleX(0); }
+    100% { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes evidence-connector-arrow-horizontal {
+    0% { opacity: 0; transform: translateY(-50%) translateX(-0.15rem) rotate(-45deg) scale(0.55); }
+    100% { opacity: 1; transform: translateY(-50%) rotate(-45deg) scale(1); }
 }
 
 @media (max-width: 480px) {
@@ -822,6 +1002,7 @@ body::after{
     stroke: var(--boundary-accent);
     stroke-width: 2;
     opacity: 0.62;
+    animation: boundary-signal-gate 220ms ease-out 600ms both;
 }
 
 .boundary-signal__node {
@@ -840,6 +1021,35 @@ body::after{
     fill: var(--boundary-accent);
     stroke: var(--boundary-signal-ring);
     stroke-width: 4;
+}
+
+.boundary-signal__node--source,
+.boundary-signal__node--destination {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.boundary-signal__node--source {
+    animation: boundary-signal-source 240ms ease-out 100ms both;
+}
+
+.boundary-signal__node--destination {
+    animation: boundary-signal-destination 280ms ease-out 930ms both;
+}
+
+@keyframes boundary-signal-source {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    46% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes boundary-signal-gate {
+    0%, 100% { opacity: 0.62; stroke-width: 2; }
+    46% { opacity: 1; stroke-width: 2.6; }
+}
+
+@keyframes boundary-signal-destination {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    46% { opacity: 1; transform: scale(1.08); }
 }
 
 @keyframes boundary-signal-traverse {
@@ -898,6 +1108,13 @@ body::after{
         animation: none;
         stroke-dashoffset: 404;
         opacity: 0.6;
+    }
+
+    .boundary-signal__node--source,
+    .boundary-signal__node--destination,
+    .boundary-signal__gate {
+        animation: none;
+        transform: none;
     }
 }
 

@@ -41,10 +41,10 @@ export function BoundarySignal() {
                 </g>
 
                 <g className="boundary-signal__nodes">
-                    <circle className="boundary-signal__node" cx="106" cy="180" r="7" />
+                    <circle className="boundary-signal__node boundary-signal__node--source" cx="106" cy="180" r="7" />
                     <circle className="boundary-signal__node boundary-signal__node--secondary" cx="242" cy="94" r="5" />
                     <circle className="boundary-signal__node boundary-signal__node--signal" cx="345" cy="180" r="6" />
-                    <circle className="boundary-signal__node" cx="542" cy="180" r="7" />
+                    <circle className="boundary-signal__node boundary-signal__node--destination" cx="542" cy="180" r="7" />
                     <circle className="boundary-signal__node boundary-signal__node--secondary" cx="468" cy="268" r="5" />
                 </g>
             </svg>
