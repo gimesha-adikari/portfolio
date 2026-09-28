@@ -319,6 +319,163 @@ body::after{
     opacity:.18;
 }
 
+.homepage-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+}
+
+.homepage-hero__content {
+    position: relative;
+    z-index: 1;
+}
+
+.homepage-hero__visual {
+    position: absolute;
+    z-index: 0;
+    top: 6.75rem;
+    right: 0.5rem;
+    width: clamp(380px, 34vw, 500px);
+    aspect-ratio: 16 / 9;
+    pointer-events: none;
+}
+
+.boundary-signal {
+    width: 100%;
+    height: 100%;
+    color: var(--boundary-line);
+    opacity: 0.9;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.78) 18%, #000 36%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.78) 18%, #000 36%, #000 88%, transparent 100%);
+}
+
+.boundary-signal svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.boundary-signal__grid {
+    color: var(--boundary-grid);
+    opacity: 0.7;
+}
+
+.boundary-signal__route {
+    stroke: var(--boundary-route);
+    stroke-width: 1.4;
+    opacity: 0.7;
+}
+
+.boundary-signal__route--secondary {
+    stroke: var(--boundary-line);
+    stroke-width: 1.2;
+    opacity: 0.65;
+}
+
+.boundary-signal__route--tertiary {
+    opacity: 0.42;
+}
+
+.boundary-signal__route--signal {
+    stroke: var(--boundary-accent);
+    stroke-width: 2;
+    stroke-dasharray: 32 436;
+    stroke-dashoffset: 0;
+    opacity: 0;
+    animation: boundary-signal-traverse 980ms cubic-bezier(0.22, 1, 0.36, 1) 100ms forwards;
+}
+
+.boundary-signal__boundary {
+    stroke: var(--boundary-line);
+    stroke-width: 1.5;
+    stroke-dasharray: 2 9;
+    opacity: 0.95;
+}
+
+.boundary-signal__gate {
+    stroke: var(--boundary-accent);
+    stroke-width: 2;
+    opacity: 0.62;
+}
+
+.boundary-signal__node {
+    fill: var(--boundary-node-fill);
+    stroke: var(--boundary-node-stroke);
+    stroke-width: 1.5;
+}
+
+.boundary-signal__node--secondary {
+    fill: var(--boundary-node-secondary-fill);
+    stroke: var(--boundary-node-secondary-stroke);
+    stroke-width: 1.25;
+}
+
+.boundary-signal__node--signal {
+    fill: var(--boundary-accent);
+    stroke: var(--boundary-signal-ring);
+    stroke-width: 4;
+}
+
+@keyframes boundary-signal-traverse {
+    0% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 0.9;
+    }
+
+    86% {
+        stroke-dashoffset: 404;
+        opacity: 0.9;
+    }
+
+    100% {
+        stroke-dashoffset: 404;
+        opacity: 0.36;
+    }
+}
+
+:root {
+    --boundary-grid: color-mix(in oklab, var(--border) 62%, transparent);
+    --boundary-line: color-mix(in oklab, var(--muted) 62%, transparent);
+    --boundary-route: color-mix(in oklab, var(--accent) 72%, var(--muted) 28%);
+    --boundary-accent: color-mix(in oklab, var(--accent) 88%, transparent);
+    --boundary-signal-ring: color-mix(in oklab, var(--accent) 26%, transparent);
+    --boundary-node-fill: color-mix(in oklab, var(--surface) 86%, var(--accent) 14%);
+    --boundary-node-stroke: color-mix(in oklab, var(--accent) 70%, var(--border) 30%);
+    --boundary-node-secondary-fill: color-mix(in oklab, var(--surface) 94%, var(--muted) 6%);
+    --boundary-node-secondary-stroke: color-mix(in oklab, var(--muted) 58%, var(--border) 42%);
+}
+
+:root[data-theme="dark"] {
+    --boundary-grid: color-mix(in oklab, var(--border) 78%, transparent);
+    --boundary-line: color-mix(in oklab, var(--muted) 78%, transparent);
+    --boundary-route: color-mix(in oklab, var(--accent) 82%, var(--muted) 18%);
+    --boundary-accent: color-mix(in oklab, var(--accent) 94%, transparent);
+    --boundary-signal-ring: color-mix(in oklab, var(--accent) 34%, transparent);
+    --boundary-node-fill: color-mix(in oklab, var(--surface) 80%, var(--accent) 20%);
+    --boundary-node-stroke: color-mix(in oklab, var(--accent) 82%, var(--border) 18%);
+    --boundary-node-secondary-fill: color-mix(in oklab, var(--surface) 90%, var(--muted) 10%);
+    --boundary-node-secondary-stroke: color-mix(in oklab, var(--muted) 72%, var(--border) 28%);
+}
+
+@media (max-width: 1279px) {
+    .homepage-hero__visual {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .boundary-signal__route--signal {
+        animation: none;
+        stroke-dashoffset: 404;
+        opacity: 0.6;
+    }
+}
+
 @media (max-width: 480px){
     .section { padding-block: 28px; }
     .btn { min-height: 42px; padding: 0 16px; }

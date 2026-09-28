@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { BoundarySignal } from "@/components/BoundarySignal";
 import { siteConfig } from "@/lib/siteConfig";
 
 export function HomepageHero() {
     return (
-        <section className="homepage-section" aria-labelledby="homepage-hero-title">
-            <div className="container-xl mx-auto max-w-5xl">
+        <section className="homepage-section homepage-hero" aria-labelledby="homepage-hero-title">
+            <div className="container-xl mx-auto max-w-5xl homepage-hero__content">
                 <div className="max-w-4xl space-y-7">
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
                         {siteConfig.name} · Systems and platform engineering
@@ -44,6 +45,9 @@ export function HomepageHero() {
                         </a>
                     </div>
                 </div>
+            </div>
+            <div className="homepage-hero__visual">
+                <BoundarySignal />
             </div>
         </section>
     );
