@@ -319,6 +319,805 @@ body::after{
     opacity:.18;
 }
 
+.homepage-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+}
+
+.homepage-hero__content {
+    position: relative;
+    z-index: 1;
+}
+
+.homepage-hero__visual {
+    position: absolute;
+    z-index: 0;
+    top: 6.75rem;
+    right: 0.5rem;
+    width: clamp(380px, 34vw, 500px);
+    aspect-ratio: 16 / 9;
+    pointer-events: none;
+}
+
+.project-fingerprint {
+    --fingerprint-line: color-mix(in oklab, var(--muted) 68%, transparent);
+    --fingerprint-route: color-mix(in oklab, var(--accent) 72%, var(--muted) 28%);
+    --fingerprint-accent: color-mix(in oklab, var(--accent) 88%, transparent);
+    --fingerprint-boundary: color-mix(in oklab, var(--muted) 76%, transparent);
+    --fingerprint-node-fill: color-mix(in oklab, var(--surface) 90%, var(--accent) 10%);
+    --fingerprint-node-stroke: color-mix(in oklab, var(--accent) 70%, var(--border) 30%);
+    --fingerprint-node-secondary-fill: color-mix(in oklab, var(--surface) 94%, var(--muted) 6%);
+    --fingerprint-node-secondary-stroke: color-mix(in oklab, var(--muted) 58%, var(--border) 42%);
+    width: 4.75rem;
+    height: 2.75rem;
+    flex: 0 0 4.75rem;
+    color: var(--fingerprint-line);
+    opacity: 0.82;
+    transition: opacity 180ms ease, color 180ms ease;
+}
+
+.project-fingerprint svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.project-fingerprint__connectors {
+    stroke: var(--fingerprint-route);
+    stroke-width: 1.25;
+    opacity: 0.78;
+    transition: opacity 180ms ease;
+}
+
+.project-fingerprint__signal {
+    fill: none;
+    stroke: var(--fingerprint-accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0;
+    pointer-events: none;
+    stroke-dasharray: 0.24 1;
+    stroke-dashoffset: 1.24;
+}
+
+.project-fingerprint__boundary {
+    stroke: var(--fingerprint-boundary);
+    stroke-width: 1.2;
+    stroke-dasharray: 2 4;
+    opacity: 0.92;
+    transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
+}
+
+.project-fingerprint__node {
+    fill: var(--fingerprint-node-fill);
+    stroke: var(--fingerprint-node-stroke);
+    stroke-width: 1.35;
+    transition: opacity 180ms ease, stroke 180ms ease;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.project-fingerprint__node--secondary {
+    fill: var(--fingerprint-node-secondary-fill);
+    stroke: var(--fingerprint-node-secondary-stroke);
+    stroke-width: 1.1;
+}
+
+.project-fingerprint__node--accent {
+    fill: var(--fingerprint-accent);
+    stroke: var(--fingerprint-accent);
+    stroke-width: 1.2;
+}
+
+.project-fingerprint__node--core {
+    fill: var(--fingerprint-accent);
+    stroke: var(--fingerprint-node-stroke);
+    stroke-width: 1.8;
+}
+
+.project-fingerprint__job {
+    fill: none;
+    stroke: var(--fingerprint-accent);
+    stroke-width: 1;
+    opacity: 0.72;
+}
+
+.portfolio-project-card__link:hover article,
+.portfolio-project-card__link:focus-visible article {
+    border-color: color-mix(in oklab, var(--accent) 24%, var(--border));
+}
+
+.portfolio-project-card__link:hover .project-fingerprint,
+.portfolio-project-card__link:focus-visible .project-fingerprint {
+    --fingerprint-route: color-mix(in oklab, var(--accent) 86%, var(--muted) 14%);
+    --fingerprint-accent: color-mix(in oklab, var(--accent) 96%, transparent);
+    opacity: 1;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint__connectors,
+.portfolio-project-card__link:focus-visible .project-fingerprint__connectors {
+    opacity: 0.94;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint__signal,
+.portfolio-project-card__link:focus-visible .project-fingerprint__signal {
+    animation: project-fingerprint-signal 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint__node--secondary,
+.portfolio-project-card__link:focus-visible .project-fingerprint__node--secondary {
+    animation: project-fingerprint-node-activate 420ms ease-out both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--termstead .project-fingerprint__boundary,
+.portfolio-project-card__link:focus-visible .project-fingerprint--termstead .project-fingerprint__boundary {
+    animation: project-fingerprint-boundary 420ms ease-out 100ms both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--termstead .project-fingerprint__node--authority,
+.portfolio-project-card__link:focus-visible .project-fingerprint--termstead .project-fingerprint__node--authority {
+    animation: project-fingerprint-node-settle 420ms ease-out 160ms both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--platen .project-fingerprint__node--api,
+.portfolio-project-card__link:focus-visible .project-fingerprint--platen .project-fingerprint__node--api {
+    animation: project-fingerprint-node-activate 420ms ease-out both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--platen .project-fingerprint__signal,
+.portfolio-project-card__link:focus-visible .project-fingerprint--platen .project-fingerprint__signal {
+    animation-delay: 120ms;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--platen .project-fingerprint__boundary--worker,
+.portfolio-project-card__link:focus-visible .project-fingerprint--platen .project-fingerprint__boundary--worker {
+    animation: project-fingerprint-boundary 420ms ease-out 120ms both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--platen .project-fingerprint__node--direct,
+.portfolio-project-card__link:focus-visible .project-fingerprint--platen .project-fingerprint__node--direct,
+.portfolio-project-card__link:hover .project-fingerprint--platen .project-fingerprint__node--worker,
+.portfolio-project-card__link:focus-visible .project-fingerprint--platen .project-fingerprint__node--worker {
+    animation: project-fingerprint-node-settle 420ms ease-out 160ms both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--banking .project-fingerprint__connectors,
+.portfolio-project-card__link:focus-visible .project-fingerprint--banking .project-fingerprint__connectors {
+    animation: project-fingerprint-relationships 420ms ease-out both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--banking .project-fingerprint__node--core,
+.portfolio-project-card__link:focus-visible .project-fingerprint--banking .project-fingerprint__node--core {
+    animation: project-fingerprint-core 420ms ease-out both;
+}
+
+.portfolio-project-card__link:hover .project-fingerprint--banking .project-fingerprint__node--secondary,
+.portfolio-project-card__link:focus-visible .project-fingerprint--banking .project-fingerprint__node--secondary,
+.portfolio-project-card__link:hover .project-fingerprint--banking .project-fingerprint__node--accent,
+.portfolio-project-card__link:focus-visible .project-fingerprint--banking .project-fingerprint__node--accent {
+    animation: project-fingerprint-node-settle 420ms ease-out 80ms both;
+}
+
+@keyframes project-fingerprint-signal {
+    0% {
+        stroke-dashoffset: 1.24;
+        opacity: 0;
+    }
+
+    18% {
+        opacity: 0.94;
+    }
+
+    84% {
+        stroke-dashoffset: 0;
+        opacity: 0.94;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes project-fingerprint-node-activate {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    42% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes project-fingerprint-node-settle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    44% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes project-fingerprint-boundary {
+    0%, 100% { opacity: 0.92; stroke-width: 1.2; }
+    44% { opacity: 1; stroke-width: 1.6; }
+}
+
+@keyframes project-fingerprint-relationships {
+    0%, 100% { opacity: 0.94; }
+    40% { opacity: 1; }
+}
+
+@keyframes project-fingerprint-core {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    42% { opacity: 1; transform: scale(1.07); }
+}
+
+.portfolio-project-card__arrow {
+    transition: transform 180ms ease, color 180ms ease;
+}
+
+.portfolio-project-card__link:hover .portfolio-project-card__arrow,
+.portfolio-project-card__link:focus-visible .portfolio-project-card__arrow {
+    transform: translateX(2px);
+}
+
+:root[data-theme="dark"] .project-fingerprint {
+    --fingerprint-line: color-mix(in oklab, var(--muted) 82%, transparent);
+    --fingerprint-route: color-mix(in oklab, var(--accent) 84%, var(--muted) 16%);
+    --fingerprint-accent: color-mix(in oklab, var(--accent) 94%, transparent);
+    --fingerprint-boundary: color-mix(in oklab, var(--muted) 84%, transparent);
+    --fingerprint-node-fill: color-mix(in oklab, var(--surface) 82%, var(--accent) 18%);
+    --fingerprint-node-stroke: color-mix(in oklab, var(--accent) 82%, var(--border) 18%);
+    --fingerprint-node-secondary-fill: color-mix(in oklab, var(--surface) 91%, var(--muted) 9%);
+    --fingerprint-node-secondary-stroke: color-mix(in oklab, var(--muted) 72%, var(--border) 28%);
+}
+
+.homepage-engineering-evidence {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+}
+
+.homepage-engineering-evidence::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 4% 0;
+    pointer-events: none;
+    background:
+        linear-gradient(to bottom, color-mix(in oklab, var(--border) 18%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in oklab, var(--border) 18%, transparent) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%);
+    opacity: 0.28;
+}
+
+:root[data-theme="dark"] .homepage-engineering-evidence::before {
+    background:
+        linear-gradient(to bottom, color-mix(in oklab, var(--border) 28%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in oklab, var(--border) 28%, transparent) 1px, transparent 1px);
+    opacity: 0.32;
+}
+
+.homepage-engineering-evidence__grid {
+    position: relative;
+    display: grid;
+    gap: 0;
+}
+
+.homepage-engineering-evidence__reveal {
+    min-width: 0;
+}
+
+.homepage-engineering-evidence__item {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    padding: 1.5rem 0;
+    border-top: 1px solid color-mix(in oklab, var(--border) 82%, transparent);
+}
+
+.homepage-engineering-evidence__project {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 1.35rem;
+}
+
+.homepage-engineering-evidence__project-name,
+.homepage-engineering-evidence__index,
+.homepage-engineering-evidence__label,
+.homepage-engineering-evidence__responsibility-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.homepage-engineering-evidence__project-name {
+    color: var(--muted);
+}
+
+.homepage-engineering-evidence__index {
+    color: color-mix(in oklab, var(--muted) 72%, transparent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    letter-spacing: 0.08em;
+}
+
+.homepage-engineering-evidence__boundary {
+    padding-top: 1.45rem;
+}
+
+.homepage-engineering-evidence__label {
+    color: var(--muted);
+}
+
+.homepage-engineering-evidence__boundary-title {
+    margin-top: 0.55rem;
+    color: var(--fg);
+    font-size: 1.18rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.28;
+}
+
+.homepage-engineering-evidence__responsibility {
+    margin-top: 0.8rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+}
+
+.homepage-engineering-evidence__responsibility-label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: color-mix(in oklab, var(--muted) 86%, transparent);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+}
+
+.homepage-engineering-evidence__connector {
+    position: relative;
+    width: 1.25rem;
+    height: 2.45rem;
+    margin-top: 1rem;
+    margin-bottom: 0.35rem;
+}
+
+.homepage-engineering-evidence__connector-dot {
+    position: absolute;
+    top: 0.12rem;
+    left: 0.33rem;
+    width: 0.42rem;
+    height: 0.42rem;
+    border: 1px solid color-mix(in oklab, var(--accent) 70%, var(--border) 30%);
+    border-radius: 999px;
+    background: var(--surface);
+}
+
+.homepage-engineering-evidence__connector-line {
+    position: absolute;
+    top: 0.58rem;
+    left: 0.52rem;
+    bottom: 0.42rem;
+    width: 1px;
+    background: linear-gradient(to bottom, color-mix(in oklab, var(--accent) 62%, var(--border) 38%), color-mix(in oklab, var(--muted) 60%, transparent));
+    transform-origin: top center;
+}
+
+.homepage-engineering-evidence__connector::after {
+    position: absolute;
+    bottom: 0.04rem;
+    left: 0.35rem;
+    width: 0.36rem;
+    height: 0.36rem;
+    border-right: 1px solid var(--accent);
+    border-bottom: 1px solid var(--accent);
+    content: "";
+    transform: rotate(45deg);
+}
+
+.homepage-engineering-evidence__motion {
+    position: relative;
+}
+
+[data-evidence-motion="active"] .homepage-engineering-evidence__connector-dot {
+    animation: evidence-connector-dot 180ms ease-out var(--evidence-delay, 0ms) both;
+}
+
+[data-evidence-motion="active"] .homepage-engineering-evidence__connector-line {
+    animation: evidence-connector-line-vertical 460ms cubic-bezier(0.22, 1, 0.36, 1) var(--evidence-delay, 0ms) both;
+}
+
+[data-evidence-motion="active"] .homepage-engineering-evidence__connector::after {
+    animation: evidence-connector-arrow-vertical 120ms ease-out calc(var(--evidence-delay, 0ms) + 360ms) both;
+}
+
+[data-evidence-motion="active"] .homepage-engineering-evidence__decision::before {
+    animation: evidence-decision-rail 240ms ease-out calc(var(--evidence-delay, 0ms) + 360ms) both;
+}
+
+@keyframes evidence-connector-dot {
+    0% { opacity: 0; scale: 0.5; }
+    100% { opacity: 1; scale: 1; }
+}
+
+@keyframes evidence-connector-line-vertical {
+    0% { opacity: 0; transform: scaleY(0); }
+    100% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes evidence-connector-arrow-vertical {
+    0% { opacity: 0; transform: translateY(-0.15rem) rotate(45deg) scale(0.55); }
+    100% { opacity: 1; transform: rotate(45deg) scale(1); }
+}
+
+@keyframes evidence-decision-rail {
+    0% { opacity: 0; transform: scaleY(0); }
+    100% { opacity: 0.56; transform: scaleY(1); }
+}
+
+.homepage-engineering-evidence__decision {
+    position: relative;
+    padding-left: 0.9rem;
+}
+
+.homepage-engineering-evidence__decision::before {
+    position: absolute;
+    top: 0.05rem;
+    bottom: 0.05rem;
+    left: 0;
+    width: 2px;
+    border-radius: 999px;
+    background: var(--accent);
+    content: "";
+    opacity: 0.56;
+    transform-origin: top center;
+}
+
+.homepage-engineering-evidence__label--decision {
+    color: var(--accent);
+}
+
+.homepage-engineering-evidence__decision-text {
+    margin-top: 0.55rem;
+    color: var(--fg);
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.55;
+}
+
+.homepage-engineering-evidence__link {
+    margin-top: auto;
+    padding-top: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .homepage-engineering-evidence__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .homepage-engineering-evidence__grid::before {
+        position: absolute;
+        top: 0.68rem;
+        right: 0;
+        left: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--border) 86%, transparent) 12%, color-mix(in oklab, var(--border) 86%, transparent) 88%, transparent);
+        content: "";
+        opacity: 0.7;
+    }
+
+    .homepage-engineering-evidence__item {
+        min-height: 100%;
+        padding: 1.5rem 1.5rem 0;
+        border-top: 0;
+    }
+
+    .homepage-engineering-evidence__grid > .homepage-engineering-evidence__reveal + .homepage-engineering-evidence__reveal .homepage-engineering-evidence__item {
+        border-left: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+    }
+}
+
+@media (min-width: 1280px) {
+    .homepage-engineering-evidence__item {
+        padding-inline: 1.75rem;
+    }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+    .homepage-engineering-evidence__grid {
+        display: block;
+    }
+
+    .homepage-engineering-evidence__item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 2.25rem minmax(0, 1fr);
+        column-gap: clamp(0.75rem, 2vw, 1.25rem);
+        align-items: stretch;
+        padding: 1.25rem 0 1.35rem;
+    }
+
+    .homepage-engineering-evidence__project {
+        grid-column: 1;
+        grid-row: 1;
+        margin-bottom: 0;
+    }
+
+    .homepage-engineering-evidence__index {
+        display: none;
+    }
+
+    .homepage-engineering-evidence__boundary {
+        grid-column: 1;
+        grid-row: 2;
+        padding-top: 0;
+    }
+
+    .homepage-engineering-evidence__connector {
+        grid-column: 2;
+        grid-row: 2;
+        align-self: center;
+        width: 100%;
+        height: 1.25rem;
+        margin: 0;
+    }
+
+    .homepage-engineering-evidence__connector-dot {
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+    }
+
+    .homepage-engineering-evidence__connector-line {
+        top: 50%;
+        right: 0.36rem;
+        bottom: auto;
+        left: 0.36rem;
+        width: auto;
+        height: 1px;
+        background: linear-gradient(to right, color-mix(in oklab, var(--accent) 62%, var(--border) 38%), color-mix(in oklab, var(--muted) 60%, transparent));
+        transform-origin: left center;
+    }
+
+    .homepage-engineering-evidence__connector::after {
+        top: 50%;
+        right: 0;
+        bottom: auto;
+        left: auto;
+        transform: translateY(-50%) rotate(-45deg);
+    }
+
+    [data-evidence-motion="active"] .homepage-engineering-evidence__connector-line {
+        animation-name: evidence-connector-line-horizontal;
+    }
+
+    [data-evidence-motion="active"] .homepage-engineering-evidence__connector::after {
+        animation-name: evidence-connector-arrow-horizontal;
+    }
+
+    .homepage-engineering-evidence__decision {
+        grid-column: 3;
+        grid-row: 2;
+        align-self: stretch;
+        padding-left: 0.85rem;
+    }
+
+    .homepage-engineering-evidence__decision-text {
+        font-size: 0.94rem;
+        line-height: 1.48;
+    }
+
+    .homepage-engineering-evidence__link {
+        grid-column: 3;
+        grid-row: 1;
+        align-self: start;
+        justify-self: end;
+        min-height: 0;
+        margin-top: 0;
+        padding-top: 0;
+    }
+}
+
+@keyframes evidence-connector-line-horizontal {
+    0% { opacity: 0; transform: scaleX(0); }
+    100% { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes evidence-connector-arrow-horizontal {
+    0% { opacity: 0; transform: translateY(-50%) translateX(-0.15rem) rotate(-45deg) scale(0.55); }
+    100% { opacity: 1; transform: translateY(-50%) rotate(-45deg) scale(1); }
+}
+
+@media (max-width: 480px) {
+    .homepage-engineering-evidence::before {
+        inset: 2% 0;
+        opacity: 0.18;
+    }
+
+    :root[data-theme="dark"] .homepage-engineering-evidence::before {
+        opacity: 0.22;
+    }
+
+    .homepage-engineering-evidence__item {
+        padding-block: 1.25rem;
+    }
+
+    .homepage-engineering-evidence__boundary {
+        padding-top: 1.2rem;
+    }
+}
+
+.boundary-signal {
+    width: 100%;
+    height: 100%;
+    color: var(--boundary-line);
+    opacity: 0.9;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.78) 18%, #000 36%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.78) 18%, #000 36%, #000 88%, transparent 100%);
+}
+
+.boundary-signal svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.boundary-signal__grid {
+    color: var(--boundary-grid);
+    opacity: 0.7;
+}
+
+.boundary-signal__route {
+    stroke: var(--boundary-route);
+    stroke-width: 1.4;
+    opacity: 0.7;
+}
+
+.boundary-signal__route--secondary {
+    stroke: var(--boundary-line);
+    stroke-width: 1.2;
+    opacity: 0.65;
+}
+
+.boundary-signal__route--tertiary {
+    opacity: 0.42;
+}
+
+.boundary-signal__route--signal {
+    stroke: var(--boundary-accent);
+    stroke-width: 2;
+    stroke-dasharray: 32 436;
+    stroke-dashoffset: 0;
+    opacity: 0;
+    animation: boundary-signal-traverse 980ms cubic-bezier(0.22, 1, 0.36, 1) 100ms forwards;
+}
+
+.boundary-signal__boundary {
+    stroke: var(--boundary-line);
+    stroke-width: 1.5;
+    stroke-dasharray: 2 9;
+    opacity: 0.95;
+}
+
+.boundary-signal__gate {
+    stroke: var(--boundary-accent);
+    stroke-width: 2;
+    opacity: 0.62;
+    animation: boundary-signal-gate 220ms ease-out 600ms both;
+}
+
+.boundary-signal__node {
+    fill: var(--boundary-node-fill);
+    stroke: var(--boundary-node-stroke);
+    stroke-width: 1.5;
+}
+
+.boundary-signal__node--secondary {
+    fill: var(--boundary-node-secondary-fill);
+    stroke: var(--boundary-node-secondary-stroke);
+    stroke-width: 1.25;
+}
+
+.boundary-signal__node--signal {
+    fill: var(--boundary-accent);
+    stroke: var(--boundary-signal-ring);
+    stroke-width: 4;
+}
+
+.boundary-signal__node--source,
+.boundary-signal__node--destination {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.boundary-signal__node--source {
+    animation: boundary-signal-source 240ms ease-out 100ms both;
+}
+
+.boundary-signal__node--destination {
+    animation: boundary-signal-destination 280ms ease-out 930ms both;
+}
+
+@keyframes boundary-signal-source {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    46% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes boundary-signal-gate {
+    0%, 100% { opacity: 0.62; stroke-width: 2; }
+    46% { opacity: 1; stroke-width: 2.6; }
+}
+
+@keyframes boundary-signal-destination {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    46% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes boundary-signal-traverse {
+    0% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 0.9;
+    }
+
+    86% {
+        stroke-dashoffset: 404;
+        opacity: 0.9;
+    }
+
+    100% {
+        stroke-dashoffset: 404;
+        opacity: 0.36;
+    }
+}
+
+:root {
+    --boundary-grid: color-mix(in oklab, var(--border) 62%, transparent);
+    --boundary-line: color-mix(in oklab, var(--muted) 62%, transparent);
+    --boundary-route: color-mix(in oklab, var(--accent) 72%, var(--muted) 28%);
+    --boundary-accent: color-mix(in oklab, var(--accent) 88%, transparent);
+    --boundary-signal-ring: color-mix(in oklab, var(--accent) 26%, transparent);
+    --boundary-node-fill: color-mix(in oklab, var(--surface) 86%, var(--accent) 14%);
+    --boundary-node-stroke: color-mix(in oklab, var(--accent) 70%, var(--border) 30%);
+    --boundary-node-secondary-fill: color-mix(in oklab, var(--surface) 94%, var(--muted) 6%);
+    --boundary-node-secondary-stroke: color-mix(in oklab, var(--muted) 58%, var(--border) 42%);
+}
+
+:root[data-theme="dark"] {
+    --boundary-grid: color-mix(in oklab, var(--border) 78%, transparent);
+    --boundary-line: color-mix(in oklab, var(--muted) 78%, transparent);
+    --boundary-route: color-mix(in oklab, var(--accent) 82%, var(--muted) 18%);
+    --boundary-accent: color-mix(in oklab, var(--accent) 94%, transparent);
+    --boundary-signal-ring: color-mix(in oklab, var(--accent) 34%, transparent);
+    --boundary-node-fill: color-mix(in oklab, var(--surface) 80%, var(--accent) 20%);
+    --boundary-node-stroke: color-mix(in oklab, var(--accent) 82%, var(--border) 18%);
+    --boundary-node-secondary-fill: color-mix(in oklab, var(--surface) 90%, var(--muted) 10%);
+    --boundary-node-secondary-stroke: color-mix(in oklab, var(--muted) 72%, var(--border) 28%);
+}
+
+@media (max-width: 1279px) {
+    .homepage-hero__visual {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .boundary-signal__route--signal {
+        animation: none;
+        stroke-dashoffset: 404;
+        opacity: 0.6;
+    }
+
+    .boundary-signal__node--source,
+    .boundary-signal__node--destination,
+    .boundary-signal__gate {
+        animation: none;
+        transform: none;
+    }
+}
+
 @media (max-width: 480px){
     .section { padding-block: 28px; }
     .btn { min-height: 42px; padding: 0 16px; }

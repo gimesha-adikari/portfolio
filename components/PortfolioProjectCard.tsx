@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { PortfolioProject, RepositoryFacts } from "@/lib/portfolio-projects";
+import { ProjectFingerprint } from "@/components/ProjectFingerprint";
 
 function labelForStatus(status: PortfolioProject["status"]) {
     return status.charAt(0).toUpperCase() + status.slice(1);
@@ -22,7 +23,7 @@ export function PortfolioProjectCard({
     return (
         <Link
             href={`/projects/${project.slug}`}
-            className="group block h-full"
+            className="group portfolio-project-card__link block h-full"
             prefetch={false}
         >
             <article
@@ -42,12 +43,15 @@ export function PortfolioProjectCard({
                     {project.category && <span>{project.category}</span>}
                 </div>
 
-                <h3
-                    id={titleId}
-                    className="mt-5 text-xl font-bold tracking-tight text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors"
-                >
-                    {project.title}
-                </h3>
+                <div className="portfolio-project-card__title-row mt-5 flex items-start justify-between gap-3">
+                    <h3
+                        id={titleId}
+                        className="min-w-0 flex-1 text-xl font-bold tracking-tight text-[var(--fg)] transition-colors group-hover:text-[var(--accent)]"
+                    >
+                        {project.title}
+                    </h3>
+                    {variant === "homepage" && <ProjectFingerprint projectSlug={project.slug} />}
+                </div>
                 <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
                     {project.tagline}
                 </p>
@@ -98,7 +102,7 @@ export function PortfolioProjectCard({
                     ) : (
                         <span>{project.caseStudies?.length ?? 0} associated case studies</span>
                     )}
-                    <span className="inline-flex items-center gap-1 group-hover:text-[var(--accent)] transition-colors">
+                    <span className={`inline-flex items-center gap-1 group-hover:text-[var(--accent)] transition-colors ${variant === "homepage" ? "portfolio-project-card__arrow" : ""}`}>
                         {variant === "homepage" ? "Explore system" : "View project"}
                         <span className="icon-[tabler--arrow-up-right] size-4" aria-hidden />
                     </span>
