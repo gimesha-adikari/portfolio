@@ -9,6 +9,7 @@ import { PortfolioProjectGallery } from "./PortfolioProjectGallery";
 import { PortfolioProjectHero } from "./PortfolioProjectHero";
 import { PortfolioProjectRepositories } from "./PortfolioProjectRepositories";
 import { PortfolioProjectTechnicalEvidence } from "./PortfolioProjectTechnicalEvidence";
+import { TermsteadAuthoritySummary } from "./TermsteadAuthoritySummary";
 
 export function PortfolioProjectDetail({
     project,
@@ -35,6 +36,7 @@ export function PortfolioProjectDetail({
     return (
         <article className="space-y-12 pb-20 container-xl max-w-5xl mx-auto pt-6">
             <PortfolioProjectHero project={project} />
+            {project.slug === "termstead" && <TermsteadAuthoritySummary />}
             <PortfolioProjectContext project={project} />
             {project.technicalEvidence
                 ? <PortfolioProjectTechnicalEvidence project={project} />
