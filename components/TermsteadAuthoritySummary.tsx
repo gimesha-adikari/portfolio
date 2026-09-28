@@ -52,7 +52,7 @@ export function TermsteadAuthoritySummary() {
                 <div className="termstead-authority-summary__lifecycle-heading">
                     <p className="termstead-authority-summary__eyebrow">Lifecycle distinction</p>
                     <h3 id="termstead-authority-lifecycle-title" className="termstead-authority-summary__lifecycle-title">
-                        View lifetime <span aria-hidden="true">≠</span> session lifetime
+                        View lifetime <span aria-hidden="true">≠</span><span className="sr-only"> is not </span> session lifetime
                     </h3>
                 </div>
                 <div className="termstead-authority-summary__lifecycle-grid">
