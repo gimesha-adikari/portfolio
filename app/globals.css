@@ -978,6 +978,239 @@ body::after{
     transition: opacity 180ms ease, color 180ms ease;
 }
 
+.projects-flagship-list {
+    border-block: 1px solid var(--border);
+}
+
+.projects-flagship-row__reveal + .projects-flagship-row__reveal {
+    border-top: 1px solid var(--border);
+}
+
+.projects-flagship-row {
+    display: block;
+    color: var(--fg);
+    outline-offset: 4px;
+    transition: background-color 180ms ease, color 180ms ease;
+}
+
+.projects-flagship-row:hover,
+.projects-flagship-row:focus-visible {
+    background: color-mix(in oklab, var(--surface) 74%, var(--accent) 6%);
+}
+
+.projects-flagship-row__surface {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(7rem, .45fr);
+    gap: clamp(1.25rem, 3vw, 2.75rem);
+    align-items: start;
+    padding-block: clamp(1.35rem, 3vw, 2.2rem);
+}
+
+.projects-flagship-row__identity,
+.projects-flagship-row__reasoning,
+.projects-flagship-row__fingerprint,
+.projects-flagship-row__footer {
+    min-width: 0;
+}
+
+.projects-flagship-row__eyebrow,
+.projects-flagship-row__label {
+    color: var(--muted);
+    font-size: .7rem;
+    font-weight: 650;
+    letter-spacing: .16em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.projects-flagship-row__eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+}
+
+.projects-flagship-row__title {
+    margin-top: .8rem;
+    color: var(--fg);
+    font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+    font-weight: 750;
+    letter-spacing: -.025em;
+    line-height: 1.1;
+    transition: color 180ms ease;
+}
+
+.projects-flagship-row:hover .projects-flagship-row__title,
+.projects-flagship-row:focus-visible .projects-flagship-row__title {
+    color: var(--accent);
+}
+
+.projects-flagship-row__tagline {
+    margin-top: .7rem;
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.65;
+}
+
+.projects-flagship-row__reasoning {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+.projects-flagship-row__reasoning p {
+    margin-top: .45rem;
+    color: var(--fg);
+    font-size: .9rem;
+    line-height: 1.65;
+}
+
+.projects-flagship-row__fingerprint {
+    display: flex;
+    min-height: 4.5rem;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.projects-flagship-row__fingerprint .project-fingerprint {
+    width: clamp(6rem, 8vw, 7.5rem);
+    height: clamp(3.2rem, 4vw, 4rem);
+    flex-basis: clamp(6rem, 8vw, 7.5rem);
+}
+
+.projects-flagship-row__footer {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: .25rem;
+    color: var(--muted);
+    font-size: .75rem;
+}
+
+.projects-flagship-row__evidence {
+    color: var(--muted);
+}
+
+.projects-flagship-row__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    color: var(--muted);
+    transition: color 180ms ease;
+}
+
+.projects-flagship-row__cta > span {
+    transition: transform 180ms ease;
+}
+
+.projects-flagship-row:hover .projects-flagship-row__cta,
+.projects-flagship-row:focus-visible .projects-flagship-row__cta {
+    color: var(--accent);
+}
+
+.projects-flagship-row:hover .projects-flagship-row__cta > span,
+.projects-flagship-row:focus-visible .projects-flagship-row__cta > span {
+    transform: translateX(2px);
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint {
+    --fingerprint-route: color-mix(in oklab, var(--accent) 86%, var(--muted) 14%);
+    --fingerprint-accent: color-mix(in oklab, var(--accent) 96%, transparent);
+    opacity: 1;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint__connectors {
+    opacity: .94;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint__signal {
+    animation: project-fingerprint-signal 420ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint__node--secondary {
+    animation: project-fingerprint-node-activate 420ms ease-out both;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--termstead .project-fingerprint__boundary {
+    animation: project-fingerprint-boundary 420ms ease-out 100ms both;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--termstead .project-fingerprint__node--authority {
+    animation: project-fingerprint-node-settle 420ms ease-out 160ms both;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--platen .project-fingerprint__node--api {
+    animation: project-fingerprint-node-activate 420ms ease-out both;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--platen .project-fingerprint__signal {
+    animation-delay: 120ms;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--platen .project-fingerprint__boundary--worker {
+    animation: project-fingerprint-boundary 420ms ease-out 120ms both;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--platen .project-fingerprint__node--direct,
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--platen .project-fingerprint__node--worker {
+    animation: project-fingerprint-node-settle 420ms ease-out 160ms both;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--banking .project-fingerprint__connectors {
+    animation: project-fingerprint-relationships 420ms ease-out both;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--banking .project-fingerprint__node--core {
+    animation: project-fingerprint-core 420ms ease-out both;
+}
+
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--banking .project-fingerprint__node--secondary,
+:is(.projects-flagship-row:hover, .projects-flagship-row:focus-visible) .project-fingerprint--banking .project-fingerprint__node--accent {
+    animation: project-fingerprint-node-settle 420ms ease-out 80ms both;
+}
+
+@media (max-width: 900px) {
+    .projects-flagship-row__surface {
+        grid-template-columns: minmax(0, 1fr) minmax(7rem, .38fr);
+    }
+
+    .projects-flagship-row__reasoning,
+    .projects-flagship-row__footer {
+        grid-column: 1 / -1;
+    }
+
+    .projects-flagship-row__fingerprint {
+        grid-column: 2;
+        grid-row: 1;
+    }
+}
+
+@media (max-width: 639px) {
+    .projects-flagship-row__surface {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.2rem;
+    }
+
+    .projects-flagship-row__fingerprint {
+        grid-column: auto;
+        grid-row: auto;
+        justify-content: flex-start;
+        min-height: 0;
+    }
+
+    .projects-flagship-row__reasoning {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .projects-flagship-row {
+        transition: none;
+    }
+}
+
 .project-fingerprint svg {
     display: block;
     width: 100%;

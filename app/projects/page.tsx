@@ -2,8 +2,10 @@ import Link from "next/link";
 import { fetchAllRepos, type Repo } from "@/lib/github";
 import { RepoCard } from "@/components/RepoCard";
 import { PortfolioProjectCard } from "@/components/PortfolioProjectCard";
+import { ProjectsFlagshipRow } from "@/components/ProjectsFlagshipRow";
 import { orderReposWithPinned } from "@/lib/pins";
 import Reveal from "@/components/Reveal";
+import MotionSection from "@/components/MotionSection";
 import ProjectsFilters from "@/components/ProjectsFilters";
 import { mapRepositoryFacts } from "@/lib/portfolio-repository-facts";
 import { filterArchiveRepositories, parseProjectFilterParams, type SortKey } from "@/lib/project-filters";
@@ -80,6 +82,8 @@ export default async function ProjectsPage({
     );
 
     const visibleProjects = curatedProjects;
+    const flagshipProjects = curatedProjects.filter((project) => project.featured);
+    const experimentalProjects = curatedProjects.filter((project) => !project.featured);
 
     const langs = uniqueLanguages(archive);
     const counts = languageCounts(archive);
@@ -118,22 +122,54 @@ export default async function ProjectsPage({
 
                         </div>
 
-                        {visibleProjects.length > 0 && (
-                            <section aria-labelledby="curated-projects-title" className="space-y-4">
+                        {flagshipProjects.length > 0 && (
+                            <MotionSection className="projects-flagship-section" y={8}>
+                                <section aria-labelledby="flagship-projects-title" className="space-y-4">
+                                    <div>
+                                        <h2 id="flagship-projects-title" className="text-xl font-bold text-[var(--fg)]">
+                                            Flagship systems
+                                        </h2>
+                                        <p className="mt-1 text-sm text-[var(--muted)]">
+                                            Selected systems with deeper architecture, evidence, and case-study context.
+                                        </p>
+                                    </div>
+                                    <div className="projects-flagship-list">
+                                        {flagshipProjects.map((project, index) => (
+                                            <Reveal
+                                                key={project.slug}
+                                                className="projects-flagship-row__reveal"
+                                                delay={index * 0.06}
+                                                duration={0.42}
+                                                fade
+                                                y={10}
+                                            >
+                                                <ProjectsFlagshipRow project={project} />
+                                            </Reveal>
+                                        ))}
+                                    </div>
+                                </section>
+                            </MotionSection>
+                        )}
+
+                        {experimentalProjects.length > 0 && (
+                            <section aria-labelledby="experimental-projects-title" className="space-y-4">
                                 <div>
-                                    <h2 id="curated-projects-title" className="text-xl font-bold text-[var(--fg)]">
-                                        Curated projects
+                                    <h2 id="experimental-projects-title" className="text-xl font-bold text-[var(--fg)]">
+                                        Experiments / secondary work
                                     </h2>
                                     <p className="mt-1 text-sm text-[var(--muted)]">
-                                        Portfolio-owned identity, narrative, order, and repository grouping.
+                                        Portfolio-owned experiments and secondary systems kept distinct from the flagship set.
                                     </p>
                                 </div>
                                 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 items-stretch">
-                                    {visibleProjects.map((project, index) => (
-                                        <Reveal key={project.slug} delay={(index % 10) * 0.05}>
-                                            <PortfolioProjectCard project={project} facts={factsBySlug.get(project.slug)} />
-                                        </Reveal>
-                                    ))}
+                                    {experimentalProjects.map((project) => {
+                                        const originalIndex = curatedProjects.findIndex((candidate) => candidate.slug === project.slug);
+                                        return (
+                                            <Reveal key={project.slug} delay={(originalIndex % 10) * 0.05}>
+                                                <PortfolioProjectCard project={project} facts={factsBySlug.get(project.slug)} />
+                                            </Reveal>
+                                        );
+                                    })}
                                 </div>
                             </section>
                         )}
