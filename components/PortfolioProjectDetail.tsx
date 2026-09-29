@@ -11,6 +11,7 @@ import { PortfolioProjectHero } from "./PortfolioProjectHero";
 import { PortfolioProjectRepositories } from "./PortfolioProjectRepositories";
 import { PortfolioProjectTechnicalEvidence } from "./PortfolioProjectTechnicalEvidence";
 import { TermsteadAuthoritySummary } from "./TermsteadAuthoritySummary";
+import { BankingCoreAuthority } from "./BankingCoreAuthority";
 
 export function PortfolioProjectDetail({
     project,
@@ -39,6 +40,9 @@ export function PortfolioProjectDetail({
             <PortfolioProjectHero project={project} />
             {project.slug === "termstead" && <TermsteadAuthoritySummary />}
             {project.slug === "pdfnest" && <PlatenProcessingModes project={project} />}
+            {project.slug === "banking-platform" && project.technicalEvidence && (
+                <BankingCoreAuthority evidence={project.technicalEvidence} />
+            )}
             <PortfolioProjectContext project={project} />
             {project.technicalEvidence
                 ? <PortfolioProjectTechnicalEvidence project={project} />
