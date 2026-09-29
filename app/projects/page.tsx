@@ -81,7 +81,6 @@ export default async function ProjectsPage({
         ]),
     );
 
-    const visibleProjects = curatedProjects;
     const flagshipProjects = curatedProjects.filter((project) => project.featured);
     const experimentalProjects = curatedProjects.filter((project) => !project.featured);
 
@@ -92,7 +91,7 @@ export default async function ProjectsPage({
 
     const list = sortRepos(filtered, sort);
     const count = list.length;
-    const totalCount = visibleProjects.length + count;
+    const totalCount = curatedProjects.length + count;
 
     return (
         <section aria-labelledby="projects-title" className="relative hero-glow">
@@ -112,7 +111,7 @@ export default async function ProjectsPage({
                                 <p role="status" aria-live="polite" aria-atomic="true" className="mt-2 text-[var(--muted)] leading-relaxed flex flex-wrap items-center gap-x-2 gap-y-1">
                                     <span>Selected work and experiments</span>
                                     {totalCount > 0 && <span className="opacity-50">•</span>}
-                                    {totalCount > 0 && <span>{visibleProjects.length} curated project{visibleProjects.length === 1 ? "" : "s"}{count > 0 ? ` · ${count} archive entr${count === 1 ? "y" : "ies"}` : ""}</span>}
+                                    {totalCount > 0 && <span>{curatedProjects.length} curated project{curatedProjects.length === 1 ? "" : "s"}{count > 0 ? ` · ${count} archive entr${count === 1 ? "y" : "ies"}` : ""}</span>}
                                     {q && <span className="opacity-50">•</span>}
                                     {q && <span>search: <span className="font-medium text-[var(--fg)]">“{q}”</span></span>}
                                     {lang && <span className="opacity-50">•</span>}
@@ -166,7 +165,11 @@ export default async function ProjectsPage({
                                         const originalIndex = curatedProjects.findIndex((candidate) => candidate.slug === project.slug);
                                         return (
                                             <Reveal key={project.slug} delay={(originalIndex % 10) * 0.05}>
-                                                <PortfolioProjectCard project={project} facts={factsBySlug.get(project.slug)} />
+                                                <PortfolioProjectCard
+                                                    project={project}
+                                                    facts={factsBySlug.get(project.slug)}
+                                                    variant="secondary"
+                                                />
                                             </Reveal>
                                         );
                                     })}
@@ -174,15 +177,16 @@ export default async function ProjectsPage({
                             </section>
                         )}
 
-                        <section aria-labelledby="repository-archive-title" className="space-y-4">
-                            <div>
-                                <h2 id="repository-archive-title" className="text-xl font-bold text-[var(--fg)]">
-                                    Labs / repository archive
-                                </h2>
-                                <p className="mt-1 text-sm text-[var(--muted)]">
-                                    Public repositories not assigned to a curated project. They do not define portfolio identity or featured status.
-                                </p>
-                            </div>
+                        <MotionSection className="projects-archive-motion" y={8}>
+                            <section aria-labelledby="repository-archive-title" className="projects-archive-section space-y-4">
+                                <div>
+                                    <h2 id="repository-archive-title" className="text-xl font-bold text-[var(--fg)]">
+                                        Labs / repository archive
+                                    </h2>
+                                    <p className="mt-1 text-sm text-[var(--muted)]">
+                                        Public repositories not assigned to a curated project. They do not define portfolio identity or featured status.
+                                    </p>
+                                </div>
 
                             <div className="w-full sm:max-w-xl">
                                 <ProjectsFilters initialQ={q} initialLang={lang} initialSort={sort} langs={langs} counts={counts} totalCount={archive.length} />
@@ -193,8 +197,15 @@ export default async function ProjectsPage({
                                     {list.map((repo, i) => {
                                         const key = repo.fullName || repo.name;
                                         return (
-                                            <Reveal key={key} delay={(i % 10) * 0.05}>
-                                                <RepoCard repo={repo} featured={false} />
+                                            <Reveal
+                                                key={key}
+                                                className="projects-archive-card__reveal"
+                                                delay={(i % 10) * 0.04}
+                                                duration={0.4}
+                                                fade
+                                                y={8}
+                                            >
+                                                <RepoCard repo={repo} featured={false} variant="archive" />
                                             </Reveal>
                                         );
                                     })}
@@ -220,7 +231,8 @@ export default async function ProjectsPage({
                                     </div>
                                 </Reveal>
                             )}
-                        </section>
+                            </section>
+                        </MotionSection>
                 </div>
             </div>
         </section>

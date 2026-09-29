@@ -24,7 +24,16 @@ function getInitials(name: string) {
         .join("");
 }
 
-export async function RepoCard({ repo, featured = false }: { repo: Repo; featured?: boolean }) {
+export async function RepoCard({
+    repo,
+    featured = false,
+    variant = "default",
+}: {
+    repo: Repo;
+    featured?: boolean;
+    variant?: "default" | "archive";
+}) {
+    const isArchive = variant === "archive";
     let cover: string | null = null;
     let bullets: string[] = [];
     let stack: string[] = [];
@@ -56,15 +65,16 @@ export async function RepoCard({ repo, featured = false }: { repo: Repo; feature
     return (
         <Link
             href={href}
-            className="group block h-full"
+            className={`group block h-full ${isArchive ? "projects-repo-card__link" : ""}`}
             prefetch={false}
         >
-            <div className="relative h-full rounded-[14px] p-[1px] transition-transform duration-300 group-hover:-translate-y-1">
-                {/* Glowing Outer Border */}
-                <div className="absolute inset-0 rounded-[14px] border border-transparent bg-gradient-to-br from-[var(--accent)] via-[color-mix(in_oklab,var(--accent)_45%,var(--success))] to-[var(--accent)] opacity-15 blur-[1px] transition-opacity duration-300 group-hover:opacity-35" />
+            <div className={`relative h-full rounded-[14px] ${isArchive ? "projects-repo-card__frame" : "p-[1px] transition-transform duration-300 group-hover:-translate-y-1"}`}>
+                {!isArchive && (
+                    <div className="absolute inset-0 rounded-[14px] border border-transparent bg-gradient-to-br from-[var(--accent)] via-[color-mix(in_oklab,var(--accent)_45%,var(--success))] to-[var(--accent)] opacity-15 blur-[1px] transition-opacity duration-300 group-hover:opacity-35" />
+                )}
 
                 <article
-                    className="relative card rounded-[14px] overflow-hidden h-full flex flex-col bg-[var(--surface)]"
+                    className={`relative card rounded-[14px] overflow-hidden h-full flex flex-col bg-[var(--surface)] ${isArchive ? "projects-repo-card__surface" : ""}`}
                     aria-labelledby={titleId}
                 >
                     <div className="relative aspect-[16/10] bg-[color-mix(in_oklab,var(--bg)_70%,var(--surface))] overflow-hidden border-b border-[var(--border)]">
@@ -73,7 +83,7 @@ export async function RepoCard({ repo, featured = false }: { repo: Repo; feature
                                 src={cover}
                                 alt={`Cover image for ${repo.name}`}
                                 fill
-                                className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                                className={isArchive ? "object-cover" : "object-cover transition-transform duration-500 group-hover:scale-[1.02]"}
                                 sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                                 priority={false}
                             />
