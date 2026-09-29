@@ -319,6 +319,344 @@ body::after{
     opacity:.18;
 }
 
+.banking-core-authority {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.banking-core-authority__header {
+    max-width: 50rem;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 82%, transparent);
+    padding-bottom: 1.5rem;
+}
+
+.banking-core-authority__eyebrow,
+.banking-core-authority__label,
+.banking-core-authority__relationship {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+.banking-core-authority__eyebrow {
+    color: var(--accent);
+}
+
+.banking-core-authority__title {
+    margin-top: 0.55rem;
+    color: var(--fg);
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 750;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+}
+
+.banking-core-authority__intro {
+    max-width: 46rem;
+    margin-top: 0.8rem;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.banking-core-authority__figure {
+    position: relative;
+    overflow: hidden;
+    border-block: 1px solid var(--border);
+    background:
+        linear-gradient(to bottom, color-mix(in oklab, var(--border) 8%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in oklab, var(--border) 7%, transparent) 1px, transparent 1px);
+    background-size: 100% 3.4rem, 3.4rem 100%;
+    padding: 1rem 0 0;
+}
+
+.banking-core-authority__caption,
+.banking-core-authority__figure-note {
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.55;
+}
+
+.banking-core-authority__caption {
+    padding-inline: clamp(0.1rem, 1.5vw, 1rem);
+}
+
+.banking-core-authority__topology {
+    display: grid;
+    grid-template-areas: "web core kyc" "android core kyc";
+    grid-template-columns: minmax(0, 0.9fr) minmax(16rem, 1.25fr) minmax(0, 0.9fr);
+    grid-template-rows: minmax(12rem, auto) minmax(12rem, auto);
+    gap: clamp(1.25rem, 3.5vw, 2.75rem);
+    align-items: center;
+    padding: clamp(1.5rem, 4vw, 3rem) clamp(0.1rem, 1.5vw, 1rem);
+}
+
+.banking-core-authority__core,
+.banking-core-authority__domain {
+    position: relative;
+    min-width: 0;
+}
+
+.banking-core-authority__core {
+    grid-area: core;
+    align-self: stretch;
+    border-block: 1px solid color-mix(in oklab, var(--accent) 46%, var(--border) 54%);
+    background: color-mix(in oklab, var(--surface) 68%, transparent);
+    padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.banking-core-authority__core::before {
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 2px;
+    background: var(--accent);
+    content: "";
+    opacity: 0.82;
+}
+
+.banking-core-authority__domain {
+    border-block: 1px solid color-mix(in oklab, var(--border) 86%, transparent);
+    padding: 1.1rem 0;
+}
+
+.banking-core-authority__domain::before {
+    position: absolute;
+    top: 1.25rem;
+    left: -0.2rem;
+    width: 0.38rem;
+    height: 0.38rem;
+    border: 1px solid color-mix(in oklab, var(--accent) 74%, var(--border) 26%);
+    border-radius: 999px;
+    background: var(--surface);
+    content: "";
+}
+
+.banking-core-authority__domain--web {
+    grid-area: web;
+}
+
+.banking-core-authority__domain--android {
+    grid-area: android;
+}
+
+.banking-core-authority__domain--kyc {
+    grid-area: kyc;
+    align-self: stretch;
+    border-inline-start: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+    padding-block: 1.1rem;
+    padding-inline-start: clamp(1.1rem, 2.5vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.banking-core-authority__domain--web::after,
+.banking-core-authority__domain--android::after,
+.banking-core-authority__domain--kyc::before {
+    position: absolute;
+    top: 50%;
+    height: 1px;
+    background: color-mix(in oklab, var(--accent) 48%, var(--border) 52%);
+    content: "";
+    opacity: 0.78;
+}
+
+.banking-core-authority__domain--web::after,
+.banking-core-authority__domain--android::after {
+    right: calc(clamp(1.25rem, 3.5vw, 2.75rem) * -1);
+    width: clamp(1.25rem, 3.5vw, 2.75rem);
+}
+
+.banking-core-authority__domain--kyc::before {
+    top: 50%;
+    left: calc(clamp(1.25rem, 3.5vw, 2.75rem) * -1);
+    width: clamp(1.25rem, 3.5vw, 2.75rem);
+}
+
+.banking-core-authority__label {
+    color: var(--muted);
+}
+
+.banking-core-authority__domain-title {
+    margin-top: 0.45rem;
+    color: var(--fg);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.018em;
+    line-height: 1.25;
+}
+
+.banking-core-authority__domain-summary {
+    margin-top: 0.45rem;
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.55;
+}
+
+.banking-core-authority__list {
+    display: grid;
+    gap: 0.38rem;
+    margin-top: 0.9rem;
+    color: var(--fg);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.banking-core-authority__list li {
+    position: relative;
+    padding-left: 0.9rem;
+}
+
+.banking-core-authority__list li::before {
+    position: absolute;
+    top: 0.62em;
+    left: 0;
+    width: 0.28rem;
+    height: 0.28rem;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--accent) 72%, var(--muted) 28%);
+    content: "";
+}
+
+.banking-core-authority__relationship {
+    margin-top: 1rem;
+    color: color-mix(in oklab, var(--accent) 78%, var(--muted) 22%);
+    font-size: 0.6rem;
+    letter-spacing: 0.11em;
+}
+
+.banking-core-authority__authority-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    margin-top: 1.35rem;
+    border-top: 1px solid color-mix(in oklab, var(--accent) 28%, var(--border) 72%);
+    padding-top: 0.9rem;
+    color: var(--fg);
+    font-size: 0.82rem;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+.banking-core-authority__authority-note .icon-\[tabler--shield-check\] {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+    color: var(--accent);
+    margin-top: 0.12rem;
+}
+
+.banking-core-authority__figure-note {
+    border-top: 1px solid color-mix(in oklab, var(--border) 78%, transparent);
+    padding: 0.9rem clamp(0.1rem, 1.5vw, 1rem) 1.1rem;
+}
+
+.banking-core-authority__distinction {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);
+    gap: 1.5rem;
+    border-block: 1px solid color-mix(in oklab, var(--border) 84%, transparent);
+    padding: 1.25rem clamp(0.1rem, 1.5vw, 1rem);
+}
+
+.banking-core-authority__distinction-title {
+    margin-top: 0.45rem;
+    color: var(--fg);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.banking-core-authority__distinction-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+}
+
+.banking-core-authority__distinction-mark {
+    color: var(--accent);
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.banking-core-authority__distinction-text {
+    margin-top: 0.4rem;
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.55;
+}
+
+@media (max-width: 900px) {
+    .banking-core-authority__topology {
+        grid-template-areas: "core core" "web android" "kyc kyc";
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+    }
+
+    .banking-core-authority__domain--kyc {
+        border-inline-start: 0;
+        border-top: 1px solid color-mix(in oklab, var(--border) 86%, transparent);
+        padding-inline-start: 0;
+        padding-top: 1.1rem;
+    }
+
+    .banking-core-authority__domain--web::after,
+    .banking-core-authority__domain--android::after,
+    .banking-core-authority__domain--kyc::before {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .banking-core-authority__topology {
+        grid-template-areas: "core" "web" "android" "kyc";
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+        padding-block: 1.25rem;
+    }
+
+    .banking-core-authority__core,
+    .banking-core-authority__domain,
+    .banking-core-authority__domain--kyc {
+        border-block: 0;
+        border-top: 1px solid color-mix(in oklab, var(--border) 86%, transparent);
+        padding-block: 1.15rem;
+        padding-inline: 0;
+    }
+
+    .banking-core-authority__core {
+        border-top: 0;
+        border-bottom: 1px solid color-mix(in oklab, var(--accent) 46%, var(--border) 54%);
+        padding-top: 0;
+    }
+
+    .banking-core-authority__core::before {
+        inset-block: 0;
+    }
+
+    .banking-core-authority__domain::before {
+        display: none;
+    }
+
+    .banking-core-authority__distinction {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .banking-core-authority__distinction-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .banking-core-authority__distinction-mark {
+        display: none;
+    }
+}
+
 .homepage-hero {
     position: relative;
     isolation: isolate;
