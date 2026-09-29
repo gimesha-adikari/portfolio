@@ -13,8 +13,9 @@ export function PortfolioProjectCard({
 }: {
     project: PortfolioProject;
     facts?: readonly RepositoryFacts[];
-    variant?: "default" | "homepage";
+    variant?: "default" | "homepage" | "secondary";
 }) {
+    const isSecondary = variant === "secondary";
     const technologies = Array.from(
         new Set(project.architecture.flatMap((block) => block.technologies)),
     ).slice(0, 5);
@@ -23,11 +24,11 @@ export function PortfolioProjectCard({
     return (
         <Link
             href={`/projects/${project.slug}`}
-            className="group portfolio-project-card__link block h-full"
+            className={`group portfolio-project-card__link block h-full ${isSecondary ? "projects-secondary-card__link" : ""}`}
             prefetch={false}
         >
             <article
-                className="relative h-full rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-5 md:p-6 transition-transform duration-300 group-hover:-translate-y-1"
+                className={`relative h-full rounded-[14px] border border-[var(--border)] bg-[var(--surface)] ${isSecondary ? "projects-secondary-card__surface p-4 sm:p-5" : "p-5 md:p-6 transition-transform duration-300 group-hover:-translate-y-1"}`}
                 aria-labelledby={titleId}
             >
                 <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
@@ -43,10 +44,10 @@ export function PortfolioProjectCard({
                     {project.category && <span>{project.category}</span>}
                 </div>
 
-                <div className="portfolio-project-card__title-row mt-5 flex items-start justify-between gap-3">
+                <div className={`portfolio-project-card__title-row ${isSecondary ? "mt-4" : "mt-5"} flex items-start justify-between gap-3`}>
                     <h3
                         id={titleId}
-                        className="min-w-0 flex-1 text-xl font-bold tracking-tight text-[var(--fg)] transition-colors group-hover:text-[var(--accent)]"
+                        className={`min-w-0 flex-1 ${isSecondary ? "text-lg sm:text-xl" : "text-xl"} font-bold tracking-tight text-[var(--fg)] transition-colors group-hover:text-[var(--accent)]`}
                     >
                         {project.title}
                     </h3>
@@ -57,7 +58,7 @@ export function PortfolioProjectCard({
                 </p>
 
                 {variant === "homepage" ? (
-                    <div className="mt-5 grid gap-3 text-xs text-[var(--muted)] sm:grid-cols-2">
+                    <div className={`${isSecondary ? "mt-4" : "mt-5"} grid gap-3 text-xs text-[var(--muted)] sm:grid-cols-2`}>
                         <div>
                             <div className="font-semibold uppercase tracking-[0.16em]">Problem</div>
                             <div className="mt-1 text-sm leading-relaxed text-[var(--fg)]">{project.problem}</div>
@@ -84,7 +85,7 @@ export function PortfolioProjectCard({
                 )}
 
                 {technologies.length > 0 && (
-                    <div className="mt-5 flex flex-wrap gap-2">
+                    <div className={`${isSecondary ? "mt-4" : "mt-5"} flex flex-wrap gap-2`}>
                         {technologies.map((technology) => (
                             <span
                                 key={technology}
@@ -96,7 +97,7 @@ export function PortfolioProjectCard({
                     </div>
                 )}
 
-                <div className="mt-6 flex items-center justify-between text-xs text-[var(--muted)]">
+                <div className={`${isSecondary ? "mt-5" : "mt-6"} flex items-center justify-between text-xs text-[var(--muted)]`}>
                     {variant === "homepage" ? (
                         <span>Portfolio-owned system</span>
                     ) : (
