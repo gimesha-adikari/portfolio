@@ -4,6 +4,7 @@ import { hasEngineeringDecisions } from "@/lib/engineering-decisions";
 import type { PortfolioProject, RepositoryFacts } from "@/lib/portfolio-projects";
 import { siteConfig } from "@/lib/siteConfig";
 import { PortfolioProjectContext } from "./PortfolioProjectContext";
+import { PlatenProcessingModes } from "./PlatenProcessingModes";
 import { PortfolioProjectEvidence } from "./PortfolioProjectEvidence";
 import { PortfolioProjectGallery } from "./PortfolioProjectGallery";
 import { PortfolioProjectHero } from "./PortfolioProjectHero";
@@ -37,6 +38,7 @@ export function PortfolioProjectDetail({
         <article className="space-y-12 pb-20 container-xl max-w-5xl mx-auto pt-6">
             <PortfolioProjectHero project={project} />
             {project.slug === "termstead" && <TermsteadAuthoritySummary />}
+            {project.slug === "pdfnest" && <PlatenProcessingModes project={project} />}
             <PortfolioProjectContext project={project} />
             {project.technicalEvidence
                 ? <PortfolioProjectTechnicalEvidence project={project} />
