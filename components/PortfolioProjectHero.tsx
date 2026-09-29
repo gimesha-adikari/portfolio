@@ -6,6 +6,8 @@ function labelForStatus(status: PortfolioProject["status"]): string {
 }
 
 export function PortfolioProjectHero({ project }: { project: PortfolioProject }) {
+    const usesCompactMobileActions = project.slug === "pdfnest";
+
     return (
         <>
             <Link
@@ -54,10 +56,20 @@ export function PortfolioProjectHero({ project }: { project: PortfolioProject })
                     </div>
                 </dl>
 
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div
+                    className={
+                        usesCompactMobileActions
+                            ? "mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap"
+                            : "mt-8 flex flex-wrap gap-3"
+                    }
+                >
                     {project.liveUrl && (
                         <a
-                            className="rounded-lg bg-[var(--accent)] text-[var(--bg)] px-6 py-3 text-sm font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm"
+                            className={
+                                usesCompactMobileActions
+                                    ? "col-span-2 flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-[var(--bg)] shadow-sm transition-opacity hover:opacity-90 sm:w-auto"
+                                    : "rounded-lg bg-[var(--accent)] text-[var(--bg)] px-6 py-3 text-sm font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm"
+                            }
                             href={project.liveUrl}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -69,12 +81,23 @@ export function PortfolioProjectHero({ project }: { project: PortfolioProject })
                     {project.repositories.map((repository) => (
                         <a
                             key={repository.name}
-                            className="rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--fg)] px-4 py-3 text-sm font-semibold hover:border-[var(--accent)] transition-colors flex items-center gap-2"
+                            className={
+                                usesCompactMobileActions
+                                    ? "flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-center text-xs font-semibold text-[var(--fg)] transition-colors hover:border-[var(--accent)] sm:w-auto sm:px-4 sm:py-3 sm:text-sm"
+                                    : "rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--fg)] px-4 py-3 text-sm font-semibold hover:border-[var(--accent)] transition-colors flex items-center gap-2"
+                            }
                             href={repository.url}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <span className="icon-[tabler--brand-github] size-5" aria-hidden />
+                            <span
+                                className={
+                                    usesCompactMobileActions
+                                        ? "icon-[tabler--brand-github] size-4 sm:size-5"
+                                        : "icon-[tabler--brand-github] size-5"
+                                }
+                                aria-hidden
+                            />
                             {repository.name}
                         </a>
                     ))}
