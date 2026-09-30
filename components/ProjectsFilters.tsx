@@ -67,7 +67,7 @@ export default function ProjectsFilters({
         updateUrl(next);
     }
 
-    const classRoot = "card p-3 rounded-xl flex flex-col gap-3 w-full";
+    const classRoot = "projects-archive-filters card p-3 rounded-xl flex flex-col gap-3 w-full";
 
     const langChips = useMemo(
         () => buildLanguageFilterOptions(langs, counts, totalCount),
@@ -132,7 +132,7 @@ export default function ProjectsFilters({
             </div>
 
             <div>
-                    <label htmlFor={sortId} className="mb-1 block text-xs font-medium text-[var(--muted)]">Sort by</label>
+                    <label htmlFor={sortId} className="mb-1 block text-xs font-medium text-[var(--muted)]">Sort repository archive by</label>
                     <div className="gn-select-wrapper w-full">
                         <select
                         id={sortId}
