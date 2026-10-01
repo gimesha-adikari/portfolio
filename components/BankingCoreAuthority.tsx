@@ -16,7 +16,7 @@ export function BankingCoreAuthority({ evidence }: { evidence: ProjectTechnicalE
                     One core, three surrounding boundaries
                 </h2>
                 <p className="banking-core-authority__intro">
-                    BankingSystem owns the authoritative Spring backend, protected API, authentication and authorization, JWT/session validation, banking rules, and persistence. The Next.js web and Android applications are clients; FastAPI KYC remains a bounded service relationship.
+                    bank-core owns the authoritative Spring backend, protected API, authentication and authorization, JWT/session validation, banking rules, and persistence. The Next.js web and Android applications are clients; FastAPI KYC remains a bounded service relationship.
                 </p>
             </header>
 
@@ -80,7 +80,7 @@ export function BankingCoreAuthority({ evidence }: { evidence: ProjectTechnicalE
                 </div>
 
                 <p className="banking-core-authority__figure-note">
-                    Client route guards and device-local token protection support the clients; they do not replace BankingSystem server authorization.
+                    Client route guards and device-local token protection support the clients; they do not replace bank-core server authorization.
                 </p>
             </figure>
 
@@ -99,7 +99,7 @@ export function BankingCoreAuthority({ evidence }: { evidence: ProjectTechnicalE
                     <div className="banking-core-authority__distinction-mark" aria-hidden="true">≠</div>
                     <div>
                         <p className="banking-core-authority__label">Server authority</p>
-                        <p className="banking-core-authority__distinction-text">BankingSystem authorization, JWT/session validation, banking rules, and owner checks.</p>
+                        <p className="banking-core-authority__distinction-text">bank-core authorization, JWT/session validation, banking rules, and owner checks.</p>
                     </div>
                 </div>
             </aside>

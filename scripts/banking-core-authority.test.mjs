@@ -25,5 +25,5 @@ test("BankingCoreAuthority renders against the canonical four-owner evidence", a
     assert.match(componentSource, /Authority map/);
     assert.match(componentSource, /One core, three surrounding boundaries/);
     assert.match(componentSource, /Device-local protection/);
-    assert.match(componentSource, /BankingSystem authorization/);
+    assert.match(componentSource, /bank-core authorization/);
 });

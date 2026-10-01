@@ -13,12 +13,12 @@ test("Banking Platform is one curated cross-stack project with grouped repositor
     assert.equal(banking.title, "Banking Platform");
     assert.deepEqual(
         banking.repositories.map((repository) => repository.name),
-        ["BankingSystem", "bank-web", "banking-service", "BankApp"],
+        ["bank-core", "bank-web", "bank-service", "bank-app"],
     );
     assert.ok(banking.technicalEvidence);
     assert.deepEqual(
         banking.technicalEvidence.ownership.map((boundary) => boundary.owner),
-        ["BankingSystem / Spring backend", "bank-web / Next.js web", "BankApp / Android client", "banking-service / FastAPI KYC"],
+        ["bank-core / Spring backend", "bank-web / Next.js web", "bank-app / Android client", "bank-service / FastAPI KYC"],
     );
 });
 
@@ -40,6 +40,22 @@ test("Banking evidence covers KYC policy, workflows, failures, and exact source 
     assert.ok(evidence.sources.every((source) => /^[0-9a-f]{40}$/.test(source.commit)));
     assert.ok(evidence.sources.every((source) => /^https:\/\//.test(source.url)));
     assert.match(serialized, /no labeled|not established|not publish|not tested/i);
+});
+
+test("Banking Platform public data uses only canonical repository identities and URLs", () => {
+    assert.ok(banking);
+    const serialized = JSON.stringify(banking);
+    for (const repository of ["bank-core", "bank-web", "bank-service", "bank-app"]) {
+        assert.match(serialized, new RegExp(`https://github\\.com/gimesha-adikari/${repository}`));
+        assert.match(serialized, new RegExp(`\\"name\\":\\"${repository}\\"`));
+    }
+    for (const oldRepositoryUrl of [
+        "gimesha-adikari/BankingSystem",
+        "gimesha-adikari/banking-service",
+        "gimesha-adikari/BankApp",
+    ]) {
+        assert.doesNotMatch(serialized, new RegExp(oldRepositoryUrl));
+    }
 });
 
 test("Banking evidence does not publish unsupported outcome or operational claims", () => {
