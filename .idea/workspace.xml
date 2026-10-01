@@ -27,6 +27,9 @@
     &quot;accountId&quot;: &quot;6bba76d6-1a35-44b5-9494-4c31128e857e&quot;
   }
 }</component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="A58dt0PA" />
+  </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -42,6 +45,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;CidrDebugProfileConversion&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
@@ -71,6 +75,7 @@
 }</component>
   <component name="RunManager" selected="npm.Next.js: server-side">
     <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
+      <js-stepping-options />
       <method v="2" />
     </configuration>
     <configuration name="Next.js: server-side" type="js.build_tools.npm">
@@ -81,6 +86,9 @@
       </scripts>
       <node-interpreter value="project" />
       <envs />
+      <EXTENSION ID="com.intellij.javascript.debugger.execution.JSSteppingRunConfigurationExtension">
+        <js-stepping-options />
+      </EXTENSION>
       <method v="2" />
     </configuration>
   </component>
