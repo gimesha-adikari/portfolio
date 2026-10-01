@@ -1,0 +1,62 @@
+---
+title: When a Terminal Cell Width Is Not a Text-Run Width
+slug: terminal-cell-width-vs-text-run-width
+description: A focused Termstead debugging note about the difference between terminal-cell geometry and shaped text-run width at the GPUI renderer boundary.
+publishedAt: 2026-09-27
+projectSlug: termstead
+question: Why did Termstead need a per-cell forced width instead of the total shaped-run width?
+tags:
+  - renderer
+  - terminal
+  - Rust
+  - GPUI
+sourceLinks:
+  - label: Termstead renderer.rs at the pinned implementation commit
+    url: https://github.com/gimesha-adikari/termstead/blob/0776a19f39539c396df76038c55a14bb55948a53/crates/terminal-render/src/renderer.rs#L916-L920
+relatedCaseStudies: []
+published: true
+---
+
+## The bug was a geometry assumption
+
+Termstead’s renderer sits between two useful but different coordinate systems. A terminal grid describes cells: ordinary text occupies one column at a time, while combining and wide characters need different treatment. A shaped text run describes glyphs after the text has been prepared for rendering.
+
+The bug came from treating those descriptions as interchangeable at the GPUI boundary. `TextRun.force_width` is the advance assigned to each glyph. It is not the total width of the shaped run.
+
+## The incorrect mental model
+
+The diagnosed error was:
+
+```text
+total run width = per-glyph forced advance
+```
+
+Those values are only interchangeable in a very narrow ordinary-cell case. Passing a run’s total width as each glyph’s forced advance can multiply the spacing across the run and produce scattered glyph placement.
+
+## The correction
+
+The renderer now returns one terminal-cell width for compatible runs and leaves other runs alone:
+
+```rust
+fn forced_cell_width(text: &str, columns: u16, cell_width: gpui::Pixels) -> Option<gpui::Pixels> {
+    // GPUI's `force_width` is the advance assigned to each glyph, not the
+    // total width of the shaped run.
+    should_force_cell_width(text, columns).then_some(cell_width)
+}
+```
+
+The important correction is semantic rather than visual: the value passed to `force_width` represents one glyph advance, so the ordinary one-column case receives one cell width instead of the whole run’s width.
+
+## Why wide and combining cells are different
+
+The shortcut is guarded by `should_force_cell_width(text, columns)`. A run such as `abc` spread across three ordinary terminal columns can use one cell width per glyph. A combining sequence cannot be treated as three independent columns, and a double-width character cannot be treated as one ordinary glyph advance. Those cases are excluded from the simple rule rather than forced into it.
+
+## What the regression test proves
+
+The focused test `forced_width_is_one_cell_per_glyph_not_the_full_run_width` establishes that an ordinary compatible run receives one cell advance per glyph, not the full shaped-run width. The neighboring focused cases preserve the exclusions for combining and wide content, along with fractional-width and resize behavior.
+
+That is geometry and shaping evidence at the renderer boundary. It is a narrower claim than proving how every font, compositor, or device will display the result.
+
+## What this does not prove
+
+This correction is not pixel-golden validation, cross-device proof, physical keyboard or IME validation, complete Unicode correctness, terminal-emulator completeness, or a performance benchmark. It also does not establish frame-rate or input-latency improvement, production-scale reliability, or complete GPUI product-shell functionality.

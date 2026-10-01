@@ -1,8 +1,13 @@
 "use client";
-import { useMemo, useState, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
-type SortKey = "recent" | "stars" | "name";
+import {
+    buildLanguageFilterOptions,
+    buildProjectFilterParams,
+    parseProjectFilterParams,
+    type ProjectFilterPatch,
+    type SortKey,
+} from "@/lib/project-filters";
 
 export default function ProjectsFilters({
                                             initialQ,
@@ -10,14 +15,14 @@ export default function ProjectsFilters({
                                             initialSort,
                                             langs,
                                             counts,
-                                            layout = "bar",
+                                            totalCount,
                                         }: {
     initialQ: string;
     initialLang: string;
     initialSort: SortKey;
     langs: string[];
     counts: Record<string, number>;
-    layout?: "bar" | "card";
+    totalCount: number;
 }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -28,70 +33,69 @@ export default function ProjectsFilters({
     const [lang, setLang] = useState(initialLang);
     const [sort, setSort] = useState<SortKey>(initialSort);
 
-    function update(next: Partial<{ q: string; lang: string; sort: SortKey }>, replace = true) {
-        const params = new URLSearchParams(searchParams?.toString());
-        if ("q" in next) {
-            const v = (next.q ?? "").trim();
-            v ? params.set("q", v) : params.delete("q");
-            setQ(v);
-        }
-        if ("lang" in next) {
-            const v = next.lang ?? "";
-            v ? params.set("lang", v) : params.delete("lang");
-            setLang(v);
-        }
-        if ("sort" in next) {
-            const v = next.sort ?? "recent";
-            v === "recent" ? params.delete("sort") : params.set("sort", v);
-            setSort(v);
-        }
-        startTransition(() => {
-            const url = params.toString() ? `${pathname}?${params}` : pathname;
-            replace ? router.replace(url) : router.push(url);
-        });
-    }
-
-    const classRoot =
-        layout === "card"
-            ? "card p-3 rounded-xl flex flex-col gap-3 w-full"
-            : "card p-3 rounded-xl flex flex-col gap-3 w-full";
-
-    const langChips = useMemo(
-        () =>
-            ["", ...langs].map((l) => ({
-                label: l || "All",
-                value: l,
-                count: l ? counts[l] ?? 0 : Object.values(counts).reduce((a, b) => a + b, 0),
-            })),
-        [langs, counts]
+    const urlState = useMemo(
+        () => parseProjectFilterParams(new URLSearchParams(searchParams.toString())),
+        [searchParams],
     );
 
-    let typingTimer: any;
-    function onType(value: string) {
-        setQ(value);
-        clearTimeout(typingTimer);
-        typingTimer = setTimeout(() => update({ q: value }), 280);
+    useEffect(() => {
+        setQ(urlState.q);
+        setLang(urlState.lang);
+        setSort(urlState.sort);
+    }, [urlState.lang, urlState.q, urlState.sort]);
+
+    const updateUrl = useCallback((next: ProjectFilterPatch) => {
+        const params = buildProjectFilterParams(new URLSearchParams(searchParams.toString()), next);
+        const url = params.toString() ? `${pathname}?${params}` : pathname;
+
+        startTransition(() => {
+            router.replace(url);
+        });
+    }, [pathname, router, searchParams]);
+
+    useEffect(() => {
+        const value = q.trim();
+        if (value === urlState.q) return;
+
+        const timeout = window.setTimeout(() => updateUrl({ q: value }), 280);
+        return () => window.clearTimeout(timeout);
+    }, [q, updateUrl, urlState.q]);
+
+    function update(next: ProjectFilterPatch) {
+        if (next.lang !== undefined) setLang(next.lang);
+        if (next.sort !== undefined) setSort(next.sort);
+        updateUrl(next);
     }
+
+    const classRoot = "projects-archive-filters card p-3 rounded-xl flex flex-col gap-3 w-full";
+
+    const langChips = useMemo(
+        () => buildLanguageFilterOptions(langs, counts, totalCount),
+        [counts, langs, totalCount],
+    );
 
     function reset() {
         setQ("");
         setLang("");
         setSort("recent");
-        startTransition(() => router.replace(pathname));
+        updateUrl({ q: "", lang: "", sort: "recent" });
     }
+
+    const queryId = "archive-filters-query";
+    const sortId = "archive-filters-sort";
 
     return (
         <div className={classRoot}>
-            <label htmlFor="q" className="text-xs font-medium text-[var(--muted)]">Search projects…</label>
+            <label htmlFor={queryId} className="text-xs font-medium text-[var(--muted)]">Search repository archive…</label>
             <div className="relative">
                 <input
-                    id="q"
+                    id={queryId}
                     type="search"
                     name="q"
-                    placeholder="Search projects…"
-                    defaultValue={q}
-                    onChange={(e) => onType(e.target.value)}
-                    className="gn-input w-full pr-8"
+                    placeholder="Search repository archive…"
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    className="gn-input min-h-11 h-11 w-full pr-8"
                 />
                 <span
                     aria-hidden
@@ -110,9 +114,9 @@ export default function ProjectsFilters({
                             <button
                                 key={chip.label}
                                 type="button"
-                                aria-current={active ? "true" : undefined}
+                                aria-pressed={active}
                                 className={[
-                                    "px-2.5 py-1 rounded-lg text-xs hairline",
+                                    "min-h-11 px-3 rounded-lg text-xs hairline",
                                     active
                                         ? "bg-[color-mix(in_oklab,var(--accent)_16%,transparent)] outline outline-1 outline-[color-mix(in_oklab,var(--accent)_35%,transparent)]"
                                         : "hover:bg-[color-mix(in_oklab,var(--surface)_92%,var(--accent)_8%)]",
@@ -128,14 +132,14 @@ export default function ProjectsFilters({
             </div>
 
             <div>
-                <label htmlFor="sort" className="mb-1 block text-xs font-medium text-[var(--muted)]">Sort by</label>
-                <div className="gn-select-wrapper w-full">
-                    <select
-                        id="sort"
+                    <label htmlFor={sortId} className="mb-1 block text-xs font-medium text-[var(--muted)]">Sort repository archive by</label>
+                    <div className="gn-select-wrapper w-full">
+                        <select
+                        id={sortId}
                         name="sort"
-                        defaultValue={sort}
+                        value={sort}
                         onChange={(e) => update({ sort: e.target.value as SortKey })}
-                        className="gn-select w-full"
+                        className="gn-select min-h-11 h-11 w-full"
                     >
                         <option value="recent">Recently updated</option>
                         <option value="stars">Most stars</option>
@@ -145,11 +149,8 @@ export default function ProjectsFilters({
             </div>
 
             <div className="flex gap-2 pt-1">
-                <button type="button" onClick={() => update({ q, lang, sort })} className="btn btn-ghost text-sm">
-                    Apply
-                </button>
                 {(q || lang || sort !== "recent") && (
-                    <button type="button" onClick={reset} className="btn btn-text text-sm">
+                    <button type="button" onClick={reset} className="btn btn-text min-h-11 text-sm">
                         Reset
                     </button>
                 )}

@@ -44,8 +44,16 @@ export function ThemeToggle() {
     };
 
     return (
-        <button onClick={toggle} className="btn btn-ghost focus-ring" aria-label="Toggle theme">
-            {light ? "🌞" : "🌙"}
+        <button
+            type="button"
+            onClick={toggle}
+            className="btn btn-ghost !min-h-11 !min-w-11 focus-ring"
+            aria-label={light ? "Switch to dark theme" : "Switch to light theme"}
+        >
+            <span
+                className={light ? "icon-[tabler--sun] size-5" : "icon-[tabler--moon] size-5"}
+                aria-hidden="true"
+            />
         </button>
     );
 }

@@ -2,39 +2,39 @@ import type { Metadata } from "next";
 import fs from "fs";
 import path from "path";
 import * as yaml from "js-yaml";
+import { parseAboutData, type AboutData } from "@/lib/about-content";
+import { buildRouteMetadata } from "@/lib/route-metadata";
 
-const siteUrl = process.env.SITE_URL ?? "http://localhost:3000";
-
-function getAboutData() {
+function getAboutData(): AboutData {
     try {
         const filePath = path.join(process.cwd(), "content/about.yml");
         const fileContents = fs.readFileSync(filePath, "utf8");
-        return (yaml.load(fileContents) as Record<string, any>) || {};
+        const parsed: unknown = yaml.load(fileContents);
+        return parseAboutData(parsed);
     } catch (error) {
         console.error("Failed to load about.yml:", error);
         return {};
     }
 }
 
-export const metadata: Metadata = {
+function isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function formatValue(value: unknown): string {
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+        return String(value);
+    }
+    if (Array.isArray(value)) return value.map(formatValue).join(", ");
+    return "";
+}
+
+export const metadata: Metadata = buildRouteMetadata({
     title: "About",
     description: "Software engineer shipping reliable products across web, mobile, and backend.",
-    alternates: { canonical: "/about" },
-    openGraph: {
-        type: "article",
-        url: `${siteUrl}/about`,
-        title: "About — 3 min read",
-        description: "Software engineer shipping reliable products across web, mobile, and backend.",
-        siteName: "gimesha.dev",
-        images: [{ url: "/og?title=About&subtitle=3%20min%20read" }],
-    },
-    twitter: {
-        card: "summary_large_image",
-        title: "About — 3 min read",
-        description: "Software engineer shipping reliable products across web, mobile, and backend.",
-        images: [{ url: "/og?title=About&subtitle=3%20min%20read" }],
-    },
-};
+    path: "/about",
+    type: "article",
+});
 
 export default function AboutPage() {
     const aboutData = getAboutData();
@@ -73,7 +73,7 @@ export default function AboutPage() {
                     </blockquote>
                     {aboutData.badges && (
                         <ul className="flex flex-wrap gap-2 pt-2">
-                            {aboutData.badges.map((badge: any, idx: number) => (
+                            {aboutData.badges.map((badge, idx) => (
                                 <li key={idx} className="border border-[var(--border)] px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-medium flex items-center gap-2 bg-[var(--background)] text-[var(--fg)] shadow-sm">
                                     <span className={`${badge.icon} size-4 text-[var(--accent)]`} aria-hidden="true"></span> {badge.label}
                                 </li>
@@ -109,7 +109,7 @@ export default function AboutPage() {
                                 <span className="icon-[tabler--compass] size-5 text-[var(--accent)]"></span> Working Style
                             </h3>
                             <ul className="space-y-3 text-sm">
-                                {aboutData.working_style?.map((style: any, idx: number) => (
+                                {aboutData.working_style?.map((style, idx) => (
                                     <li key={idx} className="flex items-start gap-2">
                                         <span className="icon-[tabler--check] size-4 text-[var(--accent)] mt-1 shrink-0"></span>
                                         <span><strong>{style.title}:</strong> {style.desc}</span>
@@ -127,7 +127,7 @@ export default function AboutPage() {
                             <span className="icon-[tabler--stack] size-6 text-[var(--accent)]"></span> Stack at a glance
                         </h3>
                         <div className="grid gap-4 sm:grid-cols-2">
-                            {aboutData.stack.map((s: any, idx: number) => (
+                            {aboutData.stack.map((s, idx) => (
                                 <div key={idx} className="card p-5 border border-[var(--border)] bg-[var(--surface)] rounded-xl hover:border-[var(--accent)]/50 transition-colors">
                                     <h4 className="text-base font-semibold text-[var(--fg)] mb-2 flex items-center gap-2">
                                         <span className={`${s.icon} size-5 text-[var(--accent)]`}></span> {s.category}
@@ -149,15 +149,17 @@ export default function AboutPage() {
                             <span className="icon-[tabler--briefcase] size-6 text-[var(--accent)]"></span> Selected work
                         </h3>
                         <div className="grid gap-4 md:grid-cols-3">
-                            {aboutData.selected_work.map((work: any, idx: number) => (
+                            {aboutData.selected_work.map((work, idx) => (
                                 <div key={idx} className="card p-5 border border-[var(--border)] bg-[var(--surface)] rounded-xl flex flex-col justify-between">
                                     <div>
                                         <h4 className="font-bold text-[var(--fg)] mb-1">{work.title}</h4>
                                         <p className="text-xs md:text-sm text-[var(--muted)]">{work.description}</p>
                                     </div>
-                                    <a className="inline-flex items-center gap-2 text-xs font-semibold underline hover:no-underline mt-4 text-[var(--accent)]" href={work.link}>
-                                        <span className="icon-[tabler--file-text] size-4"></span> {work.link_text || "Read more"}
-                                    </a>
+                                    {work.link && (
+                                        <a className="inline-flex items-center gap-2 text-xs font-semibold underline hover:no-underline mt-4 text-[var(--accent)]" href={work.link}>
+                                            <span className="icon-[tabler--file-text] size-4"></span> {work.link_text || "Read more"}
+                                        </a>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -171,7 +173,7 @@ export default function AboutPage() {
                             <span className="icon-[tabler--tools] size-6 text-[var(--accent)]"></span> Technical Skills & Toolbox
                         </h3>
                         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                            {aboutData.skills.map((skill: any, idx: number) => (
+                            {aboutData.skills.map((skill, idx) => (
                                 <div key={idx} className="space-y-2">
                                     <strong className="text-sm font-bold text-[var(--fg)] flex items-center gap-1.5">
                                         <span className={`${skill.icon} size-4 text-[var(--accent)]`}></span> {skill.category}
@@ -190,6 +192,7 @@ export default function AboutPage() {
 
                     const sectionData = aboutData[key];
                     if (!Array.isArray(sectionData)) return null;
+                    const records = sectionData.filter(isRecord);
 
                     return (
                         <section key={key} id={key} className="card p-6 md:p-8 border border-[var(--border)] bg-[var(--surface)] rounded-2xl">
@@ -197,11 +200,11 @@ export default function AboutPage() {
                                 <span className="icon-[tabler--folder] size-6 text-[var(--accent)]"></span> {key.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ')}
                             </h3>
                             <div className="grid gap-4 sm:grid-cols-2">
-                                {sectionData.map((item: any, idx: number) => (
+                                {records.map((item, idx) => (
                                     <div key={idx} className="p-4 rounded-xl border border-[var(--border)] bg-[var(--background)]">
-                                        {Object.entries(item).map(([subKey, subVal]: [string, any], subIdx: number) => (
+                                        {Object.entries(item).map(([subKey, subVal], subIdx) => (
                                             <div key={subIdx} className="text-sm">
-                                                {subKey === 'title' ? (
+                                                {subKey === 'title' && typeof subVal === "string" ? (
                                                     <strong className="text-[var(--fg)] block text-base mb-1">{subVal}</strong>
                                                 ) : typeof subVal === 'string' && subVal.startsWith('http') ? (
                                                     <a
@@ -215,7 +218,7 @@ export default function AboutPage() {
                                                     </a>
                                                 ) : (
                                                     <span className="text-xs text-[var(--muted)] block">
-                                                        <strong className="capitalize">{subKey.replace(/_/g, ' ')}:</strong> {subVal}
+                                                        <strong className="capitalize">{subKey.replace(/_/g, ' ')}:</strong> {formatValue(subVal)}
                                                     </span>
                                                 )}
                                             </div>
@@ -248,7 +251,7 @@ export default function AboutPage() {
                             <li className="text-xs text-[var(--muted)]">{aboutData.education?.institution}</li>
 
                             {/* Render Additional Education if it exists */}
-                            {aboutData.education?.additional?.map((item: string, idx: number) => (
+                            {aboutData.education?.additional?.map((item, idx) => (
                                 <li key={idx} className="text-xs text-[var(--muted)]">{item}</li>
                             ))}
 

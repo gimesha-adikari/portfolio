@@ -9,7 +9,7 @@ tags:
   - "State"
 subtitle: "Next.js · Go · PDF Processing · OCR · Workspace Flow"
 tldr: "Focused on the hard parts of document software: files that break assumptions, operations that fail in subtle ways, and workspace states that need to stay recoverable."
-context: "Covers the engineering problems behind PDFNest, especially the parts that needed extra care to keep document operations predictable and safe."
+context: "Covers the engineering problems behind Platen PDF, especially the parts that needed extra care to keep document operations predictable and safe."
 problem:
   - "Large files and multi-step workflows made it easy for users to lose progress."
   - "Different tools needed different file states, which complicated shared routing and workspace logic."
@@ -44,7 +44,7 @@ links:
     url: "/projects"
     icon: "icon-[tabler--folder]"
     is_external: false
-  - label: "PDFNest"
+  - label: "Platen PDF"
     url: "/projects/pdfnest"
     icon: "icon-[tabler--file-text]"
     is_external: false

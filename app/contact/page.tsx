@@ -2,32 +2,29 @@
 import type { Metadata } from "next";
 import ContactCards from "@/components/ContactCards";
 import Reveal from "@/components/Reveal";
+import { buildRouteMetadata } from "@/lib/route-metadata";
+import { siteConfig } from "@/lib/siteConfig";
 
-const siteUrl = process.env.SITE_URL ?? "http://localhost:3000";
-const NAME = "Gimesha Nirmal";
-const EMAIL = "gimeshanirmal23@gmail.com";
-const GITHUB = "https://github.com/gimesha-adikari";
-const LINKEDIN = "https://linkedin.com/in/gimesha-nirmal";
-
-export const metadata: Metadata = {
+export const metadata: Metadata = buildRouteMetadata({
     title: "Contact",
-    description: `Get in touch with ${NAME} — email or connect on GitHub and LinkedIn.`,
-    alternates: { canonical: "/contact" },
-};
+    description: `Get in touch with ${siteConfig.name} — email or connect on GitHub and LinkedIn.`,
+    path: "/contact",
+    type: "website",
+});
 
 export default function ContactPage() {
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "Person",
-        name: NAME,
-        url: `${siteUrl}/contact`,
-        email: `mailto:${EMAIL}`,
-        sameAs: [GITHUB, LINKEDIN],
+        name: siteConfig.name,
+        url: `${siteConfig.canonicalUrl}/contact`,
+        email: `mailto:${siteConfig.email}`,
+        sameAs: [siteConfig.github, siteConfig.linkedin],
         contactPoint: [{
             "@type": "ContactPoint",
             contactType: "Business",
-            email: EMAIL,
-            url: `${siteUrl}/contact`
+            email: siteConfig.email,
+            url: `${siteConfig.canonicalUrl}/contact`
         }]
     };
 
@@ -57,9 +54,9 @@ export default function ContactPage() {
             <Reveal delay={0.2}>
                 <div className="mt-12">
                     <ContactCards
-                        email={EMAIL}
-                        githubUrl={GITHUB}
-                        linkedinUrl={LINKEDIN}
+                        email={siteConfig.email}
+                        githubUrl={siteConfig.github}
+                        linkedinUrl={siteConfig.linkedin}
                         vcardHref="/api/vcard"
                     />
                 </div>
