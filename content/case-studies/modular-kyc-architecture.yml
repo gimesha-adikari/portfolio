@@ -1,14 +1,14 @@
 order: 2
 
 title: "Architecting a Modular KYC Microservice Platform"
-blurb: "Modular Spring Boot, React, Android, and FastAPI KYC boundaries with an explicit component-check and review path."
+blurb: "Modular Spring Boot, Next.js/React, Android, and FastAPI KYC boundaries with an explicit component-check and review path."
 read_time: "3–4 min"
 main_icon: "icon-[devicon--java]"
 tags:
   - "Impact"
   - "Architecture"
   - "Trade-offs"
-subtitle: "Spring Boot · React · Android · FastAPI KYC · OCR/vision modules"
+subtitle: "Spring Boot · Next.js/React · Android · FastAPI KYC · OCR/vision modules"
 tldr: "Designed and implemented a modular platform spanning backend, web, mobile, and a FastAPI KYC service. This case study documents service boundaries, check policy, and review states; no population-level accuracy or false-rejection outcome is published without labeled evaluation evidence."
 
 context: "Solo/lead developer across multiple layers. The implementation separates secure account flows, KYC case state, and a wallet client that communicates through explicit API boundaries."
@@ -23,12 +23,12 @@ architecture:
   - "FastAPI KYC service: face, liveness, OCR, document-classification checks, and an aggregate policy"
   - "Spring orchestration: bounded file reads, persisted check records, and UNDER_REVIEW fallback on service failure"
   - "Android Wallet: card reload, QR pay, and bill-pay intent flows through Retrofit interfaces and DTOs"
-  - "React Web client with role-gated routes, bearer-token requests, and account flows"
+  - "Next.js web client with role-gated routes, bearer-token requests, and account flows"
 
 stack:
   - name: "Spring Boot · Hibernate · MySQL"
     icon: "icon-[tabler--braces]"
-  - name: "TypeScript · React"
+  - name: "Next.js · React · TypeScript · Tailwind CSS"
     icon: "icon-[tabler--brand-react]"
   - name: "Kotlin / Android · Retrofit/OkHttp"
     icon: "icon-[tabler--device-mobile]"
@@ -52,6 +52,18 @@ links:
     is_external: false
   - label: "GitHub (Backend)"
     url: "https://github.com/gimesha-adikari/BankingSystem"
+    icon: "icon-[tabler--brand-github]"
+    is_external: true
+  - label: "GitHub (Web)"
+    url: "https://github.com/gimesha-adikari/bank-web"
+    icon: "icon-[tabler--brand-github]"
+    is_external: true
+  - label: "GitHub (KYC service)"
+    url: "https://github.com/gimesha-adikari/banking-service"
+    icon: "icon-[tabler--brand-github]"
+    is_external: true
+  - label: "GitHub (Android)"
+    url: "https://github.com/gimesha-adikari/BankApp"
     icon: "icon-[tabler--brand-github]"
     is_external: true
 

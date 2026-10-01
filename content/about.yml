@@ -72,9 +72,8 @@ selected_work:
     link_text: "View project"
   - title: "Banking Platform"
     description: >
-      Multi-platform banking system with Spring Boot backend,
-      Android application, web dashboard, authentication,
-      authorization, and AI-powered identity verification services.
+      Multi-platform banking system with a Spring Boot core, Next.js web
+      application, Kotlin/Android client, and FastAPI KYC service.
   - title: "AI Verification Service"
     description: >
       FastAPI microservice implementing face matching,

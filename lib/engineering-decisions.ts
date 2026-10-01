@@ -125,7 +125,7 @@ const pilotDecisionOverlays = [
         projectSlug: "banking-platform",
         decisionTitle: "Keep authorization server-owned",
         question: "What does Android device security protect, and what remains server-owned?",
-        context: "Banking Platform spans a Spring API and React/Android clients with client-side navigation and token handling.",
+        context: "Banking Platform spans a Spring API, Next.js/React web client, and Android client with client-side navigation and token handling.",
         constraints: [
             "Protected resources must enforce authentication, roles, ownership, and session validity at the API boundary.",
             "Android Keystore and encryption protect local token storage; they do not decide server authorization.",
