@@ -13,12 +13,12 @@ test("Banking Platform is one curated cross-stack project with grouped repositor
     assert.equal(banking.title, "Banking Platform");
     assert.deepEqual(
         banking.repositories.map((repository) => repository.name),
-        ["BankingSystem", "BankApp"],
+        ["BankingSystem", "bank-web", "banking-service", "BankApp"],
     );
     assert.ok(banking.technicalEvidence);
     assert.deepEqual(
         banking.technicalEvidence.ownership.map((boundary) => boundary.owner),
-        ["BankingSystem / Spring core", "BankingSystem / React web", "BankApp / Android client", "BankingSystem / FastAPI KYC"],
+        ["BankingSystem / Spring backend", "bank-web / Next.js web", "BankApp / Android client", "banking-service / FastAPI KYC"],
     );
 });
 
