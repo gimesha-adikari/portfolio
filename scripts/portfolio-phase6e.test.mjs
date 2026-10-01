@@ -11,7 +11,7 @@ import {
 const EXPECTED_COMMITS = {
     termstead: "0776a19f39539c396df76038c55a14bb55948a53",
     pdfnest: "9faae1a42155843e0e5a6e472d6a4109ccaa25a8",
-    "banking-platform": "5afe20e3797191b1f9535185f2caecbe993cdb38",
+    "banking-platform": "7e4beb846c65afc99966a6e4edc9dfd3c9311250",
     polyshop: "2e818de0c772fd186da27640933da71d1cda43e5",
 };
 

@@ -406,7 +406,7 @@ const curatedProjectData = [
     {
         slug: "banking-platform",
         title: "Banking Platform",
-        tagline: "A multi-client banking system grouping core services, web operations, Android flows, and KYC boundaries.",
+        tagline: "A multi-client banking system spanning a Spring Boot core, Next.js web application, Android client, and FastAPI KYC service.",
         status: "active",
         featured: true,
         order: 30,
@@ -420,36 +420,41 @@ const curatedProjectData = [
         ],
         architecture: [
             {
-                boundary: "Core banking and web",
-                responsibility: "Provide the Spring Boot banking backend and React/Vite web application contained in the BankingSystem repository.",
-                technologies: ["Spring Boot", "Java", "Hibernate", "MySQL", "React", "Vite"],
+                boundary: "Core banking backend",
+                responsibility: "Own the authoritative Spring Boot banking API, authentication, authorization, customers, accounts, financial workflows, ledger, MySQL/Flyway persistence, KYC orchestration, and server-side banking rules.",
+                technologies: ["Spring Boot", "Java", "Hibernate/JPA", "MySQL", "Flyway"],
+            },
+            {
+                boundary: "Web application",
+                responsibility: "Provide supported customer, staff, and administrative browser workflows through a typed BankingSystem API boundary.",
+                technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
             },
             {
                 boundary: "KYC service",
-                responsibility: "Keep FastAPI identity-verification and document-processing concerns as an explicit service boundary; optional ONNX/Tesseract modules are not presented as the default runtime path.",
-                technologies: ["FastAPI", "OCR", "Vision check modules"],
+                responsibility: "Own FastAPI KYC component checks and aggregate verification policy consumed by BankingSystem; optional ONNX/Tesseract modules are not presented as the default runtime path.",
+                technologies: ["Python", "FastAPI", "OCR", "Vision check modules"],
             },
             {
-                boundary: "Android wallet",
-                responsibility: "Represent the separate Kotlin/Android client as part of the same banking product story.",
+                boundary: "Android application",
+                responsibility: "Provide native Kotlin/Android banking, account, KYC, wallet, and device-local security flows.",
                 technologies: ["Kotlin", "Android", "Retrofit", "OkHttp"],
             },
         ],
         decisions: [
             {
-                decision: "Group BankingSystem and BankApp under one curated Banking Platform project.",
-                rationale: "The repository structures and existing case-study material describe a single multi-client banking system rather than unrelated flagship projects.",
+                decision: "Represent four independently versioned repositories as one Banking Platform.",
+                rationale: "Repository ownership follows the backend, web, AI/KYC, and Android deployable/client boundaries while the portfolio presents them as one multi-client banking system.",
             },
             {
                 decision: "Keep KYC as a component boundary instead of a separate public flagship by default.",
-                rationale: "The verified repository places the AI/KYC service alongside the core and web components, while the former AI Verification route was synthetic.",
+                rationale: "The KYC service has its own repository and explicit HTTP boundary, while the former AI Verification route was synthetic and the curated project remains the correct product-level grouping.",
             },
         ],
         outcomes: [
             {
                 label: "Repository grouping evidence",
-                description: "BankingSystem contains backend, web-frontend, and ai-service components; BankApp supplies the separate Android application.",
-                source: "https://github.com/gimesha-adikari/BankingSystem",
+                description: "Four independently versioned repositories expose the Spring backend, Next.js web client, FastAPI KYC service, and Android client through explicit boundaries.",
+                source: "https://github.com/gimesha-adikari/bank-web",
             },
             {
                 label: "Claims intentionally scoped",
@@ -460,8 +465,18 @@ const curatedProjectData = [
         repositories: [
             {
                 name: "BankingSystem",
-                role: "Spring Boot core, React web client, and FastAPI KYC monorepo",
+                role: "Spring Boot authoritative banking backend",
                 url: "https://github.com/gimesha-adikari/BankingSystem",
+            },
+            {
+                name: "bank-web",
+                role: "Next.js web frontend",
+                url: "https://github.com/gimesha-adikari/bank-web",
+            },
+            {
+                name: "banking-service",
+                role: "FastAPI AI/KYC service",
+                url: "https://github.com/gimesha-adikari/banking-service",
             },
             {
                 name: "BankApp",
@@ -472,7 +487,7 @@ const curatedProjectData = [
         caseStudies: ["modular-kyc-architecture", "resilient-mobile-payments"],
         technicalEvidence: bankingPlatformTechnicalEvidence,
         contentNotes: [
-            "The curated slug is banking-platform; BankingSystem and BankApp remain the source repository identities.",
+            "The curated slug is banking-platform; BankingSystem, bank-web, banking-service, and BankApp remain independently versioned source repositories.",
             "KYC thresholds and decision branches are source-backed policy evidence, not measured accuracy or false-rejection outcomes.",
         ],
     },
