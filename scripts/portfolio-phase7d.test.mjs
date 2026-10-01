@@ -96,7 +96,7 @@ test("curated project identity and flagship ordering remain stable", () => {
     );
     assert.equal(
         getPortfolioProjectBySlug("banking-platform")?.repositories.map((repository) => repository.name).join(","),
-        "BankingSystem,bank-web,banking-service,BankApp",
+        "bank-core,bank-web,bank-service,bank-app",
     );
     assert.equal(getPortfolioProjectBySlug("definitely-unknown"), undefined);
 });

@@ -149,17 +149,31 @@ check(portfolioProjects.includes('liveUrl: "https://platenpdf.com"'), "Platen PD
 check(portfolioProjects.includes('role: "Related standalone local-first document/OCR SDK and optional processing engine"'), "platen-document is not described as a related standalone SDK");
 check(portfolioProjects.includes('slug: "banking-platform"'), "Banking Platform is not a curated project");
 check(portfolioProjects.includes("technicalEvidence: bankingPlatformTechnicalEvidence"), "Banking Platform technical evidence is not attached to the canonical project record");
-check(bankingEvidence.includes('owner: "BankingSystem / Spring backend"'), "Banking evidence is missing the Spring ownership boundary");
+check(bankingEvidence.includes('owner: "bank-core / Spring backend"'), "Banking evidence is missing the Spring ownership boundary");
 check(bankingEvidence.includes('owner: "bank-web / Next.js web"'), "Banking evidence is missing the Next.js ownership boundary");
-check(bankingEvidence.includes('owner: "banking-service / FastAPI KYC"'), "Banking evidence is missing the FastAPI ownership boundary");
-check(bankingEvidence.includes('owner: "BankApp / Android client"'), "Banking evidence is missing the Android ownership boundary");
+check(bankingEvidence.includes('owner: "bank-service / FastAPI KYC"'), "Banking evidence is missing the FastAPI ownership boundary");
+check(bankingEvidence.includes('owner: "bank-app / Android client"'), "Banking evidence is missing the Android ownership boundary");
 check(bankingEvidence.includes('classification: "NOT TESTED"'), "Banking evidence does not mark unverified outcomes as not tested");
-check(bankingEvidence.includes("609e7f567720ec1edf186d5803fbd744e063e34b"), "Banking evidence does not pin the BankingSystem source commit");
+check(bankingEvidence.includes("609e7f567720ec1edf186d5803fbd744e063e34b"), "Banking evidence does not pin the bank-core source commit");
 check(bankingEvidence.includes("b7d62497452733894a6f42216ea83e767406b8f3"), "Banking evidence does not pin the bank-web source commit");
-check(bankingEvidence.includes("7e4beb846c65afc99966a6e4edc9dfd3c9311250"), "Banking evidence does not pin the banking-service source commit");
-check(bankingEvidence.includes("770afcff097a58cfadf2be47e4c71fca301ca8ac"), "Banking evidence does not pin the BankApp source commit");
-check(portfolioProjects.includes('name: "bank-web"') && portfolioProjects.includes('name: "banking-service"'), "Banking Platform repository membership is incomplete");
-check(!bankingEvidence.includes("BankingSystem monorepo"), "Banking evidence still describes a monorepo");
+check(bankingEvidence.includes("7e4beb846c65afc99966a6e4edc9dfd3c9311250"), "Banking evidence does not pin the bank-service source commit");
+check(bankingEvidence.includes("770afcff097a58cfadf2be47e4c71fca301ca8ac"), "Banking evidence does not pin the bank-app source commit");
+check(portfolioProjects.includes('name: "bank-core"') && portfolioProjects.includes('name: "bank-web"') && portfolioProjects.includes('name: "bank-service"') && portfolioProjects.includes('name: "bank-app"'), "Banking Platform repository membership is incomplete");
+for (const repositoryUrl of [
+    "https://github.com/gimesha-adikari/bank-core",
+    "https://github.com/gimesha-adikari/bank-service",
+    "https://github.com/gimesha-adikari/bank-app",
+]) {
+    check(portfolioProjects.includes(repositoryUrl), `Banking Platform is missing ${repositoryUrl}`);
+}
+for (const oldRepositoryUrl of [
+    "https://github.com/gimesha-adikari/BankingSystem",
+    "https://github.com/gimesha-adikari/banking-service",
+    "https://github.com/gimesha-adikari/BankApp",
+]) {
+    check(!portfolioProjects.includes(oldRepositoryUrl) && !bankingEvidence.includes(oldRepositoryUrl), `Banking Platform still publishes ${oldRepositoryUrl}`);
+}
+check(!bankingEvidence.includes("bank-core monorepo"), "Banking evidence still describes a monorepo");
 check(!bankingEvidence.includes("React/Vite"), "Banking evidence still describes the current web runtime as React/Vite");
 check(!bankingEvidence.includes("web-frontend/my-bank-ui"), "Banking evidence still points to the archived web path");
 check(!bankingEvidence.includes("ai-service/bank-ai-service"), "Banking evidence still points to the archived KYC path");

@@ -46,7 +46,7 @@ test("Platen PDF and Banking Platform group explicit repositories", () => {
     assert.ok(banking);
     assert.deepEqual(
         banking.repositories.map((repository) => repository.name),
-        ["BankingSystem", "bank-web", "banking-service", "BankApp"],
+        ["bank-core", "bank-web", "bank-service", "bank-app"],
     );
 });
 

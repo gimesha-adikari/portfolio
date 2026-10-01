@@ -426,12 +426,12 @@ const curatedProjectData = [
             },
             {
                 boundary: "Web application",
-                responsibility: "Provide supported customer, staff, and administrative browser workflows through a typed BankingSystem API boundary.",
+                responsibility: "Provide supported customer, staff, and administrative browser workflows through a typed bank-core API boundary.",
                 technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
             },
             {
                 boundary: "KYC service",
-                responsibility: "Own FastAPI KYC component checks and aggregate verification policy consumed by BankingSystem; optional ONNX/Tesseract modules are not presented as the default runtime path.",
+                responsibility: "Own FastAPI KYC component checks and aggregate verification policy consumed by bank-core; optional ONNX/Tesseract modules are not presented as the default runtime path.",
                 technologies: ["Python", "FastAPI", "OCR", "Vision check modules"],
             },
             {
@@ -464,9 +464,9 @@ const curatedProjectData = [
         ],
         repositories: [
             {
-                name: "BankingSystem",
+                name: "bank-core",
                 role: "Spring Boot authoritative banking backend",
-                url: "https://github.com/gimesha-adikari/BankingSystem",
+                url: "https://github.com/gimesha-adikari/bank-core",
             },
             {
                 name: "bank-web",
@@ -474,20 +474,20 @@ const curatedProjectData = [
                 url: "https://github.com/gimesha-adikari/bank-web",
             },
             {
-                name: "banking-service",
+                name: "bank-service",
                 role: "FastAPI AI/KYC service",
-                url: "https://github.com/gimesha-adikari/banking-service",
+                url: "https://github.com/gimesha-adikari/bank-service",
             },
             {
-                name: "BankApp",
+                name: "bank-app",
                 role: "Kotlin/Android banking client",
-                url: "https://github.com/gimesha-adikari/BankApp",
+                url: "https://github.com/gimesha-adikari/bank-app",
             },
         ],
         caseStudies: ["modular-kyc-architecture", "resilient-mobile-payments"],
         technicalEvidence: bankingPlatformTechnicalEvidence,
         contentNotes: [
-            "The curated slug is banking-platform; BankingSystem, bank-web, banking-service, and BankApp remain independently versioned source repositories.",
+            "The curated slug is banking-platform; bank-core, bank-web, bank-service, and bank-app remain independently versioned source repositories.",
             "KYC thresholds and decision branches are source-backed policy evidence, not measured accuracy or false-rejection outcomes.",
         ],
     },

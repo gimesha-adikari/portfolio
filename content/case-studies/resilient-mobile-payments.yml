@@ -53,7 +53,7 @@ links:
     icon: "icon-[tabler--folder]"
     is_external: false
   - label: "Backend Repo"
-    url: "https://github.com/gimesha-adikari/BankingSystem"
+    url: "https://github.com/gimesha-adikari/bank-core"
     icon: "icon-[tabler--brand-github]"
     is_external: true
 
